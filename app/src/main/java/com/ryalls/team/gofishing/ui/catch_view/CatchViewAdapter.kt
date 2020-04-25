@@ -34,10 +34,8 @@ import com.ryalls.team.gofishing.`interface`.ILaunchDetailView
  *
  * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
  */
-class CatchViewAdapter(private val dataSet: Array<String>, val catchView : ILaunchDetailView) :
+class CatchViewAdapter(private val dataSet: Array<String>, private val catchView : ILaunchDetailView) :
     RecyclerView.Adapter<CatchViewAdapter.ViewHolder>() {
-
-    val _catchView = catchView
 
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
@@ -50,7 +48,7 @@ class CatchViewAdapter(private val dataSet: Array<String>, val catchView : ILaun
         init {
             // Define click listener for the ViewHolder's View.
             v.setOnClickListener {
-                _catchView.launchDetailView(1)
+                catchView.launchDetailView(1)
                 Log.d(TAG, "Element $adapterPosition clicked.")
            }
             location = v.findViewById(R.id.location)

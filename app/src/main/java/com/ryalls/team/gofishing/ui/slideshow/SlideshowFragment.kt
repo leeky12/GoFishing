@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.ryalls.team.gofish.ui.slideshow.SlideshowViewModel
 import com.ryalls.team.gofishing.R
 
 class SlideshowFragment : Fragment() {

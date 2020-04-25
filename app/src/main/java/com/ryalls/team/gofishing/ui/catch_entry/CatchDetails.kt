@@ -5,24 +5,37 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.ryalls.team.gofishing.R
+import com.ryalls.team.gofishing.data.CatchData
+import kotlinx.android.synthetic.main.catch_details.*
 
 /**
  * A placeholder fragment containing a simple view.
  */
 class CatchDetails : Fragment() {
 
-    private lateinit var pageViewModel: PageViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private val viewModel: CatchDetailsViewModel by  activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.catch_details, container, false)
+
+       return inflater.inflate(R.layout.catch_details, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val catch = viewModel.catchReady.value
+        if (catch != null) {
+            lureText.setText(catch.dbId)
+        }
+    }
+
+        private fun catchUpdated() {
+        lureText.setText("data set")
     }
 
     companion object {

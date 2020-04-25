@@ -1,4 +1,4 @@
-package com.ryalls.team.gofish.ui.slideshow
+package com.ryalls.team.gofishing.ui.slideshow
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

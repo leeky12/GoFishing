@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -134,6 +135,9 @@ class CatchView : Fragment(), ILaunchDetailView {
 
     override fun launchDetailView(dbID: Long) {
         val navController = findNavController()
-       navController.navigate(R.id.nav_details)
+        val bundle = bundleOf(
+            Pair("dbID", "" + dbID)
+        )
+       navController.navigate(R.id.nav_details, bundle)
     }
 }
