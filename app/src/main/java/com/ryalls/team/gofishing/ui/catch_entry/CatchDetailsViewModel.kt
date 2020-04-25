@@ -11,7 +11,7 @@ class CatchDetailsViewModel : ViewModel() {
     }
 
     fun setCatchDetails(dbID: String) {
-        var catch = CatchData(dbID)
+        val catch = CatchData(dbID)
         catchReady.value = catch
     }
 

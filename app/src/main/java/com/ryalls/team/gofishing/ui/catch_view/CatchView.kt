@@ -133,7 +133,7 @@ class CatchView : Fragment(), ILaunchDetailView {
         private const val DATASET_COUNT = 60
     }
 
-    override fun launchDetailView(dbID: Long) {
+    override fun launchDetailView(dbID: Int) {
         val navController = findNavController()
         val bundle = bundleOf(
             Pair("dbID", "" + dbID)

@@ -34,8 +34,13 @@ import com.ryalls.team.gofishing.`interface`.ILaunchDetailView
  *
  * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
  */
-class CatchViewAdapter(private val dataSet: Array<String>, private val catchView : ILaunchDetailView) :
+class CatchViewAdapter(
+    private val dataSet: Array<String>,
+    private val catchView: ILaunchDetailView
+) :
     RecyclerView.Adapter<CatchViewAdapter.ViewHolder>() {
+
+    var position: Int = 0
 
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
@@ -48,9 +53,9 @@ class CatchViewAdapter(private val dataSet: Array<String>, private val catchView
         init {
             // Define click listener for the ViewHolder's View.
             v.setOnClickListener {
-                catchView.launchDetailView(1)
+                catchView.launchDetailView(position)
                 Log.d(TAG, "Element $adapterPosition clicked.")
-           }
+            }
             location = v.findViewById(R.id.location)
             date = v.findViewById(R.id.date)
             species = v.findViewById(R.id.species)
@@ -69,7 +74,7 @@ class CatchViewAdapter(private val dataSet: Array<String>, private val catchView
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         Log.d(TAG, "Element $position set.")
-
+        this.position = position
         // Get element from your dataset at this position and replace the contents of the view
         // with that element
         viewHolder.location.text = dataSet[position]
