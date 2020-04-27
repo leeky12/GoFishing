@@ -6,10 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.ryalls.team.gofishing.R
-import com.ryalls.team.gofishing.data.CatchData
 import kotlinx.android.synthetic.main.catch_details.*
 
 /**
@@ -17,7 +14,7 @@ import kotlinx.android.synthetic.main.catch_details.*
  */
 class CatchDetails : Fragment() {
 
-    private val viewModel: CatchDetailsViewModel by  activityViewModels()
+    private val viewModel: CatchDetailsViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,10 +29,6 @@ class CatchDetails : Fragment() {
         if (catch != null) {
             lureText.setText(catch.dbId)
         }
-    }
-
-        private fun catchUpdated() {
-        lureText.setText("data set")
     }
 
     companion object {

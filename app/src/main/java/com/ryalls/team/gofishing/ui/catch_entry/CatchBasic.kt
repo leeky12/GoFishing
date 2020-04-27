@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProviders
 import com.ryalls.team.gofishing.R
 
@@ -14,6 +15,8 @@ import com.ryalls.team.gofishing.R
 class CatchBasic : Fragment() {
 
     private lateinit var pageViewModel: PageViewModel
+    private val viewModel: CatchDetailsViewModel by activityViewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +30,10 @@ class CatchBasic : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.catch_basic, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val catch = viewModel.catchReady.value
     }
 
     companion object {
