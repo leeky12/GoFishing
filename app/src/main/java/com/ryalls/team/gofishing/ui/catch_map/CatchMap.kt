@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.ryalls.team.gofishing.R
+import com.ryalls.team.gofishing.ui.catch_entry.CatchDetailsViewModel
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -26,6 +28,9 @@ class CatchMap : Fragment(), OnMapReadyCallback {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var mMap: GoogleMap
+
+    private val viewModels: CatchDetailsViewModel by activityViewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +78,7 @@ class CatchMap : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(51.264116, -1.1068298)))
+        val data = viewModels.allWords
     }
 
 

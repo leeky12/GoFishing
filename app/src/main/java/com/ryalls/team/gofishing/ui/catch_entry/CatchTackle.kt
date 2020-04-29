@@ -23,7 +23,7 @@ class CatchTackle : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val catch = viewModel.catchReady.value
+
     }
 
     companion object {

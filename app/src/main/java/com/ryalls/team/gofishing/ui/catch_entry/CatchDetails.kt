@@ -20,15 +20,14 @@ class CatchDetails : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
        return inflater.inflate(R.layout.catch_details, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val catch = viewModel.catchReady.value
-        if (catch != null) {
-            lureText.setText(catch.dbId)
-        }
+//        val catch = viewModel.catchReady.value
+//        if (catch != null) {
+//            lureText.setText(catch.dbId)
+//        }
     }
 
     companion object {

@@ -6,10 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ryalls.team.gofishing.R
+import com.ryalls.team.gofishing.persistance.CatchRecord
 import kotlinx.android.synthetic.main.edit_tabbed_fragment.*
 
 class CatchEntryFragment : Fragment() {
@@ -35,10 +34,15 @@ class CatchEntryFragment : Fragment() {
             R.string.tab_text_5
         )
 
-        val dbID = arguments?.getString("dbID")
-        if (dbID != null) {
-            viewModel.setCatchDetails(dbID)
-        }
+//        val dbID = arguments?.getString("dbID")
+//        if (dbID != null) {
+//            viewModel.setCatchDetails(dbID)
+//        }
+
+
+        val catch = CatchRecord("Fishy")
+        viewModel.insert(catch)
+
 
         view_pager.adapter = CatchEntryPagerAdapter(this)
         TabLayoutMediator(tabs, view_pager,

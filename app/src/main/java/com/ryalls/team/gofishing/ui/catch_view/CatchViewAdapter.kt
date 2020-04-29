@@ -23,9 +23,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-
 import com.ryalls.team.gofishing.R
-import com.ryalls.team.gofishing.`interface`.ILaunchDetailView
+import com.ryalls.team.gofishing.interfaces.ILaunchDetailView
+import com.ryalls.team.gofishing.persistance.CatchRecord
 
 /**
  * Provide views to RecyclerView with data from dataSet.
@@ -35,7 +35,7 @@ import com.ryalls.team.gofishing.`interface`.ILaunchDetailView
  * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
  */
 class CatchViewAdapter(
-    private val dataSet: Array<String>,
+    private val dataSet: Array<CatchRecord>,
     private val catchView: ILaunchDetailView
 ) :
     RecyclerView.Adapter<CatchViewAdapter.ViewHolder>() {
@@ -77,9 +77,9 @@ class CatchViewAdapter(
         this.position = position
         // Get element from your dataset at this position and replace the contents of the view
         // with that element
-        viewHolder.location.text = dataSet[position]
-        viewHolder.date.text = dataSet[position]
-        viewHolder.species.text = dataSet[position]
+        viewHolder.location.text = dataSet[position].species
+        viewHolder.date.text = dataSet[position].depth
+        viewHolder.species.text = dataSet[position].groundBait
     }
 
     // Return the size of your dataset (invoked by the layout manager)

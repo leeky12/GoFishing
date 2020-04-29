@@ -25,7 +25,7 @@ class CatchPicture : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val catch = viewModel.catchReady.value
+ //       val data = viewModel.allWords
     }
 
     companion object {

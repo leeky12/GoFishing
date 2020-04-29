@@ -22,32 +22,29 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ryalls.team.gofishing.R
-import com.ryalls.team.gofishing.`interface`.ILaunchDetailView
+import com.ryalls.team.gofishing.interfaces.ILaunchDetailView
+import com.ryalls.team.gofishing.persistance.CatchRecord
+import com.ryalls.team.gofishing.ui.catch_entry.CatchDetailsViewModel
 
 /**
- * Demonstrates the use of [RecyclerView] with a [LinearLayoutManager] and a
- * [GridLayoutManager].
+ * Demonstrates the use of [RecyclerView] with a [LinearLayoutManager]
  */
 class CatchView : Fragment(), ILaunchDetailView {
 
-    private lateinit var currentLayoutManagerType: LayoutManagerType
     private lateinit var recyclerView: RecyclerView
     private lateinit var layoutManager: RecyclerView.LayoutManager
-    private lateinit var dataset: Array<String>
+    private lateinit var dataset: List<CatchRecord>
 
-    enum class LayoutManagerType { LINEAR_LAYOUT_MANAGER }
+    private lateinit var catchViewModel: CatchDetailsViewModel // by activityViewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Initialize dataset, this data would usually come from a local content provider or
-        // remote server.
-        initDataset()
     }
 
     override fun onCreateView(
@@ -67,64 +64,30 @@ class CatchView : Fragment(), ILaunchDetailView {
         // elements are laid out.
         layoutManager = LinearLayoutManager(activity)
 
-        currentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER
+        // Get a new or existing ViewModel from the ViewModelProvider.
+        val tester = ViewModelProvider(this).get(CatchDetailsViewModel::class.java)
 
-        if (savedInstanceState != null) {
-            // Restore saved layout manager type.
-            currentLayoutManagerType = savedInstanceState
-                .getSerializable(KEY_LAYOUT_MANAGER) as LayoutManagerType
-        }
-        setRecyclerViewLayoutManager(currentLayoutManagerType)
+        val data = tester.allWords
+//
+//        val array = arrayOfNulls<CatchRecord>(data.value!!.size)
 
-        // Set CustomAdapter as the adapter for RecyclerView.
-        recyclerView.adapter = CatchViewAdapter(dataset, this)
+        //       val adapter = CatchViewAdapter(data.value, this)
 
-        setRecyclerViewLayoutManager(LayoutManagerType.LINEAR_LAYOUT_MANAGER)
+//        recyclerView.adapter = adapter
+//        recyclerView.layoutManager = LinearLayoutManager(context)
+//
+//        // Get a new or existing ViewModel from the ViewModelProvider.
+//        viewModel = ViewModelProvider(this).get(CatchDetailsViewModel::class.java)
+//
+//        // Add an observer on the LiveData returned by getAlphabetizedWords.
+//        // The onChanged() method fires when the observed data changes and the activity is
+//        // in the foreground.
+//        viewModel.allWords.observe(viewLifecycleOwner, Observer { words ->
+//            // Update the cached copy of the words in the adapter.
+//            words?.let { adapter.setWords(it) }
+//        })
 
         return rootView
-    }
-
-    /**
-     * Set RecyclerView's LayoutManager to the one given.
-     *
-     * @param layoutManagerType Type of layout manager to switch to.
-     */
-    private fun setRecyclerViewLayoutManager(layoutManagerType: LayoutManagerType) {
-        var scrollPosition = 0
-
-        // If a layout manager has already been set, get current scroll position.
-        if (recyclerView.layoutManager != null) {
-            scrollPosition = (recyclerView.layoutManager as LinearLayoutManager)
-                .findFirstCompletelyVisibleItemPosition()
-        }
-
-        when (layoutManagerType) {
-            LayoutManagerType.LINEAR_LAYOUT_MANAGER -> {
-                layoutManager = LinearLayoutManager(activity)
-                currentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER
-            }
-        }
-
-        with(recyclerView) {
-            layoutManager = this@CatchView.layoutManager
-            scrollToPosition(scrollPosition)
-        }
-
-    }
-
-    override fun onSaveInstanceState(savedInstanceState: Bundle) {
-
-        // Save currently selected layout manager.
-        savedInstanceState.putSerializable(KEY_LAYOUT_MANAGER, currentLayoutManagerType)
-        super.onSaveInstanceState(savedInstanceState)
-    }
-
-    /**
-     * Generates Strings for RecyclerView's adapter. This data would usually come
-     * from a local content provider or remote server.
-     */
-    private fun initDataset() {
-        dataset = Array(DATASET_COUNT) { i -> "This is element # $i" }
     }
 
     companion object {
@@ -138,6 +101,6 @@ class CatchView : Fragment(), ILaunchDetailView {
         val bundle = bundleOf(
             Pair("dbID", "" + dbID)
         )
-       navController.navigate(R.id.nav_details, bundle)
+        navController.navigate(R.id.nav_details, bundle)
     }
 }
