@@ -36,7 +36,7 @@ interface CatchDao {
     // Always holds/caches latest version of data. Notifies its active observers when the
     // data has changed. Since we are getting all the contents of the database,
     // we are notified whenever any of the database contents have changed.
-    @Query("SELECT * from word_table ORDER BY species ASC")
+    @Query("SELECT * from catch_table ORDER BY species ASC")
     fun getAlphabetizedWords(): LiveData<List<CatchRecord>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -45,10 +45,13 @@ interface CatchDao {
     @Update
     fun update(catchRecord: CatchRecord)
 
-    @Query("DELETE FROM word_table")
+    @Query("DELETE FROM catch_table")
     fun deleteAll()
 
-    @Query("SELECT * FROM word_table where catchId = :catchID")
+    @Query("DELETE FROM catch_table where catchID = :catchID")
+    fun deleteRecord(catchID : Int)
+
+    @Query("SELECT * FROM catch_table where catchId = :catchID")
     fun getRecord(catchID : Int) : CatchRecord
 
 }

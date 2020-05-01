@@ -24,7 +24,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ryalls.team.gofishing.R
-import com.ryalls.team.gofishing.interfaces.ILaunchDetailView
+import com.ryalls.team.gofishing.interfaces.ILaunchAdapterInterface
 import com.ryalls.team.gofishing.persistance.CatchRecord
 
 /**
@@ -35,7 +35,7 @@ import com.ryalls.team.gofishing.persistance.CatchRecord
  * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
  */
 class CatchViewAdapter(
-    private val catchView: ILaunchDetailView
+    private val catchView: ILaunchAdapterInterface
 ) :
     RecyclerView.Adapter<CatchViewAdapter.ViewHolder>() {
     private var catchList = emptyList<CatchRecord>() // Cached copy of words
@@ -51,21 +51,29 @@ class CatchViewAdapter(
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
-    inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+    inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v), View.OnLongClickListener,
+        View.OnClickListener {
         val location: TextView
         val date: TextView
         val species: TextView
-        var catchID : Int = 0
+        var catchID: Int = 0
 
         init {
-            // Define click listener for the ViewHolder's View.
-            v.setOnClickListener {
-                catchView.launchDetailView(catchID)
-                Log.d(TAG, "Element $adapterPosition clicked.")
-            }
+            v.setOnClickListener(this)
+            v.setOnLongClickListener(this)
             location = v.findViewById(R.id.location)
             date = v.findViewById(R.id.date)
             species = v.findViewById(R.id.species)
+        }
+
+        override fun onLongClick(v: View?): Boolean {
+            catchView.launchDeleteDialog(catchID)
+            return true
+        }
+
+        override fun onClick(v: View?) {
+            catchView.launchDetailView(catchID)
+            Log.d(TAG, "Element $adapterPosition clicked.")
         }
     }
 

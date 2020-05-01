@@ -36,8 +36,8 @@ class CatchDetails : Fragment() {
             depth = fish_depthField.text.toString(),
             hook = hook_sizeField.text.toString(),
             groundbait = ground_baitField.text.toString(),
-            boatspeed=boat_speedField.text.toString(),
-           tides = tidesField.text.toString()
+            boatspeed = boat_speedField.text.toString(),
+            tides = tidesField.text.toString()
         )
     }
 

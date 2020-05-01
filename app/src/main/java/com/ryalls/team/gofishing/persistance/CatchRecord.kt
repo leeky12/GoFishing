@@ -31,7 +31,7 @@ import androidx.room.PrimaryKey
  * https://developer.android.com/topic/libraries/architecture/room.html
  */
 
-@Entity(tableName = "word_table")
+@Entity(tableName = "catch_table")
 data class CatchRecord(@ColumnInfo(name = "species") var species: String) {
     @PrimaryKey(autoGenerate = true)
     var catchID: Int = 0

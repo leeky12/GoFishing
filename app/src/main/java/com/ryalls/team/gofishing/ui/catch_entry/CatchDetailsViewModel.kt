@@ -83,6 +83,9 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         repository.update(updateRecord)
     }
 
+    fun deleteRecord(catchID : Int) = viewModelScope.launch(Dispatchers.IO) {
+        repository.deleteRecord(catchID)
+    }
     /**
      * Launching a new coroutine to insert the data in a non-blocking way
      */

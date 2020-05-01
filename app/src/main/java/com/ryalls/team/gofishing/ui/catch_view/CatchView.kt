@@ -16,32 +16,35 @@
 
 package com.ryalls.team.gofishing.ui.catch_view
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ryalls.team.gofishing.R
-import com.ryalls.team.gofishing.interfaces.ILaunchDetailView
+import com.ryalls.team.gofishing.interfaces.ILaunchAdapterInterface
 import com.ryalls.team.gofishing.persistance.CatchRecord
 import com.ryalls.team.gofishing.ui.catch_entry.CatchDetailsViewModel
 
 /**
  * Demonstrates the use of [RecyclerView] with a [LinearLayoutManager]
  */
-class CatchView : Fragment(), ILaunchDetailView {
+class CatchView : Fragment(), ILaunchAdapterInterface {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var layoutManager: RecyclerView.LayoutManager
     private lateinit var dataset: List<CatchRecord>
 
-    private lateinit var catchViewModel: CatchDetailsViewModel // by activityViewModels()
+    private val viewModel: CatchDetailsViewModel by activityViewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,5 +99,20 @@ class CatchView : Fragment(), ILaunchDetailView {
             Pair("dbID", "" + dbID)
         )
         navController.navigate(R.id.nav_details, bundle)
+    }
+
+    override fun launchDeleteDialog(dbID: Int) {
+        val builder = AlertDialog.Builder(context as Context)
+        builder.setTitle("Delete Catch")
+        builder.setMessage("Do you wish to delete this catch?")
+        //builder.setPositiveButton("OK", DialogInterface.OnClickListener(function = x))
+
+        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+            viewModel.deleteRecord(dbID)
+        }
+
+        builder.setNegativeButton(android.R.string.no) { dialog, which ->
+        }
+        builder.show()
     }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ryalls.team.gofishing.R
 import com.ryalls.team.gofishing.persistance.CatchRecord
@@ -55,7 +56,6 @@ class CatchEntryFragment : Fragment() {
         if (dbID != null) {
             viewModel.getRecord(dbID!!.toInt())
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -83,6 +83,7 @@ class CatchEntryFragment : Fragment() {
                 } else {
                     updateRecord()
                 }
+                val navController = findNavController().popBackStack()
                 true
             }
             else -> {

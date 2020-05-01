@@ -16,7 +16,11 @@
         android:id="@+id/nav_details"
         android:name="com.ryalls.team.gofishing.ui.catch_entry.CatchEntryFragment"
         android:label="@string/data_details"
-        tools:layout="@layout/edit_tabbed_fragment" />
+        tools:layout="@layout/edit_tabbed_fragment" >
+        <action
+            android:id="@+id/action_nav_details_to_nav_view"
+            app:destination="@id/nav_view" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_map"
