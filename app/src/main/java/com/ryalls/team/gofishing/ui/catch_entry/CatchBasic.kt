@@ -1,29 +1,38 @@
 package com.ryalls.team.gofishing.ui.catch_entry
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
 import com.ryalls.team.gofishing.R
+import kotlinx.android.synthetic.main.catch_basic.*
 
 /**
  * A placeholder fragment containing a simple view.
  */
 class CatchBasic : Fragment() {
 
-    private lateinit var pageViewModel: PageViewModel
     private val viewModel: CatchDetailsViewModel by activityViewModels()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        pageViewModel = ViewModelProviders.of(this).get(PageViewModel::class.java).apply {
-            setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?: 1)
-        }
+        retainInstance = true
     }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("CatchBasic", "Being Paused")
+        viewModel.updatesBasicCatch(species = speciesField.text.toString(),
+            comment = commentsField.text.toString(),
+            weight = weightField.text.toString(),
+            length = lengthField.text.toString()
+        )
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +42,13 @@ class CatchBasic : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // in the foreground.
+        viewModel.recordReady.observe(viewLifecycleOwner, Observer { catch ->
+            speciesField.setText(viewModel.catchRecord?.species)
+            weightField.setText(viewModel.catchRecord?.weight)
+            lengthField.setText(viewModel.catchRecord?.length)
+            commentsField.setText(viewModel.catchRecord?.comments)
+        })
 
     }
 

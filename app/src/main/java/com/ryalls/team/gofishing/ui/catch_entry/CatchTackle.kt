@@ -19,6 +19,7 @@ class CatchTackle : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        retainInstance = true
         return inflater.inflate(R.layout.catch_tackle, container, false)
     }
 

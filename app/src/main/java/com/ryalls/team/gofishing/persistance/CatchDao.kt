@@ -17,10 +17,7 @@
 package com.ryalls.team.gofishing.persistance
 
 import androidx.lifecycle.LiveData;
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.OnConflictStrategy;
-import androidx.room.Query;
+import androidx.room.*
 
 
 /**
@@ -45,6 +42,13 @@ interface CatchDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(catchRecord: CatchRecord)
 
+    @Update
+    fun update(catchRecord: CatchRecord)
+
     @Query("DELETE FROM word_table")
     fun deleteAll()
+
+    @Query("SELECT * FROM word_table where catchId = :catchID")
+    fun getRecord(catchID : Int) : CatchRecord
+
 }

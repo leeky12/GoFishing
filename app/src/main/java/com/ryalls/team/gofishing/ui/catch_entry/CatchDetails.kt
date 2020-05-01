@@ -1,11 +1,13 @@
 package com.ryalls.team.gofishing.ui.catch_entry
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import com.ryalls.team.gofishing.R
 import kotlinx.android.synthetic.main.catch_details.*
 
@@ -20,14 +22,38 @@ class CatchDetails : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-       return inflater.inflate(R.layout.catch_details, container, false)
+        retainInstance = true
+        return inflater.inflate(R.layout.catch_details, container, false)
     }
 
+    override fun onPause() {
+        super.onPause()
+        Log.d("CatchBasic", "Being Paused")
+        viewModel.updatesDetailsCatch(
+            lure = lureField.text.toString(),
+            structure = structureField.text.toString(),
+            conditions = water_conditionsField.text.toString(),
+            depth = fish_depthField.text.toString(),
+            hook = hook_sizeField.text.toString(),
+            groundbait = ground_baitField.text.toString(),
+            boatspeed=boat_speedField.text.toString(),
+           tides = tidesField.text.toString()
+        )
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        val catch = viewModel.catchReady.value
-//        if (catch != null) {
-//            lureText.setText(catch.dbId)
-//        }
+        viewModel.recordReady.observe(viewLifecycleOwner, Observer { catch ->
+            lureField.setText(viewModel.catchRecord?.lure)
+            structureField.setText(viewModel.catchRecord?.structure)
+            water_conditionsField.setText(viewModel.catchRecord?.conditions)
+            fish_depthField.setText(viewModel.catchRecord?.depth)
+
+            hook_sizeField.setText(viewModel.catchRecord?.hook)
+            ground_baitField.setText(viewModel.catchRecord?.groundBait)
+            boat_speedField.setText(viewModel.catchRecord?.boatspeed)
+            tidesField.setText(viewModel.catchRecord?.tides)
+        })
     }
 
     companion object {

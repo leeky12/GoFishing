@@ -35,10 +35,16 @@ import com.ryalls.team.gofishing.persistance.CatchRecord
  * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
  */
 class CatchViewAdapter(
-    private val dataSet: Array<CatchRecord>,
     private val catchView: ILaunchDetailView
 ) :
     RecyclerView.Adapter<CatchViewAdapter.ViewHolder>() {
+    private var catchList = emptyList<CatchRecord>() // Cached copy of words
+
+
+    internal fun setWords(catchRecords: List<CatchRecord>) {
+        this.catchList = catchRecords
+        notifyDataSetChanged()
+    }
 
     var position: Int = 0
 
@@ -49,11 +55,12 @@ class CatchViewAdapter(
         val location: TextView
         val date: TextView
         val species: TextView
+        var catchID : Int = 0
 
         init {
             // Define click listener for the ViewHolder's View.
             v.setOnClickListener {
-                catchView.launchDetailView(position)
+                catchView.launchDetailView(catchID)
                 Log.d(TAG, "Element $adapterPosition clicked.")
             }
             location = v.findViewById(R.id.location)
@@ -77,13 +84,14 @@ class CatchViewAdapter(
         this.position = position
         // Get element from your dataset at this position and replace the contents of the view
         // with that element
-        viewHolder.location.text = dataSet[position].species
-        viewHolder.date.text = dataSet[position].depth
-        viewHolder.species.text = dataSet[position].groundBait
+        viewHolder.location.text = catchList[position].location
+        viewHolder.date.text = catchList[position].date
+        viewHolder.species.text = catchList[position].species
+        viewHolder.catchID = catchList[position].catchID
     }
 
     // Return the size of your dataset (invoked by the layout manager)
-    override fun getItemCount() = dataSet.size
+    override fun getItemCount() = catchList.size
 
     companion object {
         private const val TAG = "CustomAdapter"

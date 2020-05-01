@@ -30,6 +30,13 @@ class CatchRepository(private val catchDao: CatchDao) {
     // Observed LiveData will notify the observer when the data has changed.
     val allWords: LiveData<List<CatchRecord>> = catchDao.getAlphabetizedWords()
 
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun getRecord(iD : Int) : CatchRecord {
+        return catchDao.getRecord(iD)
+    }
+
+
     // You must call this on a non-UI thread or your app will crash. So we're making this a
     // suspend function so the caller methods know this.
     // Like this, Room ensures that you're not doing any long running operations on the main
@@ -39,4 +46,16 @@ class CatchRepository(private val catchDao: CatchDao) {
     suspend fun insert(catchRecord: CatchRecord) {
         catchDao.insert(catchRecord)
     }
+
+    // You must call this on a non-UI thread or your app will crash. So we're making this a
+    // suspend function so the caller methods know this.
+    // Like this, Room ensures that you're not doing any long running operations on the main
+    // thread, blocking the UI.
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun update(catchRecord: CatchRecord) {
+        catchDao.update(catchRecord)
+    }
+
+
 }

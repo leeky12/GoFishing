@@ -26,7 +26,7 @@
             app:counterMaxLength="250">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/lureText"
+                android:id="@+id/lureField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -45,6 +45,7 @@
             app:counterMaxLength="250">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/structureField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -63,6 +64,7 @@
             app:counterMaxLength="250">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/water_conditionsField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -79,6 +81,7 @@
             android:inputType="textNoSuggestions">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fish_depthField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -94,6 +97,7 @@
             android:inputType="textNoSuggestions">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/hook_sizeField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -109,6 +113,7 @@
             android:inputType="textNoSuggestions">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ground_baitField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -124,6 +129,7 @@
             android:inputType="textNoSuggestions">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/boat_speedField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -139,6 +145,7 @@
             android:inputType="textNoSuggestions">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tidesField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"

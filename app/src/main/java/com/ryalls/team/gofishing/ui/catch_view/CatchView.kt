@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -64,28 +65,21 @@ class CatchView : Fragment(), ILaunchDetailView {
         // elements are laid out.
         layoutManager = LinearLayoutManager(activity)
 
+        val adapter = CatchViewAdapter(this)
+
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = layoutManager
+
         // Get a new or existing ViewModel from the ViewModelProvider.
-        val tester = ViewModelProvider(this).get(CatchDetailsViewModel::class.java)
+        val viewModel = ViewModelProvider(this).get(CatchDetailsViewModel::class.java)
 
-        val data = tester.allWords
-//
-//        val array = arrayOfNulls<CatchRecord>(data.value!!.size)
-
-        //       val adapter = CatchViewAdapter(data.value, this)
-
-//        recyclerView.adapter = adapter
-//        recyclerView.layoutManager = LinearLayoutManager(context)
-//
-//        // Get a new or existing ViewModel from the ViewModelProvider.
-//        viewModel = ViewModelProvider(this).get(CatchDetailsViewModel::class.java)
-//
-//        // Add an observer on the LiveData returned by getAlphabetizedWords.
-//        // The onChanged() method fires when the observed data changes and the activity is
-//        // in the foreground.
-//        viewModel.allWords.observe(viewLifecycleOwner, Observer { words ->
-//            // Update the cached copy of the words in the adapter.
-//            words?.let { adapter.setWords(it) }
-//        })
+        // Add an observer on the LiveData returned by getAlphabetizedWords.
+        // The onChanged() method fires when the observed data changes and the activity is
+        // in the foreground.
+        viewModel.allWords.observe(viewLifecycleOwner, Observer { words ->
+            // Update the cached copy of the words in the adapter.
+            words?.let { adapter.setWords(it) }
+        })
 
         return rootView
     }

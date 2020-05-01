@@ -21,6 +21,7 @@ class CatchPicture : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        retainInstance = true
         return inflater.inflate(R.layout.catch_picture, container, false)
     }
 

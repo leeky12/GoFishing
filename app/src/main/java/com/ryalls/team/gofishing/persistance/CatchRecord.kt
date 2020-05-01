@@ -32,9 +32,15 @@ import androidx.room.PrimaryKey
  */
 
 @Entity(tableName = "word_table")
-data class CatchRecord(@ColumnInfo(name = "species") val species: String) {
+data class CatchRecord(@ColumnInfo(name = "species") var species: String) {
     @PrimaryKey(autoGenerate = true)
     var catchID: Int = 0
+
+    @ColumnInfo(name = "location")
+    var location: String = ""
+
+    @ColumnInfo(name = "date")
+    var date: String = ""
 
     @ColumnInfo(name = "weight")
     var weight: String = ""
@@ -43,7 +49,7 @@ data class CatchRecord(@ColumnInfo(name = "species") val species: String) {
     var length: String = ""
 
     @ColumnInfo(name = "comments")
-    var mComments: String = ""
+    var comments: String = ""
 
     @ColumnInfo(name = "lure")
     var lure: String = ""
@@ -64,7 +70,7 @@ data class CatchRecord(@ColumnInfo(name = "species") val species: String) {
     var groundBait: String = ""
 
     @ColumnInfo(name = "boatspeed")
-    var boatspeed: String = ""
+    var boatspeed : String = ""
 
     @ColumnInfo(name = "tides")
     var tides: String = ""

@@ -18,6 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/speciesField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -37,6 +38,7 @@
         app:layout_constraintTop_toBottomOf="@+id/species">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/weightField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -56,6 +58,7 @@
         app:layout_constraintTop_toBottomOf="@+id/weight">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/lengthField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -77,6 +80,7 @@
         app:layout_constraintTop_toBottomOf="@+id/length">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/commentsField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
