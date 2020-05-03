@@ -19,7 +19,7 @@ import java.util.*
 
 class CatchDetailsViewModel(application: Application) : AndroidViewModel(application) {
 
-    var repository: CatchRepository
+    private var repository: CatchRepository
 
     // Using LiveData and caching what getAlphabetizedWords returns has several benefits:
     // - We can put an observer on the data (instead of polling for changes) and only update the
@@ -50,7 +50,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
                 Log.d("TestCoroutine", "Finished")
             }
             withContext(Dispatchers.Main) {
-                Log.d("TestCoroutine", "" + (catchRecord?.weight ?: "Fail"))
+                Log.d("TestCoroutine", "" + catchRecord?.weight)
                 recordReady.value = "True"
             }
         }

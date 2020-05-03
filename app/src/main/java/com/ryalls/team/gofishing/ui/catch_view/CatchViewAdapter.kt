@@ -32,7 +32,7 @@ import com.ryalls.team.gofishing.persistance.CatchRecord
  *
  * Initialize the dataset of the Adapter.
  *
- * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
+ * @param catchView ILaunchAdapterInterface to launch the various adapters required
  */
 class CatchViewAdapter(
     private val catchView: ILaunchAdapterInterface
@@ -46,7 +46,7 @@ class CatchViewAdapter(
         notifyDataSetChanged()
     }
 
-    var position: Int = 0
+    private var position: Int = 0
 
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
@@ -73,7 +73,6 @@ class CatchViewAdapter(
 
         override fun onClick(v: View?) {
             catchView.launchDetailView(catchID)
-            Log.d(TAG, "Element $adapterPosition clicked.")
         }
     }
 
@@ -88,7 +87,6 @@ class CatchViewAdapter(
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        Log.d(TAG, "Element $position set.")
         this.position = position
         // Get element from your dataset at this position and replace the contents of the view
         // with that element

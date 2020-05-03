@@ -16,8 +16,7 @@ class Fragment4 : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment4, container, false)
-         return root
+        return inflater.inflate(R.layout.fragment4, container, false)
     }
 
     companion object {

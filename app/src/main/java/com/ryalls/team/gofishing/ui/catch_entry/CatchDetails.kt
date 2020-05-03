@@ -1,7 +1,6 @@
 package com.ryalls.team.gofishing.ui.catch_entry
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +27,6 @@ class CatchDetails : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        Log.d("CatchBasic", "Being Paused")
         viewModel.updatesDetailsCatch(
             lure = lureField.text.toString(),
             structure = structureField.text.toString(),
@@ -44,15 +42,15 @@ class CatchDetails : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.recordReady.observe(viewLifecycleOwner, Observer { catch ->
-            lureField.setText(viewModel.catchRecord?.lure)
-            structureField.setText(viewModel.catchRecord?.structure)
-            water_conditionsField.setText(viewModel.catchRecord?.conditions)
-            fish_depthField.setText(viewModel.catchRecord?.depth)
+            lureField.setText(viewModel.catchRecord.lure)
+            structureField.setText(viewModel.catchRecord.structure)
+            water_conditionsField.setText(viewModel.catchRecord.conditions)
+            fish_depthField.setText(viewModel.catchRecord.depth)
 
-            hook_sizeField.setText(viewModel.catchRecord?.hook)
-            ground_baitField.setText(viewModel.catchRecord?.groundBait)
-            boat_speedField.setText(viewModel.catchRecord?.boatspeed)
-            tidesField.setText(viewModel.catchRecord?.tides)
+            hook_sizeField.setText(viewModel.catchRecord.hook)
+            ground_baitField.setText(viewModel.catchRecord.groundBait)
+            boat_speedField.setText(viewModel.catchRecord.boatspeed)
+            tidesField.setText(viewModel.catchRecord.tides)
         })
     }
 

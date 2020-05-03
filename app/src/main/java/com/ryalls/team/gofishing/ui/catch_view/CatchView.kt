@@ -49,10 +49,6 @@ class CatchView : Fragment(), ILaunchAdapterInterface {
     private val viewModel: CatchDetailsViewModel by activityViewModels()
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onResume() {
         super.onResume()
         activity?.fab?.show()
@@ -81,7 +77,7 @@ class CatchView : Fragment(), ILaunchAdapterInterface {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = layoutManager
 
-        // hide the fab button when scrolling and show when it's not scrolling
+        // Hide the fab button when scrolling and show when it's not scrolling
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -105,12 +101,12 @@ class CatchView : Fragment(), ILaunchAdapterInterface {
         // Get a new or existing ViewModel from the ViewModelProvider.
         val viewModel = ViewModelProvider(this).get(CatchDetailsViewModel::class.java)
 
-        // Add an observer on the LiveData returned by getAlphabetizedWords.
+        // Add an observer on the LiveData returned by getAllCatchByCatchID.
         // The onChanged() method fires when the observed data changes and the activity is
         // in the foreground.
-        viewModel.allWords.observe(viewLifecycleOwner, Observer { words ->
+        viewModel.allWords.observe(viewLifecycleOwner, Observer { catch ->
             // Update the cached copy of the words in the adapter.
-            words?.let { adapter.setWords(it) }
+            catch?.let { adapter.setWords(it) }
         })
 
         return rootView
@@ -118,8 +114,6 @@ class CatchView : Fragment(), ILaunchAdapterInterface {
 
     companion object {
         private const val TAG = "RecyclerViewFragment"
-        private const val KEY_LAYOUT_MANAGER = "layoutManager"
-        private const val DATASET_COUNT = 60
     }
 
     override fun launchDetailView(dbID: Int) {
@@ -134,10 +128,10 @@ class CatchView : Fragment(), ILaunchAdapterInterface {
         val builder = AlertDialog.Builder(context as Context)
         builder.setTitle("Delete Catch")
         builder.setMessage("Do you wish to delete this catch?")
-        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+        builder.setPositiveButton(android.R.string.yes) { _, _ ->
             viewModel.deleteRecord(dbID)
         }
-        builder.setNegativeButton(android.R.string.no) { dialog, which ->
+        builder.setNegativeButton(android.R.string.no) { _, _ ->
         }
         builder.show()
     }

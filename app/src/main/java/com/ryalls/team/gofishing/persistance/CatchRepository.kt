@@ -17,8 +17,6 @@ package com.ryalls.team.gofishing.persistance
 
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
-import com.ryalls.team.gofishing.persistance.CatchDao
-import com.ryalls.team.gofishing.persistance.CatchRecord
 
 /**
  * Abstracted Repository as promoted by the Architecture Guide.
@@ -28,7 +26,7 @@ class CatchRepository(private val catchDao: CatchDao) {
 
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.
-    val allWords: LiveData<List<CatchRecord>> = catchDao.getAlphabetizedWords()
+    val allWords: LiveData<List<CatchRecord>> = catchDao.getAllCatchByCatchID()
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread

@@ -30,7 +30,7 @@ class Fragment5 : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment5, container, false)
         val textView: TextView = root.findViewById(R.id.section_label)
-        pageViewModel.text.observe(viewLifecycleOwner, Observer<String> {
+        pageViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root

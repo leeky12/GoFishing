@@ -16,10 +16,6 @@ import kotlinx.android.synthetic.main.catch_basic.*
  */
 class CatchBasic : Fragment() {
 
-    override fun onResume() {
-        super.onResume()
-    }
-
     private val viewModel: CatchDetailsViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +25,6 @@ class CatchBasic : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        Log.d("CatchBasic", "Being Paused")
         viewModel.updatesBasicCatch(species = speciesField.text.toString(),
             comment = commentsField.text.toString(),
             weight = weightField.text.toString(),
@@ -48,10 +43,10 @@ class CatchBasic : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // in the foreground.
         viewModel.recordReady.observe(viewLifecycleOwner, Observer { catch ->
-            speciesField.setText(viewModel.catchRecord?.species)
-            weightField.setText(viewModel.catchRecord?.weight)
-            lengthField.setText(viewModel.catchRecord?.length)
-            commentsField.setText(viewModel.catchRecord?.comments)
+            speciesField.setText(viewModel.catchRecord.species)
+            weightField.setText(viewModel.catchRecord.weight)
+            lengthField.setText(viewModel.catchRecord.length)
+            commentsField.setText(viewModel.catchRecord.comments)
         })
 
     }

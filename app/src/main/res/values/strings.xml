@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tabbed Sample</string>
+    <string name="app_name">Go Fishing</string>
     <string name="catch_view">Catch List</string>
 
     <string name="data_details">Catch Details</string>
@@ -45,5 +45,6 @@
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <string name="add_catch">Add Catch</string>
+    <string name="line">Line</string>
 
 </resources>

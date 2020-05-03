@@ -16,7 +16,7 @@
 
 package com.ryalls.team.gofishing.persistance
 
-import androidx.lifecycle.LiveData;
+import androidx.lifecycle.LiveData
 import androidx.room.*
 
 
@@ -37,7 +37,7 @@ interface CatchDao {
     // data has changed. Since we are getting all the contents of the database,
     // we are notified whenever any of the database contents have changed.
     @Query("SELECT * from catch_table ORDER BY catchID DESC")
-    fun getAlphabetizedWords(): LiveData<List<CatchRecord>>
+    fun getAllCatchByCatchID(): LiveData<List<CatchRecord>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(catchRecord: CatchRecord)

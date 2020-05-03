@@ -110,10 +110,6 @@ class CatchEntryFragment : Fragment() {
         viewModel.update(catchRecord)
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
-    }
-
     private fun getCatchRecord(): CatchRecord {
         val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
         val date = Date()
