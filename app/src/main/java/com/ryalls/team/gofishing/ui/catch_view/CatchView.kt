@@ -18,6 +18,7 @@ package com.ryalls.team.gofishing.ui.catch_view
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,10 +31,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
+import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_SETTLING
 import com.ryalls.team.gofishing.R
 import com.ryalls.team.gofishing.interfaces.ILaunchAdapterInterface
-import com.ryalls.team.gofishing.persistance.CatchRecord
 import com.ryalls.team.gofishing.ui.catch_entry.CatchDetailsViewModel
+import kotlinx.android.synthetic.main.app_bar_start_activity.*
 
 /**
  * Demonstrates the use of [RecyclerView] with a [LinearLayoutManager]
@@ -42,13 +45,18 @@ class CatchView : Fragment(), ILaunchAdapterInterface {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var layoutManager: RecyclerView.LayoutManager
-    private lateinit var dataset: List<CatchRecord>
 
     private val viewModel: CatchDetailsViewModel by activityViewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.fab?.show()
+
     }
 
     override fun onCreateView(
@@ -72,6 +80,27 @@ class CatchView : Fragment(), ILaunchAdapterInterface {
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = layoutManager
+
+        // hide the fab button when scrolling and show when it's not scrolling
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0 && activity?.fab?.visibility == View.VISIBLE) {
+                    activity?.fab?.hide()
+                } else if (dy < 0 && activity?.fab?.visibility == View.VISIBLE) {
+                    activity?.fab?.hide()
+                }
+            }
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == SCROLL_STATE_IDLE)
+                {
+                    activity?.fab?.show()
+                }
+            }
+
+        })
 
         // Get a new or existing ViewModel from the ViewModelProvider.
         val viewModel = ViewModelProvider(this).get(CatchDetailsViewModel::class.java)
@@ -105,12 +134,9 @@ class CatchView : Fragment(), ILaunchAdapterInterface {
         val builder = AlertDialog.Builder(context as Context)
         builder.setTitle("Delete Catch")
         builder.setMessage("Do you wish to delete this catch?")
-        //builder.setPositiveButton("OK", DialogInterface.OnClickListener(function = x))
-
         builder.setPositiveButton(android.R.string.yes) { dialog, which ->
             viewModel.deleteRecord(dbID)
         }
-
         builder.setNegativeButton(android.R.string.no) { dialog, which ->
         }
         builder.show()

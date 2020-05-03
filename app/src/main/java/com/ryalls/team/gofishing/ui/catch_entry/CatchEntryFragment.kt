@@ -5,9 +5,11 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ryalls.team.gofishing.R
 import com.ryalls.team.gofishing.persistance.CatchRecord
+import kotlinx.android.synthetic.main.app_bar_start_activity.*
 import kotlinx.android.synthetic.main.catch_basic.*
 import kotlinx.android.synthetic.main.catch_details.*
 import kotlinx.android.synthetic.main.catch_tackle.*
@@ -52,6 +54,8 @@ class CatchEntryFragment : Fragment() {
                 tab.text = getString(TAB_TITLES[position])
             }).attach()
 
+        activity?.fab?.hide()
+
         dbID = arguments?.getString("dbID")
         if (dbID != null) {
             viewModel.getRecord(dbID!!.toInt())
@@ -67,22 +71,26 @@ class CatchEntryFragment : Fragment() {
         return when (item.itemId) {
             R.id.add_catch -> {
                 // check to see if the catch has been filled in, at least trout
-                val myFragment = childFragmentManager.findFragmentByTag("f" + 1)
-                if (myFragment == null) {
-                    view_pager.setCurrentItem(1, true)
-                    return true
-                }
-                val data = myFragment.speciesField?.text.toString()
-                if (data.isEmpty()) {
-                    myFragment.speciesField?.error = "Please enter details"
-                    view_pager.setCurrentItem(1, true)
-                    return true
+                if (dbID == null) {
+                    val myFragment = childFragmentManager.findFragmentByTag("f" + 1)
+                    if (myFragment == null) {
+                        view_pager.setCurrentItem(1, true)
+                        return true
+                    }
+                    val data = myFragment.speciesField?.text.toString()
+                    if (data.isEmpty()) {
+                        myFragment.speciesField?.error = "Please enter details"
+                        view_pager.setCurrentItem(1, true)
+                        return true
+                    }
                 }
                 if (dbID == null) {
                     insertRecord()
                 } else {
                     updateRecord()
                 }
+                viewModel.resetCatchDetails()
+                // pop back the stack so you go back to the list view
                 val navController = findNavController().popBackStack()
                 true
             }

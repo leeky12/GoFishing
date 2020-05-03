@@ -27,7 +27,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     // - Repository is completely separated from the UI through the ViewModel.
     var allWords: LiveData<List<CatchRecord>>
 
-    var catchRecord : CatchRecord = CatchRecord("")
+    var catchRecord: CatchRecord = CatchRecord("")
 
     // Mutable String used to indicate the list has been completely filled  with the data
     val recordReady: MutableLiveData<String> by lazy {
@@ -36,13 +36,13 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
 
 
     init {
-        val catchDao = CatchRoomDatabase.getDatabase(context = application, scope = viewModelScope).catchDao()
+        val catchDao =
+            CatchRoomDatabase.getDatabase(context = application, scope = viewModelScope).catchDao()
         repository = CatchRepository(catchDao)
         allWords = repository.allWords
-     }
+    }
 
-    fun getRecord(recordID : Int)
-    {
+    fun getRecord(recordID: Int) {
         GlobalScope.launch {
             withContext(Dispatchers.IO) {
                 Log.d("TestCoroutine", "Started " + recordID)
@@ -56,9 +56,25 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         }
     }
 
-    fun updatesDetailsCatch(lure :  String, structure:  String, conditions:  String, depth:  String,
-    hook : String, groundbait :  String, boatspeed:  String, tides:  String)
-    {
+    fun resetCatchDetails() {
+        catchRecord.lure = ""
+        catchRecord.structure = ""
+        catchRecord.conditions = ""
+        catchRecord.depth = ""
+        catchRecord.hook = ""
+        catchRecord.groundBait = ""
+        catchRecord.boatspeed = ""
+        catchRecord.tides = ""
+        catchRecord.species = ""
+        catchRecord.comments = ""
+        catchRecord.weight = ""
+        catchRecord.length = ""
+    }
+
+    fun updatesDetailsCatch(
+        lure: String, structure: String, conditions: String, depth: String,
+        hook: String, groundbait: String, boatspeed: String, tides: String
+    ) {
 //        catchRecord.lure = lure
 //        catchRecord.structure = structure
 //        catchRecord.conditions = conditions
@@ -69,32 +85,35 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
 //        catchRecord.tides = tides
     }
 
-    fun updatesBasicCatch(species :  String, comment:  String, weight:  String, length:  String)
-    {
+    fun updatesBasicCatch(species: String, comment: String, weight: String, length: String) {
 //        catchRecord.species = species
 //        catchRecord.comments = comment
 //        catchRecord.weight = weight
 //        catchRecord.length = length
     }
 
-    fun update(updateRecord : CatchRecord) = viewModelScope.launch(Dispatchers.IO) {
+    fun update(updateRecord: CatchRecord) = viewModelScope.launch(Dispatchers.IO) {
         updateRecord.catchID = catchRecord.catchID
         Log.d("CatchRecord", "" + updateRecord.catchID)
         repository.update(updateRecord)
     }
 
-    fun deleteRecord(catchID : Int) = viewModelScope.launch(Dispatchers.IO) {
+    fun deleteRecord(catchID: Int) = viewModelScope.launch(Dispatchers.IO) {
         repository.deleteRecord(catchID)
     }
+
     /**
      * Launching a new coroutine to insert the data in a non-blocking way
      */
-    fun insert(catchRecord : CatchRecord) = viewModelScope.launch(Dispatchers.IO) {
+    fun insert(catchRecord: CatchRecord) = viewModelScope.launch(Dispatchers.IO) {
         val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
         val date = Date()
         catchRecord.date = formatter.format(date)
 
-        Log.d("CatchRecord", catchRecord.species + " " + catchRecord.date + " " + catchRecord.location)
+        Log.d(
+            "CatchRecord",
+            catchRecord.species + " " + catchRecord.date + " " + catchRecord.location
+        )
         repository.insert(catchRecord)
     }
 

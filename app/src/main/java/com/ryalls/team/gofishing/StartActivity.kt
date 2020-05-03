@@ -5,6 +5,7 @@ import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -43,6 +44,8 @@ class StartActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener {
+            val catchDetailsViewModel = ViewModelProvider(this).get(CatchDetailsViewModel::class.java)
+            catchDetailsViewModel.resetCatchDetails()
             navController.navigate(R.id.nav_details)
         }
 

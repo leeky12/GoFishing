@@ -16,6 +16,10 @@ import kotlinx.android.synthetic.main.catch_basic.*
  */
 class CatchBasic : Fragment() {
 
+    override fun onResume() {
+        super.onResume()
+    }
+
     private val viewModel: CatchDetailsViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
