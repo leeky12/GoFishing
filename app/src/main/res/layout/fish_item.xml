@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="@dimen/design_snackbar_padding_horizontal"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_toEndOf="@+id/fishThumbnail"
             android:textAppearance="?android:attr/textAppearanceSmall"

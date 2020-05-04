@@ -52,7 +52,6 @@ class CatchView : Fragment(), ILaunchAdapterInterface {
     override fun onResume() {
         super.onResume()
         activity?.fab?.show()
-
     }
 
     override fun onCreateView(

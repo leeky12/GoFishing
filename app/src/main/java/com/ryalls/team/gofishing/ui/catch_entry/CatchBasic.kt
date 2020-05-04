@@ -34,6 +34,15 @@ class CatchBasic : Fragment() {
             weight = weightField.text.toString(),
             length = lengthField.text.toString()
         )
+        speciesField.error = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (speciesField.text.toString().isEmpty())
+        {
+            speciesField.error = getString(R.string.enter_species)
+        }
     }
 
     override fun onCreateView(
@@ -58,12 +67,7 @@ class CatchBasic : Fragment() {
             speciesField.setText(viewModel.catchRecord.species)
         })
 
-        if (speciesField.text.toString().isEmpty())
-        {
-            speciesField.error = getString(R.string.enter_species)
-        }
     }
-
 
     companion object {
         /**

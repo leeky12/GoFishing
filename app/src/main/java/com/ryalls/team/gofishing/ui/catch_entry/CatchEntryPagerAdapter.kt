@@ -12,7 +12,7 @@ import com.ryalls.team.gofishing.R
  * one of the sections/tabs/pages.
  */
 class CatchEntryPagerAdapter(private val context: Context, fm: FragmentManager)
-    : FragmentPagerAdapter(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+    : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     private val TAB_TITLES = arrayOf(
         R.string.catch_picture,
