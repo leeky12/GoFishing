@@ -21,6 +21,8 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
 
     private var repository: CatchRepository
 
+    var currentPage = 0
+
     // Using LiveData and caching what getAlphabetizedWords returns has several benefits:
     // - We can put an observer on the data (instead of polling for changes) and only update the
     //   the UI when the data actually changes.
@@ -69,27 +71,36 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         catchRecord.comments = ""
         catchRecord.weight = ""
         catchRecord.length = ""
+        catchRecord.line = ""
+        catchRecord.rod = ""
+        catchRecord.reel = ""
     }
 
-    fun updatesDetailsCatch(
+    fun updatesTackle(rod: String, reel: String, line: String ) {
+        catchRecord.line = line
+        catchRecord.reel = reel
+        catchRecord.rod = rod
+    }
+
+        fun updatesDetailsCatch(
         lure: String, structure: String, conditions: String, depth: String,
         hook: String, groundbait: String, boatspeed: String, tides: String
     ) {
-//        catchRecord.lure = lure
-//        catchRecord.structure = structure
-//        catchRecord.conditions = conditions
-//        catchRecord.depth = depth
-//        catchRecord.hook = hook
-//        catchRecord.groundBait = groundbait
-//        catchRecord.boatspeed = boatspeed
-//        catchRecord.tides = tides
+        catchRecord.lure = lure
+        catchRecord.structure = structure
+        catchRecord.conditions = conditions
+        catchRecord.depth = depth
+        catchRecord.hook = hook
+        catchRecord.groundBait = groundbait
+        catchRecord.boatspeed = boatspeed
+        catchRecord.tides = tides
     }
 
     fun updatesBasicCatch(species: String, comment: String, weight: String, length: String) {
-//        catchRecord.species = species
-//        catchRecord.comments = comment
-//        catchRecord.weight = weight
-//        catchRecord.length = length
+        catchRecord.species = species
+        catchRecord.comments = comment
+        catchRecord.weight = weight
+        catchRecord.length = length
     }
 
     fun update(updateRecord: CatchRecord) = viewModelScope.launch(Dispatchers.IO) {

@@ -1,15 +1,18 @@
 package com.ryalls.team.gofishing.ui.catch_entry
 
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.ryalls.team.gofishing.R
+import com.ryalls.team.gofishing.data.FishList
 import kotlinx.android.synthetic.main.catch_basic.*
+
 
 /**
  * A placeholder fragment containing a simple view.
@@ -20,6 +23,8 @@ class CatchBasic : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         retainInstance = true
     }
 
@@ -42,12 +47,22 @@ class CatchBasic : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // in the foreground.
+        val adapter: ArrayAdapter<String> =
+            ArrayAdapter<String>(context as Context, android.R.layout.select_dialog_item, FishList.fish_list)
+
+        speciesField.threshold = 1
+        speciesField.setAdapter(adapter)
+
         viewModel.recordReady.observe(viewLifecycleOwner, Observer { catch ->
             speciesField.setText(viewModel.catchRecord.species)
             weightField.setText(viewModel.catchRecord.weight)
             lengthField.setText(viewModel.catchRecord.length)
             commentsField.setText(viewModel.catchRecord.comments)
         })
+        if (speciesField.text.toString().isEmpty())
+        {
+            speciesField.error = "Please enter a species"
+        }
 
     }
 

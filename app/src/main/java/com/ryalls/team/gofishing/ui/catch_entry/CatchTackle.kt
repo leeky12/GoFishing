@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import com.ryalls.team.gofishing.R
+import kotlinx.android.synthetic.main.catch_tackle.*
 
 /**
  * A placeholder fragment containing a simple view.
@@ -24,8 +26,22 @@ class CatchTackle : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+        viewModel.recordReady.observe(viewLifecycleOwner, Observer { catch ->
+            rodField.setText(viewModel.catchRecord.rod)
+            reelField.setText(viewModel.catchRecord.reel)
+            lineField.setText(viewModel.catchRecord.line)
+        })
     }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.updatesTackle(
+            rod = rodField.text.toString(),
+            line = lineField.text.toString(),
+            reel = reelField.text.toString()
+        )
+    }
+
 
     companion object {
         /**
