@@ -51,6 +51,7 @@ class CatchDetails : Fragment() {
             ground_baitField.setText(viewModel.catchRecord.groundBait)
             boat_speedField.setText(viewModel.catchRecord.boatspeed)
             tidesField.setText(viewModel.catchRecord.tides)
+            lureField.requestFocus ()
         })
     }
 

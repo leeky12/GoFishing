@@ -1,13 +1,14 @@
 package com.ryalls.team.gofishing.ui.catch_entry
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
-import com.google.android.material.tabs.TabLayoutMediator
+import androidx.viewpager.widget.ViewPager
 import com.ryalls.team.gofishing.R
 import com.ryalls.team.gofishing.persistance.CatchRecord
 import kotlinx.android.synthetic.main.app_bar_start_activity.*
@@ -18,7 +19,7 @@ import kotlinx.android.synthetic.main.edit_tabbed_fragment.*
 class CatchEntryFragment : Fragment() {
 
     private val viewModel: CatchDetailsViewModel by activityViewModels()
-    private var dbID : String? = null
+    private var dbID: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,17 +46,30 @@ class CatchEntryFragment : Fragment() {
             R.string.tab_text_5
         )
 
+        view_pager.adapter = CatchEntryPagerAdapter(context as Context,  childFragmentManager)
+        tabs.setupWithViewPager(view_pager)
 
-        view_pager.adapter = CatchEntryPagerAdapter(this)
-        TabLayoutMediator(tabs, view_pager,
-            TabLayoutMediator.TabConfigurationStrategy { tab, position ->
-                tab.text = getString(TAB_TITLES[position])
-            }).attach()
 
-        view_pager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
+//        view_pager.adapter = CatchEntryPagerAdapter(this)
+//        TabLayoutMediator(tabs, view_pager,
+//            TabLayoutMediator.TabConfigurationStrategy { tab, position ->
+//                tab.text = getString(TAB_TITLES[position])
+//            }).attach()
+
+        view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+            }
+
             override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                viewModel.currentPage = position
+                 viewModel.currentPage = position
                 Log.d("Selected_Page", position.toString())
             }
         })
@@ -78,16 +92,17 @@ class CatchEntryFragment : Fragment() {
             R.id.add_catch -> {
                 // check to see if the catch has been filled in, at least trout
                 Log.d("Current Page", "Current Page " + viewModel.currentPage)
-                val myFragment = childFragmentManager.findFragmentByTag("f" + viewModel.currentPage)
+
+                val name = "android:switcher:" + R.id.view_pager + ":" + view_pager.currentItem
+                val myFragment = childFragmentManager.findFragmentByTag(name)
+
                 myFragment?.onPause()
 
-   //              check to see if species actually has something in it if so it means we have been to that screen already.
-
-                if (dbID == null) {
+                if (dbID == null || myFragment?.speciesField?.text.toString().isEmpty()) {
                     val data = viewModel.catchRecord.species
                     if (data.isEmpty()) {
-                        myFragment?.speciesField?.error = "Please enter species"
                         view_pager.setCurrentItem(1, true)
+                        myFragment?.species?.error = getString(R.string.enter_species)
                         return true
                     }
                 }

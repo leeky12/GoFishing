@@ -66,10 +66,6 @@ class CatchView : Fragment(), ILaunchAdapterInterface {
         ).apply { tag = TAG }
 
         recyclerView = rootView.findViewById(R.id.recyclerView)
-
-        // LinearLayoutManager is used here, this will layout the elements in a similar fashion
-        // to the way ListView would layout elements. The RecyclerView.LayoutManager defines how
-        // elements are laid out.
         layoutManager = LinearLayoutManager(activity)
 
         val adapter = CatchViewAdapter(this)

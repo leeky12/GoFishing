@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
  * This is the backend. The database. This used to be done by the OpenHelper.
  * The fact that this has very few comments emphasizes its coolness.
  */
-@Database(entities = [CatchRecord::class], version = 1)
+@Database(entities = [CatchRecord::class], version = 2)
 abstract class CatchRoomDatabase : RoomDatabase() {
 
     abstract fun catchDao(): CatchDao
