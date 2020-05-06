@@ -2,6 +2,7 @@ package com.ryalls.team.gofishing.ui.catch_entry
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +28,6 @@ class CatchWeather : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         viewModel.weatherPresent.observe(viewLifecycleOwner, Observer { weather ->
             rainField.setText(viewModel.todaysWeather.rain.toString())
             tempField.setText(viewModel.todaysWeather.temp.toString())
@@ -38,8 +38,8 @@ class CatchWeather : Fragment() {
             windDirectionField.setText(viewModel.todaysWeather.windDirection.toString())
             windSpeedField.setText(viewModel.todaysWeather.windSpeed.toString())
             locationField.setText(viewModel.catchRecord.location)
+            Log.d("Volley", "Weather Present Observer called")
         })
-
     }
 
     override fun onPause() {
@@ -55,7 +55,6 @@ class CatchWeather : Fragment() {
             windSpeedField.text.toString()
         )
     }
-
 
     companion object {
         /**
