@@ -1,15 +1,24 @@
 package com.ryalls.team.gofishing.ui.catch_entry
 
+import com.ryalls.team.gofishing.data.weather.GSONWeather
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.viewpager.widget.ViewPager
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
+import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import com.ryalls.team.gofishing.R
 import com.ryalls.team.gofishing.persistance.CatchRecord
+import com.ryalls.team.gofishing.utils.WeatherConvertor
 import kotlinx.android.synthetic.main.app_bar_start_activity.*
 import kotlinx.android.synthetic.main.catch_basic.*
 import kotlinx.android.synthetic.main.edit_tabbed_fragment.*
@@ -42,6 +51,7 @@ class CatchEntryFragment : Fragment() {
 
         activity?.fab?.hide()
 
+
         dbID = arguments?.getString("dbID")
         if (dbID != null) {
             viewModel.getRecord(dbID!!.toInt())
@@ -52,6 +62,7 @@ class CatchEntryFragment : Fragment() {
         inflater.inflate(R.menu.add_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

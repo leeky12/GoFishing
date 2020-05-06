@@ -38,7 +38,7 @@ class CatchEntryPagerAdapter(private val context: Context, fm: FragmentManager)
             3 ->
                 CatchTackle.newInstance(position + 1)
             4 ->
-                Fragment4.newInstance(position + 1)
+                CatchWeather.newInstance(position + 1)
             else ->
                 Fragment5.newInstance(position + 1)
         }

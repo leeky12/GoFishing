@@ -23,7 +23,7 @@
             android:layout_height="100dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:contentDescription=""
+            android:contentDescription="@string/catch_image"
             android:src="@drawable/ic_fisher" />
 
         <TextView

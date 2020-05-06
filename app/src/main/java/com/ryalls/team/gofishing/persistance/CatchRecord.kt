@@ -83,5 +83,44 @@ data class CatchRecord(@ColumnInfo(name = "species") var species: String) {
 
     @ColumnInfo(name = "line")
     var line: String = ""
+
+    @ColumnInfo(name = "rain")
+    var rain: String = ""
+
+    @ColumnInfo(name = "clouds")
+    var clouds: String = ""
+
+    @ColumnInfo(name = "humidity")
+    var humidity: String = ""
+
+    @ColumnInfo(name = "pressure")
+    var pressure: String = ""
+
+    @ColumnInfo(name = "temp")
+    var temp: String = ""
+
+    @ColumnInfo(name = "windDirection")
+    var windDirection: String = ""
+
+    @ColumnInfo(name = "weatherDescription")
+    var weatherDescription: String = ""
+
+    @ColumnInfo(name = "windSpeed")
+    var windSpeed: String = ""
+
+    @ColumnInfo(name = "town")
+    var town: String = ""
+
+    @ColumnInfo(name = "latitude")
+    var latitude: String = ""
+
+    @ColumnInfo(name = "longitude")
+    var longitude: String = ""
+
+    @ColumnInfo(name = "weatherIcon")
+    var weatherIcon: String = ""
+
+
+
 }
 
