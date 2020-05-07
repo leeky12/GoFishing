@@ -52,9 +52,6 @@ class CatchEntryFragment : Fragment() {
      */
     private var fusedLocationClient: FusedLocationProviderClient? = null
 
-
-
-
     private val viewModel: CatchDetailsViewModel by activityViewModels()
     private var dbID: String? = null
 
@@ -80,7 +77,6 @@ class CatchEntryFragment : Fragment() {
         tabs.setupWithViewPager(view_pager)
 
         activity?.fab?.hide()
-
 
         dbID = arguments?.getString("dbID")
         if (dbID != null) {
@@ -171,7 +167,7 @@ class CatchEntryFragment : Fragment() {
                 val sb = StringBuilder()
                 if (addresses.size > 0) {
                     address = addresses[0]
-                    town = address.getAddressLine(0)
+//                    town = address.locality
                 }
             } catch (ioe: IOException) {
                 // if no location then city should be "Unknown"
@@ -182,7 +178,7 @@ class CatchEntryFragment : Fragment() {
             // as its a viewable or edit on that record
 
             if (town != null) {
-                viewModel.catchRecord.location = town
+//                viewModel.catchRecord.location = town
             }
             Log.i(TAG, "Location is = $town")
 

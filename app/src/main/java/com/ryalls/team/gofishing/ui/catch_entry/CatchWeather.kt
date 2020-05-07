@@ -1,6 +1,5 @@
 package com.ryalls.team.gofishing.ui.catch_entry
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -37,7 +36,7 @@ class CatchWeather : Fragment() {
             descriptionField.setText(viewModel.todaysWeather.weatherDescription)
             windDirectionField.setText(viewModel.todaysWeather.windDirection.toString())
             windSpeedField.setText(viewModel.todaysWeather.windSpeed.toString())
-            locationField.setText(viewModel.catchRecord.location)
+            locationField.setText(viewModel.todaysWeather.location)
             Log.d("Volley", "Weather Present Observer called")
         })
     }
@@ -52,7 +51,8 @@ class CatchWeather : Fragment() {
             tempField.text.toString(),
             descriptionField.text.toString(),
             windDirectionField.text.toString(),
-            windSpeedField.text.toString()
+            windSpeedField.text.toString(),
+            locationField.text.toString()
         )
     }
 

@@ -1,7 +1,6 @@
 package com.ryalls.team.gofishing.ui.catch_entry
 
 import android.app.Application
-import android.content.ClipDescription
 import android.content.Context
 import android.location.Location
 import android.util.Log
@@ -38,7 +37,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     //   the UI when the data actually changes.
     // - Repository is completely separated from the UI through the ViewModel.
     var allWords: LiveData<List<CatchRecord>>
-    lateinit var todaysWeather : WeatherData
+    lateinit var todaysWeather: WeatherData
 
     val weatherPresent: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
@@ -88,6 +87,15 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         catchRecord.line = ""
         catchRecord.rod = ""
         catchRecord.reel = ""
+        catchRecord.rain = ""
+        catchRecord.clouds = ""
+        catchRecord.humidity = ""
+        catchRecord.pressure = ""
+        catchRecord.temp = ""
+        catchRecord.weatherDescription = ""
+        catchRecord.windDirection = ""
+        catchRecord.windSpeed = ""
+        catchRecord.town = ""
     }
 
     fun updatesTackle(rod: String, reel: String, line: String) {
@@ -117,8 +125,10 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         catchRecord.length = length
     }
 
-    fun updateWeather(rain: String, clouds: String, humidity: String, pressure: String, temp: String,
-    weatherDescription:String, windDirection : String, windSpeed : String) {
+    fun updateWeather(
+        rain: String, clouds: String, humidity: String, pressure: String, temp: String,
+        weatherDescription: String, windDirection: String, windSpeed: String, town: String
+    ) {
         catchRecord.rain = rain
         catchRecord.clouds = clouds
         catchRecord.humidity = humidity
@@ -127,11 +137,11 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         catchRecord.weatherDescription = weatherDescription
         catchRecord.windDirection = windDirection
         catchRecord.windSpeed = windSpeed
+        catchRecord.town = town
     }
 
-    fun updateLocation(town : String, latitude : String, longitude : String)
-    {
-        catchRecord.town = town
+    fun updateLocation(town: String, latitude: String, longitude: String) {
+//        catchRecord.town = town
         catchRecord.latitude = latitude
         catchRecord.longitude = longitude
     }
@@ -161,7 +171,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         repository.insert(catchRecord)
     }
 
-    fun getWeather(context: Context, location : Location) {
+    fun getWeather(context: Context, location: Location) {
         GlobalScope.launch {
             withContext(Dispatchers.IO) {
                 // Instantiate the RequestQueue.

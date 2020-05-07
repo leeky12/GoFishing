@@ -15,6 +15,7 @@ class WeatherConvertor {
         weatherData.windDirection = wd.wind.deg.toFloat()
         weatherData.windSpeed = wd.wind.speed.toFloat()
         weatherData.weatherDescription = wd.weather[0].description
+        weatherData.location = wd.name
         return weatherData
     }
 }
