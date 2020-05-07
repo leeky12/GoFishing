@@ -23,7 +23,7 @@
         android:minHeight="100dp"
         android:scaleType="fitXY"
         android:src="@drawable/ic_menu_camera"
-        android:text="Button"
+        android:text="Take Picture"
         android:theme="@style/AppTheme.MyRipple"
         app:layout_constraintBottom_toTopOf="@+id/catchImage"
         app:layout_constraintEnd_toEndOf="parent"
