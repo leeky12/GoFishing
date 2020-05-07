@@ -3,7 +3,6 @@ package com.ryalls.team.gofishing.ui.catch_entry
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import com.ryalls.team.gofishing.data.weather.GSONWeather
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -18,31 +17,20 @@ import android.view.*
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
 import com.ryalls.team.gofishing.BuildConfig
 import com.ryalls.team.gofishing.R
-import com.ryalls.team.gofishing.StartActivity
 import com.ryalls.team.gofishing.persistance.CatchRecord
-import com.ryalls.team.gofishing.utils.WeatherConvertor
 import kotlinx.android.synthetic.main.app_bar_start_activity.*
 import kotlinx.android.synthetic.main.catch_basic.*
 import kotlinx.android.synthetic.main.edit_tabbed_fragment.*
 import java.io.IOException
 import java.util.*
-
 
 
 class CatchEntryFragment : Fragment() {
@@ -203,7 +191,6 @@ class CatchEntryFragment : Fragment() {
 
         })?.addOnFailureListener(activity as Activity) { e -> Log.w(TAG, "getLastLocation:onFailure", e) }
     }
-
 
     /**
      * Return the current state of the permissions needed.
