@@ -1,13 +1,17 @@
 package com.ryalls.team.gofishing.ui.catch_entry
 
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.ryalls.team.gofishing.R
-import kotlinx.android.synthetic.main.catch_details.*
+import kotlinx.android.synthetic.main.catch_picture.*
 
 /**
  * A placeholder fragment containing a simple view.
@@ -26,8 +30,29 @@ class CatchPicture : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
- //       val data = viewModel.allWords
+        takePicture.setOnClickListener {
+            takePictureIntent()
+        }
     }
+
+    val REQUEST_IMAGE_CAPTURE = 1
+
+    private fun takePictureIntent() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            val act = activity as Activity
+            takePictureIntent.resolveActivity(act.packageManager)?.also {
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+            val imageBitmap = data?.extras?.get("data") as Bitmap
+            // imageView.setImageBitmap(imageBitmap)
+        }
+    }
+
 
     companion object {
         /**
