@@ -102,10 +102,10 @@ class CatchEntryFragment : Fragment() {
                 myFragment?.onPause()
 
                 if (viewModel.catchRecord.species.isEmpty()) {
-                        view_pager.setCurrentItem(1, true)
-                        myFragment?.speciesField?.error = getString(R.string.enter_species)
-                        return true
-                    }
+                    view_pager.setCurrentItem(1, true)
+                    myFragment?.speciesField?.error = getString(R.string.enter_species)
+                    return true
+                }
 
                 if (dbID == null) {
                     insertRecord()
@@ -151,55 +151,67 @@ class CatchEntryFragment : Fragment() {
      */
     @SuppressLint("MissingPermission")
     private fun getAddress() {
-        fusedLocationClient?.lastLocation?.addOnSuccessListener(activity as Activity, OnSuccessListener { location ->
-            var town: String? = "Unknown"
-            if (location == null) {
-                Log.w(TAG, "onSuccess:null")
-                return@OnSuccessListener
-            }
-
-            lastLocation = location
-            val gc = Geocoder(activity as Activity, Locale.getDefault())
-            val address: Address
-            try {
-                val addresses =
-                    gc.getFromLocation(location.latitude, location.longitude, 1)
-                val sb = StringBuilder()
-                if (addresses.size > 0) {
-                    address = addresses[0]
-//                    town = address.locality
+        fusedLocationClient?.lastLocation?.addOnSuccessListener(
+            activity as Activity,
+            OnSuccessListener { location ->
+                var town: String? = "Unknown"
+                if (location == null) {
+                    Log.w(TAG, "onSuccess:null")
+                    return@OnSuccessListener
                 }
-            } catch (ioe: IOException) {
-                // if no location then city should be "Unknown"
-            }
 
-            // put some code in so this goes to a temporary structure and of its a new entry
-            // then copy this structure over to the catchRecord else leave the original record alone
-            // as its a viewable or edit on that record
+                lastLocation = location
+                val gc = Geocoder(activity as Activity, Locale.getDefault())
+                val address: Address
+                try {
+                    val addresses =
+                        gc.getFromLocation(location.latitude, location.longitude, 1)
+                    val sb = StringBuilder()
+                    if (addresses.size > 0) {
+                        address = addresses[0]
+//                    town = address.locality
+                    }
+                } catch (ioe: IOException) {
+                    // if no location then city should be "Unknown"
+                }
 
-            if (town != null) {
+                // put some code in so this goes to a temporary structure and of its a new entry
+                // then copy this structure over to the catchRecord else leave the original record alone
+                // as its a viewable or edit on that record
+
+                if (town != null) {
 //                viewModel.catchRecord.location = town
-            }
-            Log.i(TAG, "Location is = $town")
+                }
+                Log.i(TAG, "Location is = $town")
 
-            viewModel.getWeather(context as Context, location)
+                viewModel.getWeather(context as Context, location)
 
 
-        })?.addOnFailureListener(activity as Activity) { e -> Log.w(TAG, "getLastLocation:onFailure", e) }
+            })?.addOnFailureListener(activity as Activity) { e ->
+            Log.w(
+                TAG,
+                "getLastLocation:onFailure",
+                e
+            )
+        }
     }
 
     /**
      * Return the current state of the permissions needed.
      */
     private fun checkPermissions(): Boolean {
-        val permissionState = ActivityCompat.checkSelfPermission(activity as Activity,
-            Manifest.permission.ACCESS_FINE_LOCATION)
+        val permissionState = ActivityCompat.checkSelfPermission(
+            activity as Activity,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
         return permissionState == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestPermissions() {
-        val shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(activity as Activity,
-            Manifest.permission.ACCESS_FINE_LOCATION)
+        val shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(
+            activity as Activity,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
 
         // Provide an additional rationale to the user. This would happen if the user denied the
         // request previously, but didn't check the "Don't ask again" checkbox.
@@ -209,9 +221,11 @@ class CatchEntryFragment : Fragment() {
             showSnackbar(R.string.permission_rationale, android.R.string.ok,
                 View.OnClickListener {
                     // Request permission
-                    ActivityCompat.requestPermissions(activity as Activity,
+                    ActivityCompat.requestPermissions(
+                        activity as Activity,
                         arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                        REQUEST_PERMISSIONS_REQUEST_CODE)
+                        REQUEST_PERMISSIONS_REQUEST_CODE
+                    )
                 })
 
         } else {
@@ -219,8 +233,10 @@ class CatchEntryFragment : Fragment() {
             // Request permission. It's possible this can be auto answered if device policy
             // sets the permission in a given state or the user denied the permission
             // previously and checked "Never ask again".
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                REQUEST_PERMISSIONS_REQUEST_CODE)
+            requestPermissions(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_PERMISSIONS_REQUEST_CODE
+            )
         }
     }
 
@@ -236,8 +252,10 @@ class CatchEntryFragment : Fragment() {
         actionStringId: Int,
         listener: View.OnClickListener
     ) {
-        Snackbar.make(view as View, getString(mainTextStringId),
-            Snackbar.LENGTH_INDEFINITE)
+        Snackbar.make(
+            view as View, getString(mainTextStringId),
+            Snackbar.LENGTH_INDEFINITE
+        )
             .setAction(getString(actionStringId), listener)
             .show()
     }
