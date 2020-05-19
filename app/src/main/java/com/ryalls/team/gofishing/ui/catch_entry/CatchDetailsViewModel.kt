@@ -60,7 +60,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     fun getRecord(recordID: Int) {
         GlobalScope.launch {
             withContext(Dispatchers.IO) {
-                Log.d("TestCoroutine", "Started " + recordID)
+                Log.d("TestCoroutine", "Started $recordID")
                 catchRecord = repository.getRecord(recordID)
                 Log.d("TestCoroutine", "Finished")
             }
@@ -148,7 +148,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
 
     fun update(updateRecord: CatchRecord) = viewModelScope.launch(Dispatchers.IO) {
         updateRecord.catchID = catchRecord.catchID
-        Log.d("CatchRecord", "" + updateRecord.catchID)
+        Log.d("CatchRecord", "${updateRecord.catchID}")
         repository.update(updateRecord)
     }
 
@@ -176,29 +176,32 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
             withContext(Dispatchers.IO) {
                 // Instantiate the RequestQueue.
                 val queue = Volley.newRequestQueue(context)
+                val latitude = location.latitude
+                val longitude = location.longitude
+
                 val url: String =
-                    "https://api.openweathermap.org/data/2.5/weather?lat=" + location.latitude + "&lon=" + location.longitude + "&APPID=b4a56ac53a68780edf02ac7deb48b25e"
-                // 51.2560767,-1.142331
+                    "https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&APPID=b4a56ac53a68780edf02ac7deb48b25e"
+
                 // Request a string response from the provided URL.
                 val stringReq = StringRequest(
                     Request.Method.GET, url,
-                    Response.Listener<String> { response ->
+                    Response.Listener { response ->
                         val gson = Gson()
                         try {
                             val wd = gson.fromJson(response, GSONWeather::class.java)
                             val weatherConv = WeatherConvertor()
                             todaysWeather = weatherConv.createWeatherData(wd)
                             weatherPresent.value = "True"
-                            Log.d("Volley", "Got Data " + todaysWeather.weatherDescription)
+                            Log.d("Volley", "Got Data ${todaysWeather.weatherDescription}")
                         } catch (jse: JsonSyntaxException) {
                             Log.d(
                                 "Volley",
-                                "com.ryalls.team.gofishing.data.weather.Weather not found " + jse.toString()
+                                "com.ryalls.team.gofishing.data.weather.Weather not found $jse"
                             )
                         }
                     },
                     Response.ErrorListener { response ->
-                        Log.d("Volley", "Didn't work " + response.toString())
+                        Log.d("Volley", "Didn't work $response")
                     })
                 queue.add(stringReq)
             }

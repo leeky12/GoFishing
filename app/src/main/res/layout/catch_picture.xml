@@ -25,13 +25,13 @@
         android:src="@drawable/ic_menu_camera"
         android:text="Take Picture"
         android:theme="@style/AppTheme.MyRipple"
-        app:layout_constraintBottom_toTopOf="@+id/catchImage"
+        app:layout_constraintBottom_toTopOf="@+id/catchView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/catchImage"
+        android:id="@+id/catchView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"

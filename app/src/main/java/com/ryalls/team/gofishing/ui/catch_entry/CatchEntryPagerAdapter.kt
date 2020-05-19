@@ -4,23 +4,28 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.ryalls.team.gofishing.R
+import com.ryalls.team.gofishing.interfaces.FishingPermissions
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-class CatchEntryPagerAdapter(private val context: Context, fm: FragmentManager)
+class CatchEntryPagerAdapter(
+    private val context: Context,
+    fm: FragmentManager,
+    parentFragment: FishingPermissions
+)
     : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+
+    private var permFragment: FishingPermissions = parentFragment
 
     private val TAB_TITLES = arrayOf(
         R.string.catch_picture,
         R.string.catch_basic,
         R.string.catch_details,
         R.string.catch_tackle,
-        R.string.tab_text_4,
-        R.string.tab_text_5
+        R.string.tab_text_4
     )
 
     override fun getPageTitle(position: Int): CharSequence? {
@@ -30,21 +35,20 @@ class CatchEntryPagerAdapter(private val context: Context, fm: FragmentManager)
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 ->
-                CatchPicture.newInstance(position + 1)
+                CatchPicture.newInstance(permFragment)
             1 ->
-                CatchBasic.newInstance(position + 1)
+                CatchBasic.newInstance(1)
             2 ->
-                CatchDetails.newInstance(position + 1)
+                CatchDetails.newInstance(2)
             3 ->
-                CatchTackle.newInstance(position + 1)
-            4 ->
-                CatchWeather.newInstance(position + 1)
+                CatchTackle.newInstance(3)
             else ->
-                Fragment5.newInstance(position + 1)
+                CatchWeather.newInstance(4)
+
         }
     }
 
     override fun getCount(): Int {
-        return 6
+        return 5
     }
 }
