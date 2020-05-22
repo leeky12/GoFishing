@@ -120,7 +120,11 @@ data class CatchRecord(@ColumnInfo(name = "species") var species: String) {
     @ColumnInfo(name = "weatherIcon")
     var weatherIcon: String = ""
 
+    @ColumnInfo(name = "imageID")
+    var imageID: String = ""
 
+    @ColumnInfo(name = "thumbnail")
+    var thumbnail: String = ""
 
 }
 

@@ -1,10 +1,11 @@
+@file:Suppress("DEPRECATION")
+
 package com.ryalls.team.gofishing.utils
 
 import android.app.Activity
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -21,9 +22,11 @@ object GalleryAdd {
     fun galleryAddPic(
         activity: Activity,
         currentPhotoPath: String,
-        decodeFile: Bitmap,
         fileName: String
-    ) {
+    ): String {
+        val scanLoc =
+            "" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/fishy/" + fileName
+
         val fos: OutputStream
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val resolver: ContentResolver = activity.contentResolver
@@ -57,13 +60,11 @@ object GalleryAdd {
                         "Please Work",
                         "failed to create directory"
                     )
-                    return
+                    return ""
                 }
             }
 
             val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-            val scanLoc =
-                "" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/fishy/" + fileName
             val f = File(scanLoc)
             val contentUri = Uri.fromFile(f)
             mediaScanIntent.data = contentUri
@@ -81,11 +82,9 @@ object GalleryAdd {
         Objects.requireNonNull(fos).close()
         Objects.requireNonNull(ins).close()
 
-        decodeFile.recycle()
-
         // tidy up the temporary file we needed
         val remove = File(currentPhotoPath)
         remove.delete()
-
+        return scanLoc
     }
 }

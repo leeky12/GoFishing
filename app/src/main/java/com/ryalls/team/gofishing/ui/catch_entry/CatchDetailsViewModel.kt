@@ -2,6 +2,7 @@ package com.ryalls.team.gofishing.ui.catch_entry
 
 import android.app.Application
 import android.content.Context
+import android.graphics.Bitmap
 import android.location.Location
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
@@ -39,6 +40,10 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     var allWords: LiveData<List<CatchRecord>>
     lateinit var todaysWeather: WeatherData
 
+    lateinit var galleryDestination: String
+
+    private var image: Bitmap? = null
+
     val weatherPresent: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
@@ -55,6 +60,14 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
             CatchRoomDatabase.getDatabase(context = application, scope = viewModelScope).catchDao()
         repository = CatchRepository(catchDao)
         allWords = repository.allWords
+    }
+
+    fun setBitmap(bitmap: Bitmap) {
+        image = bitmap
+    }
+
+    fun getBitmap(): Bitmap? {
+        return image
     }
 
     fun getRecord(recordID: Int) {

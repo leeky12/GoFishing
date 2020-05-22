@@ -14,21 +14,16 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.ryalls.team.gofishing.R
 import com.ryalls.team.gofishing.interfaces.FishingPermissions
 import com.ryalls.team.gofishing.utils.GalleryAdd
 import com.ryalls.team.gofishing.utils.ImageProcessing
 import kotlinx.android.synthetic.main.catch_picture.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
-import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.min
 
 
 /**
@@ -37,6 +32,10 @@ import kotlin.math.min
 class CatchPicture : Fragment() {
 
     private lateinit var permissionCheck: FishingPermissions
+    private val viewModel: CatchDetailsViewModel by activityViewModels()
+    private lateinit var bitmap: Bitmap
+
+    private lateinit var mediaPath: String
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -55,6 +54,7 @@ class CatchPicture : Fragment() {
         return inflater.inflate(R.layout.catch_picture, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         takePicture.setOnClickListener {
@@ -72,6 +72,11 @@ class CatchPicture : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        setView()
+    }
+
     private lateinit var currentPhotoPath: String
     private lateinit var fileName: String
     private val REQUEST_TAKE_PHOTO = 1
@@ -82,54 +87,32 @@ class CatchPicture : Fragment() {
         val targetW: Int = catchView.width
         val targetH: Int = catchView.height
 
-        val bmOptions = BitmapFactory.Options().apply {
-            // Get the dimensions of the bitmap
-            inJustDecodeBounds = true
+//        val bmOptions = BitmapFactory.Options().apply {
+//            // Get the dimensions of the bitmap
+//            inJustDecodeBounds = true
+//
+//            val photoW: Int = outWidth
+//            val photoH: Int = outHeight
+//
+//            // Determine how much to scale down the image
+//            val scaleFactor: Int = min(photoW / targetW, photoH / targetH)
+//
+//            // Decode the image file into a Bitmap sized to fill the View
+//            inJustDecodeBounds = false
+//            inSampleSize = scaleFactor
+//            inPurgeable = true
+//        }
 
-            val photoW: Int = outWidth
-            val photoH: Int = outHeight
-
-            // Determine how much to scale down the image
-            val scaleFactor: Int = min(photoW / targetW, photoH / targetH)
-
-            // Decode the image file into a Bitmap sized to fill the View
-            inJustDecodeBounds = false
-            inSampleSize = scaleFactor
-            inPurgeable = true
-        }
-
-        val bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions)
-        val newBitmap = ImageProcessing.rotateImageIfRequired(bitmap, currentPhotoPath)
-        catchView.setImageBitmap(newBitmap)
-
-        // this is saving out a new rotated version of the file that fits the image view, should
-        // we really be doing this as this will overwrite the original full size image? This can
-        // of course be done in a coroutine so the user doesn't see any delay in the image being
-        // displayed
-
-        // did we rotate?
-        if (newBitmap != bitmap) {
-            saveImage(newBitmap)
-        }
+//        bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions)
+        bitmap = BitmapFactory.decodeFile(currentPhotoPath)
+        viewModel.setBitmap(bitmap)
     }
 
-    private fun saveImage(bitmap: Bitmap?) {
-        GlobalScope.launch {
-            withContext(Dispatchers.IO) {
-                try {
-                    if (bitmap != null) {
-                        FileOutputStream(currentPhotoPath).use { out ->
-                            bitmap.compress(
-                                Bitmap.CompressFormat.JPEG,
-                                100,
-                                out
-                            )
-                        }
-                    }
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
+    private fun setView() {
+        if (viewModel.getBitmap() != null) {
+            val rotation = ImageProcessing.rotateImageIfRequired(mediaPath)
+            catchView.setImageBitmap(bitmap)
+            catchView.rotation = rotation
         }
     }
 
@@ -184,10 +167,9 @@ class CatchPicture : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == AppCompatActivity.RESULT_OK) {
             setPic()
-            GalleryAdd.galleryAddPic(
+            mediaPath = GalleryAdd.galleryAddPic(
                 requireActivity(),
                 currentPhotoPath,
-                BitmapFactory.decodeFile(currentPhotoPath),
                 fileName
             )
         }
@@ -201,7 +183,6 @@ class CatchPicture : Fragment() {
          */
         @JvmStatic
         fun newInstance(parentFragment: FishingPermissions): CatchPicture {
-            val args = Bundle()
             val f = CatchPicture()
             f.permissionCheck = parentFragment
             return f
