@@ -40,8 +40,6 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     var allWords: LiveData<List<CatchRecord>>
     lateinit var todaysWeather: WeatherData
 
-    lateinit var galleryDestination: String
-
     private var image: Bitmap? = null
 
     val weatherPresent: MutableLiveData<String> by lazy {
@@ -85,6 +83,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     }
 
     fun resetCatchDetails() {
+        catchRecord.catchID = 0
         catchRecord.lure = ""
         catchRecord.structure = ""
         catchRecord.conditions = ""
@@ -109,6 +108,10 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         catchRecord.windDirection = ""
         catchRecord.windSpeed = ""
         catchRecord.town = ""
+        catchRecord.imageID = ""
+        catchRecord.latitude = ""
+        catchRecord.longitude = ""
+        image = null
     }
 
     fun updatesTackle(rod: String, reel: String, line: String) {

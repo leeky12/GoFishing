@@ -62,6 +62,8 @@ class CatchEntryFragment : Fragment(), FishingPermissions {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        // clear out instances between calls
+        viewModel.resetCatchDetails()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity as Activity)
     }
 
@@ -137,7 +139,6 @@ class CatchEntryFragment : Fragment(), FishingPermissions {
         }
     }
 
-
     /**
      * Callback received when a permissions request has been completed.
      */
@@ -151,11 +152,14 @@ class CatchEntryFragment : Fragment(), FishingPermissions {
             permissions,
             grantResults
         )
-// add check for location permission granted here
-        getAddress()
+
+        // check you have permissions to get the gps lat/long coordinated from the system
+        // if you do then get the location and weather information
+        if (checkPermission(permissions, REQUEST_PERMISSIONS_CODE)) {
+            getAddress()
+        }
 
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -203,7 +207,6 @@ class CatchEntryFragment : Fragment(), FishingPermissions {
         return viewModel.catchRecord
     }
 
-
     /**
      * Gets the address for the last known location.
      */
@@ -244,7 +247,6 @@ class CatchEntryFragment : Fragment(), FishingPermissions {
 
                 viewModel.getWeather(requireContext(), location)
 
-
             })?.addOnFailureListener(requireActivity()) { e ->
             Log.w(
                 TAG,
@@ -254,7 +256,7 @@ class CatchEntryFragment : Fragment(), FishingPermissions {
         }
     }
 
-    override fun checkPermissions(): Boolean {
+    override fun checkFishingPermissions(): Boolean {
         return checkPermission(permissions, REQUEST_PERMISSIONS_CODE)
     }
 

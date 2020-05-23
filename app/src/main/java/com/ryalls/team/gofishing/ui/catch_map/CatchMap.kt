@@ -11,6 +11,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.ryalls.team.gofishing.R
 import com.ryalls.team.gofishing.ui.catch_entry.CatchDetailsViewModel
+import kotlinx.android.synthetic.main.app_bar_start_activity.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -28,6 +29,12 @@ class CatchMap : Fragment(), OnMapReadyCallback {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var mMap: GoogleMap
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        activity?.fab?.hide()
+    }
 
     private val viewModels: CatchDetailsViewModel by activityViewModels()
 

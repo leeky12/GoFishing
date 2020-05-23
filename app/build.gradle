@@ -60,6 +60,7 @@ dependencies {
 
     // Room components
     implementation "androidx.room:room-runtime:$rootProject.roomVersion"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt "androidx.room:room-compiler:$rootProject.roomVersion"
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
 
@@ -83,7 +84,7 @@ dependencies {
     // Testing
     testImplementation 'junit:junit:4.13'
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"
-    androidTestImplementation ('androidx.test.espresso:espresso-core:3.1.0', {
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

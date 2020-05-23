@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/nav_settings"
-        android:name="com.ryalls.team.gofishing.ui.slideshow.SlideshowFragment"
+        android:name="com.ryalls.team.gofishing.ui.settings.Settings"
         android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/catch_settings" />
 </navigation>

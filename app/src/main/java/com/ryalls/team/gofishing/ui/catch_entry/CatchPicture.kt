@@ -36,13 +36,18 @@ class CatchPicture : Fragment() {
     private lateinit var bitmap: Bitmap
 
     private lateinit var mediaPath: String
+    private lateinit var currentPhotoPath:
+            String
+    private lateinit var fileName: String
+    private val REQUEST_TAKE_PHOTO = 1
+    private lateinit var photoURI: Uri
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         try {
             permissionCheck = context as FishingPermissions
         } catch (castException: ClassCastException) {
-            Log.d("WordPuzzleSolver", "Interface Not Defined")
+            Log.d("CatchPicture", "Interface Not Defined")
         }
     }
 
@@ -58,7 +63,7 @@ class CatchPicture : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         takePicture.setOnClickListener {
-            val granted = permissionCheck.checkPermissions()
+            val granted = permissionCheck.checkFishingPermissions()
             if (granted) {
                 dispatchTakePictureIntent()
             } else {
@@ -70,6 +75,11 @@ class CatchPicture : Fragment() {
                 startActivity(intent)
             }
         }
+        if (viewModel.catchRecord.imageID.isNotEmpty()) {
+            currentPhotoPath = viewModel.catchRecord.imageID
+            mediaPath = currentPhotoPath
+            setPic()
+        }
     }
 
     override fun onResume() {
@@ -77,33 +87,7 @@ class CatchPicture : Fragment() {
         setView()
     }
 
-    private lateinit var currentPhotoPath: String
-    private lateinit var fileName: String
-    private val REQUEST_TAKE_PHOTO = 1
-    private lateinit var photoURI: Uri
-
     private fun setPic() {
-        // Get the dimensions of the View
-        val targetW: Int = catchView.width
-        val targetH: Int = catchView.height
-
-//        val bmOptions = BitmapFactory.Options().apply {
-//            // Get the dimensions of the bitmap
-//            inJustDecodeBounds = true
-//
-//            val photoW: Int = outWidth
-//            val photoH: Int = outHeight
-//
-//            // Determine how much to scale down the image
-//            val scaleFactor: Int = min(photoW / targetW, photoH / targetH)
-//
-//            // Decode the image file into a Bitmap sized to fill the View
-//            inJustDecodeBounds = false
-//            inSampleSize = scaleFactor
-//            inPurgeable = true
-//        }
-
-//        bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions)
         bitmap = BitmapFactory.decodeFile(currentPhotoPath)
         viewModel.setBitmap(bitmap)
     }
@@ -172,6 +156,7 @@ class CatchPicture : Fragment() {
                 currentPhotoPath,
                 fileName
             )
+            viewModel.catchRecord.imageID = mediaPath
         }
     }
 
