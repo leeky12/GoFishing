@@ -4,6 +4,7 @@ package com.ryalls.team.gofishing.utils
 
 import android.app.Activity
 import android.content.ContentResolver
+import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Intent
 import android.net.Uri
@@ -24,8 +25,8 @@ object GalleryAdd {
         currentPhotoPath: String,
         fileName: String
     ): String {
-        val scanLoc =
-            "" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/fishy/" + fileName
+
+        var scanLoc = ""
 
         val fos: OutputStream
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -42,6 +43,10 @@ object GalleryAdd {
             )
             val imageUri: Uri? =
                 resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
+            val tester =
+                imageUri.toString() + File.separator + Environment.DIRECTORY_PICTURES + File.separator + "fishy" + File.separator + fileName
+            scanLoc = fileName
             fos = resolver.openOutputStream(imageUri!!)!!
         } else {
 
@@ -64,12 +69,14 @@ object GalleryAdd {
                 }
             }
 
+            scanLoc =
+                "" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/fishy/" + fileName
+
             val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
             val f = File(scanLoc)
             val contentUri = Uri.fromFile(f)
             mediaScanIntent.data = contentUri
             activity.sendBroadcast(mediaScanIntent)
-
             fos = FileOutputStream(f)
         }
 
@@ -85,6 +92,50 @@ object GalleryAdd {
         // tidy up the temporary file we needed
         val remove = File(currentPhotoPath)
         remove.delete()
+
         return scanLoc
     }
+
+    fun parseAllImages(act: Activity, name: String): Uri {
+        try {
+            val projection =
+                arrayOf(MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID)
+            val cursor = act.contentResolver.query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                projection,  // Which columns to return
+                null,  // Return all rows
+                null,
+                null
+            )
+            val size: Int = cursor!!.count
+            /*******  If size is 0, there are no images on the SD Card.  */
+            if (size == 0) {
+            } else {
+                val thumbID = 0
+                if (cursor != null) {
+                    while (cursor.moveToNext()) {
+                        val file_ColumnIndex: Int =
+                            cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                        /**************** Captured image details  */
+                        /*****  Used to show image on view in LoadImagesFromSDCard class  */
+                        val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
+                        val path: String = cursor.getString(file_ColumnIndex)
+                        val fileName =
+                            path.substring(path.lastIndexOf("/") + 1, path.length)
+                        if (fileName == name) {
+                            val contentUri: Uri = ContentUris.withAppendedId(
+                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                                cursor.getLong(idColumn)
+                            )
+                            return contentUri
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return Uri.parse("")
+    }
+
 }

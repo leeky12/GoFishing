@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.graphics.Bitmap
 import android.location.Location
+import android.util.Base64
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -20,11 +21,13 @@ import com.ryalls.team.gofishing.data.weather.GSONWeather
 import com.ryalls.team.gofishing.persistance.CatchRecord
 import com.ryalls.team.gofishing.persistance.CatchRepository
 import com.ryalls.team.gofishing.persistance.CatchRoomDatabase
+import com.ryalls.team.gofishing.utils.Thumbnail
 import com.ryalls.team.gofishing.utils.WeatherConvertor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -66,6 +69,18 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
 
     fun getBitmap(): Bitmap? {
         return image
+    }
+
+    fun setThumbnail(currentPhotoPath: String) {
+        val bytearrayoutputstream = ByteArrayOutputStream()
+
+        val thumbnail = Thumbnail().decodeSampledBitmap(currentPhotoPath, 100, 100)
+        thumbnail?.compress(Bitmap.CompressFormat.JPEG, 70, bytearrayoutputstream)
+        val bytes = bytearrayoutputstream.toByteArray()
+        val base64 = Base64.encode(bytes, Base64.DEFAULT)
+
+        catchRecord.thumbnail = String(base64)
+
     }
 
     fun getRecord(recordID: Int) {

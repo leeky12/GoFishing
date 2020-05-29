@@ -12,6 +12,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -56,6 +57,7 @@ class CatchEntryFragment : Fragment(), FishingPermissions {
         arrayOf(
             Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.ACCESS_FINE_LOCATION
         )
 
@@ -74,7 +76,6 @@ class CatchEntryFragment : Fragment(), FishingPermissions {
     ): View? {
         super.onCreate(savedInstanceState)
         retainInstance = true
-        checkPermission(permissions, REQUEST_PERMISSIONS_CODE)
         return inflater.inflate(R.layout.edit_tabbed_fragment, container, false)
     }
 
@@ -95,10 +96,8 @@ class CatchEntryFragment : Fragment(), FishingPermissions {
 
     override fun onStart() {
         super.onStart()
-
-        if (!checkPermission(permissions, REQUEST_PERMISSIONS_CODE)) {
-            requestPermissions(permissions, REQUEST_PERMISSIONS_CODE)
-        } else {
+        requestPermissions(permissions, REQUEST_PERMISSIONS_CODE)
+        if (checkPermission(permissions, REQUEST_PERMISSIONS_CODE)) {
             getAddress()
         }
     }
@@ -112,31 +111,28 @@ class CatchEntryFragment : Fragment(), FishingPermissions {
     private fun checkPermission(permissions: Array<String>, requestCode: Int): Boolean {
         // only use for newer versions of android
         if (Build.VERSION.SDK_INT >= 23) {
-            return if (ContextCompat.checkSelfPermission(
-                    activity as Context,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                )
-                == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(
-                    activity as Context,
-                    Manifest.permission.CAMERA
-                )
-                == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(
-                    activity as Context,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                )
-                == PackageManager.PERMISSION_GRANTED
-            ) {
-                true
-            } else {
-                // Requesting the permission
-                requestPermissions(permissions, requestCode)
-                false
-            }
-        } else {
-            return true
+            return (ContextCompat.checkSelfPermission(
+                activity as Context,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+                    == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(
+                activity as Context,
+                Manifest.permission.CAMERA
+            )
+                    == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(
+                activity as Context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+                    == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(
+                activity as Context,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+                    == PackageManager.PERMISSION_GRANTED)
         }
+        return true
     }
 
     /**
@@ -152,14 +148,20 @@ class CatchEntryFragment : Fragment(), FishingPermissions {
             permissions,
             grantResults
         )
-
-        // check you have permissions to get the gps lat/long coordinated from the system
-        // if you do then get the location and weather information
         if (checkPermission(permissions, REQUEST_PERMISSIONS_CODE)) {
-            getAddress()
+        }
+        if (ActivityCompat.shouldShowRequestPermissionRationale(
+                requireActivity(), Manifest.permission.CAMERA
+            )
+        ) {
+            //Show permission explanation dialog...
+        } else {
+            //Never ask again selected, or device policy prohibits the app from having that permission.
+            //So, disable that feature, or fall back to another situation...
         }
 
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

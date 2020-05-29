@@ -4,9 +4,9 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -35,7 +35,7 @@ class CatchPicture : Fragment() {
     private val viewModel: CatchDetailsViewModel by activityViewModels()
     private lateinit var bitmap: Bitmap
 
-    private lateinit var mediaPath: String
+    private var mediaPath: String = ""
     private lateinit var currentPhotoPath:
             String
     private lateinit var fileName: String
@@ -67,12 +67,6 @@ class CatchPicture : Fragment() {
             if (granted) {
                 dispatchTakePictureIntent()
             } else {
-                val intent = Intent()
-                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                val uri =
-                    Uri.fromParts("package", requireActivity().packageName, null)
-                intent.data = uri
-                startActivity(intent)
             }
         }
         if (viewModel.catchRecord.imageID.isNotEmpty()) {
@@ -88,15 +82,47 @@ class CatchPicture : Fragment() {
     }
 
     private fun setPic() {
-        bitmap = BitmapFactory.decodeFile(currentPhotoPath)
-        viewModel.setBitmap(bitmap)
+        if (mediaPath.isNotEmpty()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val content = GalleryAdd.parseAllImages(requireActivity(), mediaPath)
+                val resolver = requireContext().contentResolver
+                val fullPath = content
+
+                val stream = resolver.openInputStream(content)
+                // Perform operations on "stream".
+                bitmap = BitmapFactory.decodeStream(stream)
+                viewModel.setBitmap(bitmap)
+                stream?.close()
+            } else {
+                bitmap = BitmapFactory.decodeFile(mediaPath)
+                viewModel.setBitmap(bitmap)
+            }
+        }
     }
+
 
     private fun setView() {
         if (viewModel.getBitmap() != null) {
-            val rotation = ImageProcessing.rotateImageIfRequired(mediaPath)
-            catchView.setImageBitmap(bitmap)
-            catchView.rotation = rotation
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val content = GalleryAdd.parseAllImages(requireActivity(), mediaPath)
+                val resolver = requireContext().contentResolver
+                val fullPath = content
+
+                val stream = resolver.openInputStream(content)
+                // Perform operations on "stream".
+                val rotation = ImageProcessing.rotateImageStreamIfRequired(stream)
+                catchView.rotation = rotation
+                catchView.setImageBitmap(bitmap)
+                stream?.close()
+
+            } else {
+                val file = File(mediaPath)
+                if (file.exists()) {
+                    val rotation = ImageProcessing.rotateImageIfRequired(mediaPath)
+                    catchView.rotation = rotation
+                }
+                catchView.setImageBitmap(bitmap)
+            }
         }
     }
 
@@ -150,12 +176,13 @@ class CatchPicture : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == AppCompatActivity.RESULT_OK) {
-            setPic()
+            viewModel.setThumbnail(currentPhotoPath)
             mediaPath = GalleryAdd.galleryAddPic(
                 requireActivity(),
                 currentPhotoPath,
                 fileName
             )
+            setPic()
             viewModel.catchRecord.imageID = mediaPath
         }
     }

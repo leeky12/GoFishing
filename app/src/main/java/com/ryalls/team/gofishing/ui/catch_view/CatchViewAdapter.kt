@@ -17,10 +17,12 @@
 package com.ryalls.team.gofishing.ui.catch_view
 
 
-import android.util.Log
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ryalls.team.gofishing.R
@@ -57,6 +59,7 @@ class CatchViewAdapter(
         val date: TextView
         val species: TextView
         var catchID: Int = 0
+        var thumbnail: ImageView
 
         init {
             v.setOnClickListener(this)
@@ -64,6 +67,7 @@ class CatchViewAdapter(
             location = v.findViewById(R.id.location)
             date = v.findViewById(R.id.date)
             species = v.findViewById(R.id.species)
+            thumbnail = v.findViewById(R.id.fishThumbnail)
         }
 
         override fun onLongClick(v: View?): Boolean {
@@ -94,6 +98,16 @@ class CatchViewAdapter(
         viewHolder.date.text = catchList[position].date
         viewHolder.species.text = catchList[position].species
         viewHolder.catchID = catchList[position].catchID
+        if (catchList[position].thumbnail.isNotEmpty()) {
+            val toByteArray = Base64.decode(catchList[position].thumbnail, Base64.DEFAULT)
+            viewHolder.thumbnail.setImageBitmap(
+                BitmapFactory.decodeByteArray(
+                    toByteArray,
+                    0,
+                    toByteArray.size
+                )
+            )
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
