@@ -80,7 +80,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         val base64 = Base64.encode(bytes, Base64.DEFAULT)
 
         catchRecord.thumbnail = String(base64)
-
+        thumbnail?.recycle()
     }
 
     fun getRecord(recordID: Int) {

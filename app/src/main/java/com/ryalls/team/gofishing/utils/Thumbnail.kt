@@ -2,6 +2,7 @@ package com.ryalls.team.gofishing.utils
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 
 class Thumbnail {
 
@@ -28,10 +29,13 @@ class Thumbnail {
         options.inSampleSize =
             pow2Ceil(minRatio_inv) // pow2Ceil: A utility function that comes later
         options.inJustDecodeBounds = false // Decode bitmap with inSampleSize set
-        return Bitmap.createScaledBitmap(
+        val newBitmap = Bitmap.createScaledBitmap(
             BitmapFactory.decodeFile(pathName, options),
             finalW, finalH, true
         )
+        val thumbnail = newBitmap.rotate(pathName)
+        newBitmap.recycle()
+        return thumbnail
     }
 
     /**
@@ -42,5 +46,13 @@ class Thumbnail {
         return 1 shl -(Integer.numberOfLeadingZeros(number) + 1) // is equivalent to:
         // return Integer.rotateRight(1, Integer.numberOfLeadingZeros(number) + 1);
     }
+
+
+    private fun Bitmap.rotate(pathName: String?): Bitmap {
+        val degrees = ImageProcessing.rotateImageIfRequired(pathName!!)
+        val matrix = Matrix().apply { postRotate(degrees) }
+        return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
+    }
+
 
 }
