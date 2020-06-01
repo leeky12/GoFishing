@@ -1,5 +1,6 @@
 package com.ryalls.team.gofishing.ui.catch_entry
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.graphics.Bitmap
@@ -23,10 +24,7 @@ import com.ryalls.team.gofishing.persistance.CatchRepository
 import com.ryalls.team.gofishing.persistance.CatchRoomDatabase
 import com.ryalls.team.gofishing.utils.Thumbnail
 import com.ryalls.team.gofishing.utils.WeatherConvertor
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
@@ -63,24 +61,21 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         allWords = repository.allWords
     }
 
-    fun setBitmap(bitmap: Bitmap) {
-        image = bitmap
-    }
 
-    fun getBitmap(): Bitmap? {
-        return image
-    }
+    @SuppressLint("CheckResult")
+    fun setThumbnail(cont: Context, currentPhotoPath: String) = runBlocking {
+        // create a thumbnail in the background so it doesnt hold up anything
+        val job = GlobalScope.launch {
+            val bytearrayoutputstream = ByteArrayOutputStream()
+            val thumbnail = Thumbnail().decodeSampledBitmap(currentPhotoPath, 100, 100)
+            thumbnail?.compress(Bitmap.CompressFormat.JPEG, 70, bytearrayoutputstream)
+            val bytes = bytearrayoutputstream.toByteArray()
+            val base64 = Base64.encode(bytes, Base64.DEFAULT)
 
-    fun setThumbnail(currentPhotoPath: String) {
-        val bytearrayoutputstream = ByteArrayOutputStream()
-
-        val thumbnail = Thumbnail().decodeSampledBitmap(currentPhotoPath, 100, 100)
-        thumbnail?.compress(Bitmap.CompressFormat.JPEG, 70, bytearrayoutputstream)
-        val bytes = bytearrayoutputstream.toByteArray()
-        val base64 = Base64.encode(bytes, Base64.DEFAULT)
-
-        catchRecord.thumbnail = String(base64)
-        thumbnail?.recycle()
+            catchRecord.thumbnail = String(base64)
+            thumbnail?.recycle()
+        }
+        job.join()
     }
 
     fun getRecord(recordID: Int) {

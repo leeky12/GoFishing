@@ -2,11 +2,11 @@ package com.ryalls.team.gofishing.ui.catch_entry
 
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,10 +15,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.ryalls.team.gofishing.R
 import com.ryalls.team.gofishing.interfaces.FishingPermissions
 import com.ryalls.team.gofishing.utils.GalleryAdd
-import com.ryalls.team.gofishing.utils.ImageProcessing
 import kotlinx.android.synthetic.main.catch_picture.*
 import java.io.File
 import java.io.IOException
@@ -33,7 +34,7 @@ class CatchPicture : Fragment() {
 
     private lateinit var permissionCheck: FishingPermissions
     private val viewModel: CatchDetailsViewModel by activityViewModels()
-    private lateinit var bitmap: Bitmap
+    private var bitmap: Bitmap? = null
 
     private var mediaPath: String = ""
     private lateinit var currentPhotoPath:
@@ -72,13 +73,15 @@ class CatchPicture : Fragment() {
         if (viewModel.catchRecord.imageID.isNotEmpty()) {
             currentPhotoPath = viewModel.catchRecord.imageID
             mediaPath = currentPhotoPath
-            setPic()
+//            setPic()
         }
+
     }
 
     override fun onResume() {
         super.onResume()
-        setView()
+//        setView()
+        setPic()
     }
 
     private fun setPic() {
@@ -86,42 +89,33 @@ class CatchPicture : Fragment() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 val content = GalleryAdd.parseAllImages(requireActivity(), mediaPath)
                 val resolver = requireContext().contentResolver
-                val fullPath = content
-
-                val stream = resolver.openInputStream(content)
-                // Perform operations on "stream".
-                bitmap = BitmapFactory.decodeStream(stream)
-                viewModel.setBitmap(bitmap)
-                stream?.close()
-            } else {
-                bitmap = BitmapFactory.decodeFile(mediaPath)
-                viewModel.setBitmap(bitmap)
-            }
-        }
-    }
-
-
-    private fun setView() {
-        if (viewModel.getBitmap() != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                val content = GalleryAdd.parseAllImages(requireActivity(), mediaPath)
-                val resolver = requireContext().contentResolver
-                val fullPath = content
-
-                val stream = resolver.openInputStream(content)
-                // Perform operations on "stream".
-                val rotation = ImageProcessing.rotateImageStreamIfRequired(stream)
-                catchView.rotation = rotation
-                catchView.setImageBitmap(bitmap)
-                stream?.close()
-
+                if (content.path?.isNotEmpty()!!) {
+                    Glide.with(this).load(content).into(catchView)
+                } else {
+                    Snackbar.make(
+                        requireView(),
+                        "Original catch picture has been removed",
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
             } else {
                 val file = File(mediaPath)
                 if (file.exists()) {
-                    val rotation = ImageProcessing.rotateImageIfRequired(mediaPath)
-                    catchView.rotation = rotation
+                    val displayMetrics = DisplayMetrics()
+                    requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+                    val height: Int = displayMetrics.heightPixels
+                    val width: Int = displayMetrics.widthPixels
+                    Glide.with(this).load(mediaPath).into(catchView)
+                    Log.d("BitmapMetrics", "Bitmap " + (bitmap?.height) + " " + (bitmap?.width))
+                    Log.d("BitmapMetrics", "Screen " + height + " " + width)
+                } else {
+                    bitmap = null
+                    Snackbar.make(
+                        requireView(),
+                        "Original catch picture has been removed",
+                        Snackbar.LENGTH_LONG
+                    ).show()
                 }
-                catchView.setImageBitmap(bitmap)
             }
         }
     }
@@ -176,7 +170,7 @@ class CatchPicture : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == AppCompatActivity.RESULT_OK) {
-            viewModel.setThumbnail(currentPhotoPath)
+            viewModel.setThumbnail(requireContext(), currentPhotoPath)
             mediaPath = GalleryAdd.galleryAddPic(
                 requireActivity(),
                 currentPhotoPath,
