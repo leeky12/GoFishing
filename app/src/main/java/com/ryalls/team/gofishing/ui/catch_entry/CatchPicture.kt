@@ -43,15 +43,6 @@ class CatchPicture : Fragment() {
     private val REQUEST_TAKE_PHOTO = 1
     private lateinit var photoURI: Uri
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        try {
-            permissionCheck = context as FishingPermissions
-        } catch (castException: ClassCastException) {
-            Log.d("CatchPicture", "Interface Not Defined")
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -73,24 +64,26 @@ class CatchPicture : Fragment() {
         if (viewModel.catchRecord.imageID.isNotEmpty()) {
             currentPhotoPath = viewModel.catchRecord.imageID
             mediaPath = currentPhotoPath
-//            setPic()
         }
 
     }
 
     override fun onResume() {
         super.onResume()
-//        setView()
         setPic()
     }
 
     private fun setPic() {
         if (mediaPath.isNotEmpty()) {
+            val displayMetrics = DisplayMetrics()
+            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+            val height: Int = displayMetrics.heightPixels
+            val width: Int = displayMetrics.widthPixels
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 val content = GalleryAdd.parseAllImages(requireActivity(), mediaPath)
                 val resolver = requireContext().contentResolver
                 if (content.path?.isNotEmpty()!!) {
-                    Glide.with(this).load(content).into(catchView)
+                    Glide.with(this).load(content).override(width, height).into(catchView)
                 } else {
                     Snackbar.make(
                         requireView(),
@@ -101,13 +94,9 @@ class CatchPicture : Fragment() {
             } else {
                 val file = File(mediaPath)
                 if (file.exists()) {
-                    val displayMetrics = DisplayMetrics()
-                    requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-                    val height: Int = displayMetrics.heightPixels
-                    val width: Int = displayMetrics.widthPixels
-                    Glide.with(this).load(mediaPath).into(catchView)
+                    Glide.with(this).load(mediaPath).override(width, height).into(catchView)
                     Log.d("BitmapMetrics", "Bitmap " + (bitmap?.height) + " " + (bitmap?.width))
-                    Log.d("BitmapMetrics", "Screen " + height + " " + width)
+                    Log.d("BitmapMetrics", "Screen $height $width")
                 } else {
                     bitmap = null
                     Snackbar.make(

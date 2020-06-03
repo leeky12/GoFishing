@@ -7,6 +7,7 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -97,10 +98,11 @@ object GalleryAdd {
     }
 
     fun parseAllImages(act: Activity, name: String): Uri {
+        var cursor: Cursor? = null
         try {
             val projection =
                 arrayOf(MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID)
-            val cursor = act.contentResolver.query(
+            cursor = act.contentResolver.query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 projection,  // Which columns to return
                 null,  // Return all rows
@@ -123,11 +125,12 @@ object GalleryAdd {
                         val fileName =
                             path.substring(path.lastIndexOf("/") + 1, path.length)
                         if (fileName == name) {
-                            val contentUri: Uri = ContentUris.withAppendedId(
+                            val idColumn = cursor.getLong(idColumn)
+                            cursor.close()
+                            return ContentUris.withAppendedId(
                                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                                cursor.getLong(idColumn)
+                                idColumn
                             )
-                            return contentUri
                         }
                     }
                 }
@@ -135,6 +138,7 @@ object GalleryAdd {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        cursor?.close()
         return Uri.parse("")
     }
 

@@ -11,7 +11,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.ryalls.team.gofishing.R
 import com.ryalls.team.gofishing.data.FishList
-import com.ryalls.team.gofishing.ui.DisplayKeyboard
 import kotlinx.android.synthetic.main.catch_basic.*
 
 

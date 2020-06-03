@@ -71,7 +71,6 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
             thumbnail?.compress(Bitmap.CompressFormat.JPEG, 70, bytearrayoutputstream)
             val bytes = bytearrayoutputstream.toByteArray()
             val base64 = Base64.encode(bytes, Base64.DEFAULT)
-
             catchRecord.thumbnail = String(base64)
             thumbnail?.recycle()
         }
@@ -205,7 +204,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
                 val latitude = location.latitude
                 val longitude = location.longitude
 
-                val url: String =
+                val url =
                     "https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&APPID=b4a56ac53a68780edf02ac7deb48b25e"
 
                 // Request a string response from the provided URL.

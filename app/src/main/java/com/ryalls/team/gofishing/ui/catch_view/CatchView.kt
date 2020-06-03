@@ -18,7 +18,6 @@ package com.ryalls.team.gofishing.ui.catch_view
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +31,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
-import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_SETTLING
 import com.ryalls.team.gofishing.R
 import com.ryalls.team.gofishing.interfaces.ILaunchAdapterInterface
 import com.ryalls.team.gofishing.ui.catch_entry.CatchDetailsViewModel
