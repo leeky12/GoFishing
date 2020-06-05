@@ -27,17 +27,20 @@ class CatchWeather : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         viewModel.weatherPresent.observe(viewLifecycleOwner, Observer { weather ->
-            rainField.setText(viewModel.todaysWeather.rain.toString())
-            tempField.setText(viewModel.todaysWeather.temp.toString())
-            humidityField.setText(viewModel.todaysWeather.humidity.toString())
-            pressureField.setText(viewModel.todaysWeather.pressure.toString())
-            cloudsField.setText(viewModel.todaysWeather.clouds.toString())
-            descriptionField.setText(viewModel.todaysWeather.weatherDescription)
-            windDirectionField.setText(viewModel.todaysWeather.windDirection.toString())
-            windSpeedField.setText(viewModel.todaysWeather.windSpeed.toString())
-            locationField.setText(viewModel.todaysWeather.location)
-            Log.d("Volley", "Weather Present Observer called")
+            if (viewModel.getNewRecord()) {
+                rainField.setText(viewModel.todaysWeather.rain.toString())
+                tempField.setText(viewModel.todaysWeather.temp.toString())
+                humidityField.setText(viewModel.todaysWeather.humidity.toString())
+                pressureField.setText(viewModel.todaysWeather.pressure.toString())
+                cloudsField.setText(viewModel.todaysWeather.clouds.toString())
+                descriptionField.setText(viewModel.todaysWeather.weatherDescription)
+                windDirectionField.setText(viewModel.todaysWeather.windDirection.toString())
+                windSpeedField.setText(viewModel.todaysWeather.windSpeed.toString())
+                locationField.setText(viewModel.todaysWeather.location)
+                Log.d("Volley", "Weather Present Observer called")
+            }
         })
     }
 

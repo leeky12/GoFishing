@@ -45,6 +45,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
      */
     private var lastLocation: Location? = null
 
+    private var isNewRecord: Boolean = true
 
     // Using LiveData and caching what getAlphabetizedWords returns has several benefits:
     // - We can put an observer on the data (instead of polling for changes) and only update the
@@ -74,6 +75,13 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         allWords = repository.allWords
     }
 
+    fun setNewRecord(value: Boolean) {
+        isNewRecord = value
+    }
+
+    fun getNewRecord(): Boolean {
+        return isNewRecord
+    }
 
     @SuppressLint("CheckResult")
     fun setThumbnail(cont: Context, currentPhotoPath: String) = runBlocking {
