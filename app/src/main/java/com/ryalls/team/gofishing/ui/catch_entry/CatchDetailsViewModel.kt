@@ -1,9 +1,12 @@
 package com.ryalls.team.gofishing.ui.catch_entry
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.graphics.Bitmap
+import android.location.Address
+import android.location.Geocoder
 import android.location.Location
 import android.util.Base64
 import android.util.Log
@@ -15,6 +18,8 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.ryalls.team.gofishing.data.WeatherData
@@ -26,6 +31,7 @@ import com.ryalls.team.gofishing.utils.Thumbnail
 import com.ryalls.team.gofishing.utils.WeatherConvertor
 import kotlinx.coroutines.*
 import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,11 +40,18 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
 
     private var repository: CatchRepository
 
+    /**
+     * Represents a geographical location.
+     */
+    private var lastLocation: Location? = null
+
+
     // Using LiveData and caching what getAlphabetizedWords returns has several benefits:
     // - We can put an observer on the data (instead of polling for changes) and only update the
     //   the UI when the data actually changes.
     // - Repository is completely separated from the UI through the ViewModel.
     var allWords: LiveData<List<CatchRecord>>
+
     lateinit var todaysWeather: WeatherData
 
     private var image: Bitmap? = null
@@ -196,42 +209,93 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         repository.insert(catchRecord)
     }
 
-    fun getWeather(context: Context, location: Location) {
+    private fun getWeather(context: Context, location: Location) {
+        // Instantiate the RequestQueue.
+        val queue = Volley.newRequestQueue(context)
+        val latitude = location.latitude
+        val longitude = location.longitude
+
+        val url =
+            "https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&APPID=b4a56ac53a68780edf02ac7deb48b25e"
+
+        // Request a string response from the provided URL.
+        val stringReq = StringRequest(
+            Request.Method.GET, url,
+            Response.Listener { response ->
+                val gson = Gson()
+                try {
+                    val wd = gson.fromJson(response, GSONWeather::class.java)
+                    val weatherConv = WeatherConvertor()
+                    todaysWeather = weatherConv.createWeatherData(wd)
+                    weatherPresent.value = "True"
+                    Log.d("Volley", "Got Data ${todaysWeather.weatherDescription}")
+                } catch (jse: JsonSyntaxException) {
+                    Log.d(
+                        "Volley",
+                        "com.ryalls.team.gofishing.data.weather.Weather not found $jse"
+                    )
+                }
+            },
+            Response.ErrorListener { response ->
+                Log.d("Volley", "Didn't work $response")
+            })
+        queue.add(stringReq)
+    }
+
+    /**
+     * Gets the address for the last known location.
+     */
+    @SuppressLint("MissingPermission")
+    fun getAddress(act: Activity, fusedLocationClient: FusedLocationProviderClient?) {
         GlobalScope.launch {
             withContext(Dispatchers.IO) {
-                // Instantiate the RequestQueue.
-                val queue = Volley.newRequestQueue(context)
-                val latitude = location.latitude
-                val longitude = location.longitude
-
-                val url =
-                    "https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&APPID=b4a56ac53a68780edf02ac7deb48b25e"
-
-                // Request a string response from the provided URL.
-                val stringReq = StringRequest(
-                    Request.Method.GET, url,
-                    Response.Listener { response ->
-                        val gson = Gson()
-                        try {
-                            val wd = gson.fromJson(response, GSONWeather::class.java)
-                            val weatherConv = WeatherConvertor()
-                            todaysWeather = weatherConv.createWeatherData(wd)
-                            weatherPresent.value = "True"
-                            Log.d("Volley", "Got Data ${todaysWeather.weatherDescription}")
-                        } catch (jse: JsonSyntaxException) {
-                            Log.d(
-                                "Volley",
-                                "com.ryalls.team.gofishing.data.weather.Weather not found $jse"
-                            )
+                fusedLocationClient?.lastLocation?.addOnSuccessListener(
+                    act,
+                    OnSuccessListener { location ->
+                        val town: String? = "Unknown"
+                        if (location == null) {
+                            Log.w("ViewModel", "onSuccess:null")
+                            return@OnSuccessListener
                         }
-                    },
-                    Response.ErrorListener { response ->
-                        Log.d("Volley", "Didn't work $response")
-                    })
-                queue.add(stringReq)
+
+                        lastLocation = location
+                        val gc = Geocoder(act, Locale.getDefault())
+                        val address: Address
+                        try {
+                            val addresses =
+                                gc.getFromLocation(location.latitude, location.longitude, 1)
+                            val sb = StringBuilder()
+                            if (addresses.size > 0) {
+                                address = addresses[0]
+//                    town = address.locality
+                            }
+                        } catch (ioe: IOException) {
+                            // if no location then city should be "Unknown"
+                        }
+
+                        // put some code in so this goes to a temporary structure and of its a new entry
+                        // then copy this structure over to the catchRecord else leave the original record alone
+                        // as its a viewable or edit on that record
+
+                        if (town != null) {
+//                viewModel.catchRecord.location = town
+                        }
+                        Log.i("Volley", "Location is = $town")
+
+                        getWeather(act as Context, location)
+
+                    })?.addOnFailureListener(act) { e ->
+                    Log.w(
+                        "Volley",
+                        "getLastLocation:onFailure",
+                        e
+                    )
+                }
             }
         }
     }
+
+
 }
 
 
