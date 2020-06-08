@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import com.ryalls.team.gofishing.R
 import com.ryalls.team.gofishing.interfaces.ILaunchAdapterInterface
 import com.ryalls.team.gofishing.ui.catch_entry.CatchDetailsViewModel
+import com.ryalls.team.gofishing.utils.KeyboardUtils
 import kotlinx.android.synthetic.main.app_bar_start_activity.*
 
 /**
@@ -49,6 +50,7 @@ class CatchView : Fragment(), ILaunchAdapterInterface {
 
     override fun onResume() {
         super.onResume()
+        KeyboardUtils().closeKeyboard(requireContext(), view)
         activity?.fab?.show()
     }
 

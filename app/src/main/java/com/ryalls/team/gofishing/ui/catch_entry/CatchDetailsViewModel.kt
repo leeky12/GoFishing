@@ -29,7 +29,10 @@ import com.ryalls.team.gofishing.persistance.CatchRepository
 import com.ryalls.team.gofishing.persistance.CatchRoomDatabase
 import com.ryalls.team.gofishing.utils.Thumbnail
 import com.ryalls.team.gofishing.utils.WeatherConvertor
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -86,7 +89,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     @SuppressLint("CheckResult")
     fun setThumbnail(cont: Context, currentPhotoPath: String) = runBlocking {
         // create a thumbnail in the background so it doesnt hold up anything
-        val job = GlobalScope.launch {
+        val job = viewModelScope.launch {
             val bytearrayoutputstream = ByteArrayOutputStream()
             val thumbnail = Thumbnail().decodeSampledBitmap(currentPhotoPath, 100, 100)
             thumbnail?.compress(Bitmap.CompressFormat.JPEG, 70, bytearrayoutputstream)
@@ -99,7 +102,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     }
 
     fun getRecord(recordID: Int) {
-        GlobalScope.launch {
+        viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 Log.d("TestCoroutine", "Started $recordID")
                 catchRecord = repository.getRecord(recordID)
@@ -137,7 +140,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         catchRecord.weatherDescription = ""
         catchRecord.windDirection = ""
         catchRecord.windSpeed = ""
-        catchRecord.town = ""
+        catchRecord.location = ""
         catchRecord.imageID = ""
         catchRecord.latitude = ""
         catchRecord.longitude = ""
@@ -173,7 +176,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
 
     fun updateWeather(
         rain: String, clouds: String, humidity: String, pressure: String, temp: String,
-        weatherDescription: String, windDirection: String, windSpeed: String, town: String
+        weatherDescription: String, windDirection: String, windSpeed: String, location: String
     ) {
         catchRecord.rain = rain
         catchRecord.clouds = clouds
@@ -183,7 +186,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         catchRecord.weatherDescription = weatherDescription
         catchRecord.windDirection = windDirection
         catchRecord.windSpeed = windSpeed
-        catchRecord.town = town
+        catchRecord.location = location
     }
 
     fun updateLocation(town: String, latitude: String, longitude: String) {
@@ -255,7 +258,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
      */
     @SuppressLint("MissingPermission")
     fun getAddress(act: Activity, fusedLocationClient: FusedLocationProviderClient?) {
-        GlobalScope.launch {
+        viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 fusedLocationClient?.lastLocation?.addOnSuccessListener(
                     act,

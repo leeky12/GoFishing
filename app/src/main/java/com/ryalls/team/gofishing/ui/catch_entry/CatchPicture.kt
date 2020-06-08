@@ -20,6 +20,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.ryalls.team.gofishing.R
 import com.ryalls.team.gofishing.interfaces.FishingPermissions
 import com.ryalls.team.gofishing.utils.GalleryAdd
+import com.ryalls.team.gofishing.utils.KeyboardUtils
 import kotlinx.android.synthetic.main.catch_picture.*
 import java.io.File
 import java.io.IOException
@@ -65,11 +66,12 @@ class CatchPicture : Fragment() {
             currentPhotoPath = viewModel.catchRecord.imageID
             mediaPath = currentPhotoPath
         }
-
+        KeyboardUtils().closeKeyboard(requireContext(), view)
     }
 
     override fun onResume() {
         super.onResume()
+        KeyboardUtils().closeKeyboard(requireContext(), view)
         setPic()
     }
 
@@ -122,6 +124,11 @@ class CatchPicture : Fragment() {
         val location = storageDir?.absolutePath + "/junk.jpg"
 
         val file = File(location)
+        try {
+            file.delete()
+        } catch (ie: IOException) {
+            // it's ok if the file isnt there to delete
+        }
         file.createNewFile()
         currentPhotoPath = location
         return file

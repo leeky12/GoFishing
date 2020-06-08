@@ -108,9 +108,6 @@ data class CatchRecord(@ColumnInfo(name = "species") var species: String) {
     @ColumnInfo(name = "windSpeed")
     var windSpeed: String = ""
 
-    @ColumnInfo(name = "town")
-    var town: String = ""
-
     @ColumnInfo(name = "latitude")
     var latitude: String = ""
 

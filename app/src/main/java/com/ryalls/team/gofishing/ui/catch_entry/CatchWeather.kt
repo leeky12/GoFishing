@@ -42,7 +42,20 @@ class CatchWeather : Fragment() {
                 Log.d("Volley", "Weather Present Observer called")
             }
         })
+        if (!viewModel.getNewRecord()) {
+            rainField.setText(viewModel.catchRecord.rain)
+            tempField.setText(viewModel.catchRecord.temp)
+            humidityField.setText(viewModel.catchRecord.humidity)
+            pressureField.setText(viewModel.catchRecord.pressure)
+            cloudsField.setText(viewModel.catchRecord.clouds)
+            descriptionField.setText(viewModel.catchRecord.weatherDescription)
+            windDirectionField.setText(viewModel.catchRecord.windDirection)
+            windSpeedField.setText(viewModel.catchRecord.windSpeed)
+            locationField.setText(viewModel.catchRecord.location)
+        }
+
     }
+
 
     override fun onPause() {
         super.onPause()
