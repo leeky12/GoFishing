@@ -56,7 +56,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     // - Repository is completely separated from the UI through the ViewModel.
     var allWords: LiveData<List<CatchRecord>>
 
-    lateinit var todaysWeather: WeatherData
+    var todaysWeather: WeatherData = WeatherData
 
     private var image: Bitmap? = null
 
@@ -98,7 +98,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
             catchRecord.thumbnail = String(base64)
             thumbnail?.recycle()
         }
-        job.join()
+//        job.join()
     }
 
     fun getRecord(recordID: Int) {
@@ -258,6 +258,14 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
      */
     @SuppressLint("MissingPermission")
     fun getAddress(act: Activity, fusedLocationClient: FusedLocationProviderClient?) {
+        val difference = System.currentTimeMillis() - todaysWeather.activated
+        val waitForRefresh = (60 * 60 * 1000)
+        if (difference < waitForRefresh) {
+            Log.d("WeatherCached", "Weather has been cached for ${waitForRefresh}")
+            return
+        } else {
+            todaysWeather.activated = System.currentTimeMillis()
+        }
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 fusedLocationClient?.lastLocation?.addOnSuccessListener(

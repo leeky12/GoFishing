@@ -69,7 +69,6 @@ class FishingActivity : AppCompatActivity(), FishingPermissions, RequestPerm {
             val catchDetailsViewModel =
                 ViewModelProvider(this).get(CatchDetailsViewModel::class.java)
             catchDetailsViewModel.resetCatchDetails()
-            ActivityCompat.requestPermissions(this, permissions, REQUEST_PERMISSIONS_CODE)
             navController.navigate(R.id.nav_details)
         }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
