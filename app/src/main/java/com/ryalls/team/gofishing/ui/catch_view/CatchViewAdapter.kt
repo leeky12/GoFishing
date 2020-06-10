@@ -19,7 +19,6 @@ package com.ryalls.team.gofishing.ui.catch_view
 
 import android.graphics.BitmapFactory
 import android.util.Base64
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,8 +48,6 @@ class CatchViewAdapter(
         this.catchList = catchRecords
         notifyDataSetChanged()
     }
-
-    private var position: Int = 0
 
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
@@ -93,7 +90,6 @@ class CatchViewAdapter(
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, positionInList: Int) {
-        this.position = positionInList
         // Get element from your dataset at this position and replace the contents of the view
         // with that element
         viewHolder.location.text = catchList[positionInList].location
@@ -101,7 +97,6 @@ class CatchViewAdapter(
         viewHolder.species.text = catchList[positionInList].species
         viewHolder.catchID = catchList[positionInList].catchID
         if (catchList[positionInList].thumbnail.isNotEmpty()) {
-            Log.d("ListView", "Position = $positionInList has a thumbnail")
             val toByteArray = Base64.decode(catchList[positionInList].thumbnail, Base64.DEFAULT)
             viewHolder.thumbnail.setImageBitmap(
                 BitmapFactory.decodeByteArray(
@@ -111,7 +106,7 @@ class CatchViewAdapter(
                 )
             )
         } else {
-            Log.d("ListView", "Position = $positionInList no thumbnail")
+            // ensure that previous views are overridden so if there is no image you get the default resource
             viewHolder.thumbnail.setImageResource(R.drawable.ic_fisher)
         }
     }
