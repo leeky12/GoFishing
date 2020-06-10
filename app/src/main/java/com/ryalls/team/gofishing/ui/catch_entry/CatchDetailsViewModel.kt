@@ -41,7 +41,11 @@ import java.util.*
 
 class CatchDetailsViewModel(application: Application) : AndroidViewModel(application) {
 
+    // 1hr in mill3seconds
+    private val timeToWait: Long = 3600000
+
     private var repository: CatchRepository
+    private var weatherCache: Long = 0L
 
     /**
      * Represents a geographical location.
@@ -57,8 +61,6 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     var allWords: LiveData<List<CatchRecord>>
 
     var todaysWeather: WeatherData = WeatherData
-
-    private var image: Bitmap? = null
 
     val weatherPresent: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
@@ -98,7 +100,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
             catchRecord.thumbnail = String(base64)
             thumbnail?.recycle()
         }
-//        job.join()
+        job.join()
     }
 
     fun getRecord(recordID: Int) {
@@ -144,7 +146,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         catchRecord.imageID = ""
         catchRecord.latitude = ""
         catchRecord.longitude = ""
-        image = null
+        catchRecord.thumbnail = ""
     }
 
     fun updatesTackle(rod: String, reel: String, line: String) {
@@ -258,13 +260,13 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
      */
     @SuppressLint("MissingPermission")
     fun getAddress(act: Activity, fusedLocationClient: FusedLocationProviderClient?) {
-        val difference = System.currentTimeMillis() - todaysWeather.activated
-        val waitForRefresh = (60 * 60 * 1000)
-        if (difference < waitForRefresh) {
-            Log.d("WeatherCached", "Weather has been cached for ${waitForRefresh}")
+        val difference = System.currentTimeMillis() - weatherCache
+        if (difference < timeToWait) {
+            Log.d("WeatherCached", "Weather has been cached for $difference")
             return
         } else {
-            todaysWeather.activated = System.currentTimeMillis()
+            Log.d("WeatherCached", "Weather has been retrieved")
+            weatherCache = System.currentTimeMillis()
         }
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -291,10 +293,6 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
                         } catch (ioe: IOException) {
                             // if no location then city should be "Unknown"
                         }
-
-                        // put some code in so this goes to a temporary structure and of its a new entry
-                        // then copy this structure over to the catchRecord else leave the original record alone
-                        // as its a viewable or edit on that record
 
                         if (town != null) {
 //                viewModel.catchRecord.location = town

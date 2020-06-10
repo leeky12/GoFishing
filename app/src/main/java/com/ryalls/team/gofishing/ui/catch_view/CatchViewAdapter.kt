@@ -19,6 +19,7 @@ package com.ryalls.team.gofishing.ui.catch_view
 
 import android.graphics.BitmapFactory
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ryalls.team.gofishing.R
 import com.ryalls.team.gofishing.interfaces.ILaunchAdapterInterface
 import com.ryalls.team.gofishing.persistance.CatchRecord
+
 
 /**
  * Provide views to RecyclerView with data from dataSet.
@@ -90,16 +92,17 @@ class CatchViewAdapter(
     }
 
     // Replace the contents of a view (invoked by the layout manager)
-    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        this.position = position
+    override fun onBindViewHolder(viewHolder: ViewHolder, positionInList: Int) {
+        this.position = positionInList
         // Get element from your dataset at this position and replace the contents of the view
         // with that element
-        viewHolder.location.text = catchList[position].location
-        viewHolder.date.text = catchList[position].date
-        viewHolder.species.text = catchList[position].species
-        viewHolder.catchID = catchList[position].catchID
-        if (catchList[position].thumbnail.isNotEmpty()) {
-            val toByteArray = Base64.decode(catchList[position].thumbnail, Base64.DEFAULT)
+        viewHolder.location.text = catchList[positionInList].location
+        viewHolder.date.text = catchList[positionInList].date
+        viewHolder.species.text = catchList[positionInList].species
+        viewHolder.catchID = catchList[positionInList].catchID
+        if (catchList[positionInList].thumbnail.isNotEmpty()) {
+            Log.d("ListView", "Position = $positionInList has a thumbnail")
+            val toByteArray = Base64.decode(catchList[positionInList].thumbnail, Base64.DEFAULT)
             viewHolder.thumbnail.setImageBitmap(
                 BitmapFactory.decodeByteArray(
                     toByteArray,
@@ -107,6 +110,9 @@ class CatchViewAdapter(
                     toByteArray.size
                 )
             )
+        } else {
+            Log.d("ListView", "Position = $positionInList no thumbnail")
+            viewHolder.thumbnail.setImageResource(R.drawable.ic_fisher)
         }
     }
 
