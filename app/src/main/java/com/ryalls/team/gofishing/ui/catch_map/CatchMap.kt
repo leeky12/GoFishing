@@ -9,7 +9,9 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.ryalls.team.gofishing.R
+import com.ryalls.team.gofishing.persistance.CatchRecord
 import com.ryalls.team.gofishing.ui.catch_entry.CatchDetailsViewModel
 import kotlinx.android.synthetic.main.app_bar_start_activity.*
 
@@ -54,7 +56,6 @@ class CatchMap : Fragment(), OnMapReadyCallback {
     ): View? {
         val root = inflater.inflate(R.layout.catch_map, container, false)
         val fm = childFragmentManager
-        // set up the initial location, layout etc. before the map appears
 
         // set up the initial location, layout etc. before the map appears
         val options = GoogleMapOptions()
@@ -86,6 +87,28 @@ class CatchMap : Fragment(), OnMapReadyCallback {
         mMap = googleMap
         mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(51.264116, -1.1068298)))
         val data = viewModels.allWords
+        updateMap(data.value)
+    }
+
+    private fun updateMap(fishedList: List<CatchRecord>?) {
+        if (fishedList != null) {
+            for (fish in fishedList) {
+                if (fish.latitude != null) {
+                    //                   val dateString: String = ConvertDate.getConvertedDateTime(fish.getDate())
+                    mMap.addMarker(
+                        MarkerOptions()
+                            .position(
+                                LatLng(
+                                    java.lang.Double.valueOf(fish.latitude),
+                                    java.lang.Double.valueOf(fish.longitude)
+                                )
+                            )
+                            .snippet(fish.species)
+                            .title(fish.date)
+                    )
+                }
+            }
+        }
     }
 
 
