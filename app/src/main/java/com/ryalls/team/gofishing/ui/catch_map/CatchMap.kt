@@ -10,11 +10,10 @@ import androidx.lifecycle.Observer
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.ryalls.team.gofishing.R
-import com.ryalls.team.gofishing.persistance.CatchRecord
+import com.ryalls.team.gofishing.persistance.MapData
 import com.ryalls.team.gofishing.ui.catch_entry.CatchDetailsViewModel
 import kotlinx.android.synthetic.main.app_bar_start_activity.*
 
@@ -60,16 +59,12 @@ class CatchMap : Fragment(), OnMapReadyCallback {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        retainInstance = true
         val root = inflater.inflate(R.layout.catch_map, container, false)
         val fm = childFragmentManager
 
         // set up the initial location, layout etc. before the map appears
         val options = GoogleMapOptions()
-            .camera(
-                CameraPosition.fromLatLngZoom(
-                    LatLng(51.264116, -1.1068298), 14.0f
-                )
-            )
             .zoomControlsEnabled(true)
             .compassEnabled(true)
             .mapType(GoogleMap.MAP_TYPE_HYBRID)
@@ -80,17 +75,7 @@ class CatchMap : Fragment(), OnMapReadyCallback {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
-        viewModel.catchLocationsReady.observe(viewLifecycleOwner, Observer { locations ->
-            updateMap(viewModel.catchLocations)
-        })
 
-        viewModel.homeLocationReady.observe(viewLifecycleOwner, Observer { location ->
-            val lat = viewModel.lastLocation!!.latitude
-            val long = viewModel.lastLocation!!.longitude
-
-            val latLng = LatLng(lat, long)
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-        })
 
         return root
     }
@@ -110,11 +95,21 @@ class CatchMap : Fragment(), OnMapReadyCallback {
             // have an pbserver on this to tell me when an address is present
             viewModel.getAddress(requireActivity(), fusedLocationClient, false)
         }
+        viewModel.catchLocationsReady.observe(viewLifecycleOwner, Observer { locations ->
+            updateMap(viewModel.catchLocations)
+        })
+        viewModel.homeLocationReady.observe(viewLifecycleOwner, Observer { location ->
+            val lat = viewModel.lastLocation!!.latitude
+            val long = viewModel.lastLocation!!.longitude
+
+            val latLng = LatLng(lat, long)
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+        })
         // I have an observer on this to tell me when all the catch locations are present to be displayed
         viewModels.getCatchLocations()
     }
 
-    private fun updateMap(fishedList: List<CatchRecord>?) {
+    private fun updateMap(fishedList: List<MapData>?) {
         if (fishedList != null) {
             for (fish in fishedList) {
                 if (fish.latitude != null) {

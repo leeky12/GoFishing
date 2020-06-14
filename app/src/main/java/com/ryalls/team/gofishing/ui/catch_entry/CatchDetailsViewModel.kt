@@ -27,6 +27,7 @@ import com.ryalls.team.gofishing.data.weather.GSONWeather
 import com.ryalls.team.gofishing.persistance.CatchRecord
 import com.ryalls.team.gofishing.persistance.CatchRepository
 import com.ryalls.team.gofishing.persistance.CatchRoomDatabase
+import com.ryalls.team.gofishing.persistance.MapData
 import com.ryalls.team.gofishing.utils.Thumbnail
 import com.ryalls.team.gofishing.utils.WeatherConvertor
 import kotlinx.coroutines.Dispatchers
@@ -47,7 +48,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     private var repository: CatchRepository
     private var weatherCache: Long = 0L
 
-    lateinit var catchLocations: List<CatchRecord>
+    lateinit var catchLocations: List<MapData>
 
     /**
      * Represents a geographical location.
