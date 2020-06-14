@@ -107,9 +107,11 @@ class CatchMap : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         if (viewModel.lastLocation == null) {
+            // have an pbserver on this to tell me when an address is present
             viewModel.getAddress(requireActivity(), fusedLocationClient, false)
         }
-        val data = viewModels.getCatchLocations()
+        // I have an observer on this to tell me when all the catch locations are present to be displayed
+        viewModels.getCatchLocations()
     }
 
     private fun updateMap(fishedList: List<CatchRecord>?) {
