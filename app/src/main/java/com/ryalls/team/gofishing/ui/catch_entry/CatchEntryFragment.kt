@@ -83,7 +83,7 @@ class CatchEntryFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         if (fishingPermissions.checkFishingPermissions()) {
-            viewModel.getAddress(requireActivity(), fusedLocationClient)
+            viewModel.getAddress(requireActivity(), fusedLocationClient, true)
         } else {
             requestPerm.requestPerm()
         }

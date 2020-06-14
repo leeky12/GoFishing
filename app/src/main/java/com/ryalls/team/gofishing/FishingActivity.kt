@@ -125,7 +125,7 @@ class FishingActivity : AppCompatActivity(), FishingPermissions, RequestPerm {
         )
         if (checkPermission(permissions, REQUEST_PERMISSIONS_CODE)) {
             // start the request for weather and location
-            viewModel.getAddress(this, fusedLocationClient)
+            viewModel.getAddress(this, fusedLocationClient, true)
         }
         if (ActivityCompat.shouldShowRequestPermissionRationale(
                 this, Manifest.permission.CAMERA

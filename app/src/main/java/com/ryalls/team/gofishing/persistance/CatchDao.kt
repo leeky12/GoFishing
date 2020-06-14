@@ -49,9 +49,12 @@ interface CatchDao {
     fun deleteAll()
 
     @Query("DELETE FROM catch_table where catchID = :catchID")
-    fun deleteRecord(catchID : Int)
+    fun deleteRecord(catchID: Int)
 
     @Query("SELECT * FROM catch_table where catchId = :catchID")
-    fun getRecord(catchID : Int) : CatchRecord
+    fun getRecord(catchID: Int): CatchRecord
+
+    @Query("SELECT *  FROM catch_table")
+    fun getCatchLocations(): List<CatchRecord>
 
 }

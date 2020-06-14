@@ -6,6 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -31,6 +34,9 @@ class CatchMap : Fragment(), OnMapReadyCallback {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var mMap: GoogleMap
+
+    private val viewModel: CatchDetailsViewModel by activityViewModels()
+    private var fusedLocationClient: FusedLocationProviderClient? = null
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -71,6 +77,21 @@ class CatchMap : Fragment(), OnMapReadyCallback {
         val fragment = SupportMapFragment.newInstance(options)
         fm.beginTransaction().replace(R.id.map, fragment).commit()
         fragment.getMapAsync(this)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+
+        viewModel.catchLocationsReady.observe(viewLifecycleOwner, Observer { locations ->
+            updateMap(viewModel.catchLocations)
+        })
+
+        viewModel.homeLocationReady.observe(viewLifecycleOwner, Observer { location ->
+            val lat = viewModel.lastLocation!!.latitude
+            val long = viewModel.lastLocation!!.longitude
+
+            val latLng = LatLng(lat, long)
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+        })
+
         return root
     }
 
@@ -85,9 +106,10 @@ class CatchMap : Fragment(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(51.264116, -1.1068298)))
-        val data = viewModels.allWords
-        updateMap(data.value)
+        if (viewModel.lastLocation == null) {
+            viewModel.getAddress(requireActivity(), fusedLocationClient, false)
+        }
+        val data = viewModels.getCatchLocations()
     }
 
     private fun updateMap(fishedList: List<CatchRecord>?) {

@@ -47,10 +47,12 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     private var repository: CatchRepository
     private var weatherCache: Long = 0L
 
+    lateinit var catchLocations: List<CatchRecord>
+
     /**
      * Represents a geographical location.
      */
-    private var lastLocation: Location? = null
+    var lastLocation: Location? = null
 
     private var isNewRecord: Boolean = true
 
@@ -70,6 +72,16 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
 
     // Mutable String used to indicate the list has been completely filled  with the data
     val recordReady: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+
+    // Mutable String used to indicate the catch locations list has been completely filled  with the data
+    val catchLocationsReady: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+
+    // Mutable String used to indicate the catch locations list has been completely filled  with the data
+    val homeLocationReady: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
 
@@ -116,6 +128,22 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
             }
         }
     }
+
+    fun getCatchLocations() {
+        val d = Log.d("TestCoroutine", "Started")
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                d
+                catchLocations = repository.getCatchLocations()
+                Log.d("TestCoroutine", "Finished")
+            }
+            withContext(Dispatchers.Main) {
+                Log.d("TestCoroutine", "" + catchRecord.weight)
+                catchLocationsReady.value = "True"
+            }
+        }
+    }
+
 
     fun resetCatchDetails() {
         catchRecord.catchID = 0
@@ -191,8 +219,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         catchRecord.location = location
     }
 
-    fun updateLocation(town: String, latitude: String, longitude: String) {
-//        catchRecord.town = town
+    fun updateLocation(latitude: String, longitude: String) {
         catchRecord.latitude = latitude
         catchRecord.longitude = longitude
     }
@@ -225,8 +252,6 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     private fun getWeather(context: Context, location: Location) {
         // Instantiate the RequestQueue.
         val queue = Volley.newRequestQueue(context)
-        val latitude = location.latitude
-        val longitude = location.longitude
 
         val url =
             "https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&APPID=b4a56ac53a68780edf02ac7deb48b25e"
@@ -259,7 +284,11 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
      * Gets the address for the last known location.
      */
     @SuppressLint("MissingPermission")
-    fun getAddress(act: Activity, fusedLocationClient: FusedLocationProviderClient?) {
+    fun getAddress(
+        act: Activity,
+        fusedLocationClient: FusedLocationProviderClient?,
+        weather: Boolean
+    ) {
         val difference = System.currentTimeMillis() - weatherCache
         if (difference < timeToWait) {
             Log.d("WeatherCached", "Weather has been cached for $difference")
@@ -283,8 +312,13 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
                         val gc = Geocoder(act, Locale.getDefault())
                         val address: Address
                         try {
+
                             val addresses =
                                 gc.getFromLocation(location.latitude, location.longitude, 1)
+                            updateLocation(
+                                location.latitude.toString(),
+                                location.longitude.toString()
+                            )
                             val sb = StringBuilder()
                             if (addresses.size > 0) {
                                 address = addresses[0]
@@ -298,9 +332,10 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
 //                viewModel.catchRecord.location = town
                         }
                         Log.i("Volley", "Location is = $town")
-
-                        getWeather(act as Context, location)
-
+                        if (weather) {
+                            getWeather(act as Context, location)
+                        }
+                        homeLocationReady.value = "True"
                     })?.addOnFailureListener(act) { e ->
                     Log.w(
                         "Volley",

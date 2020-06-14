@@ -66,5 +66,11 @@ class CatchRepository(private val catchDao: CatchDao) {
         catchDao.update(catchRecord)
     }
 
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun getCatchLocations(): List<CatchRecord> {
+        return catchDao.getCatchLocations()
+    }
+
 
 }
