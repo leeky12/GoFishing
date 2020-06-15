@@ -36,7 +36,8 @@ class FishingActivity : AppCompatActivity(), FishingPermissions, RequestPerm {
             Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
         )
 
     /**
@@ -104,6 +105,11 @@ class FishingActivity : AppCompatActivity(), FishingPermissions, RequestPerm {
                     && ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+                    == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
             )
                     == PackageManager.PERMISSION_GRANTED)
         }

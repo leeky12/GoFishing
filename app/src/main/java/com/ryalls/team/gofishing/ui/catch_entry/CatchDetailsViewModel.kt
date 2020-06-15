@@ -205,6 +205,36 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         catchRecord.length = length
     }
 
+    private fun updateLocation(latitude: String, longitude: String) {
+        catchRecord.latitude = latitude
+        catchRecord.longitude = longitude
+    }
+
+    fun updateRecord(updateRecord: CatchRecord) = viewModelScope.launch(Dispatchers.IO) {
+        updateRecord.catchID = catchRecord.catchID
+        Log.d("CatchRecord", "${updateRecord.catchID}")
+        repository.update(updateRecord)
+    }
+
+    fun deleteRecord(catchID: Int) = viewModelScope.launch(Dispatchers.IO) {
+        repository.deleteRecord(catchID)
+    }
+
+    /**
+     * Launching a new coroutine to insert the data in a non-blocking way
+     */
+    fun insertRecord(catchRecord: CatchRecord) = viewModelScope.launch(Dispatchers.IO) {
+        val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+        val date = Date()
+        catchRecord.date = formatter.format(date)
+
+        Log.d(
+            "CatchRecord",
+            catchRecord.species + " " + catchRecord.date + " " + catchRecord.location
+        )
+        repository.insert(catchRecord)
+    }
+
     fun updateWeather(
         rain: String, clouds: String, humidity: String, pressure: String, temp: String,
         weatherDescription: String, windDirection: String, windSpeed: String, location: String
@@ -220,35 +250,6 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         catchRecord.location = location
     }
 
-    fun updateLocation(latitude: String, longitude: String) {
-        catchRecord.latitude = latitude
-        catchRecord.longitude = longitude
-    }
-
-    fun update(updateRecord: CatchRecord) = viewModelScope.launch(Dispatchers.IO) {
-        updateRecord.catchID = catchRecord.catchID
-        Log.d("CatchRecord", "${updateRecord.catchID}")
-        repository.update(updateRecord)
-    }
-
-    fun deleteRecord(catchID: Int) = viewModelScope.launch(Dispatchers.IO) {
-        repository.deleteRecord(catchID)
-    }
-
-    /**
-     * Launching a new coroutine to insert the data in a non-blocking way
-     */
-    fun insert(catchRecord: CatchRecord) = viewModelScope.launch(Dispatchers.IO) {
-        val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-        val date = Date()
-        catchRecord.date = formatter.format(date)
-
-        Log.d(
-            "CatchRecord",
-            catchRecord.species + " " + catchRecord.date + " " + catchRecord.location
-        )
-        repository.insert(catchRecord)
-    }
 
     private fun getWeather(context: Context, location: Location) {
         // Instantiate the RequestQueue.
@@ -266,6 +267,17 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
                     val wd = gson.fromJson(response, GSONWeather::class.java)
                     val weatherConv = WeatherConvertor()
                     todaysWeather = weatherConv.createWeatherData(wd)
+                    updateWeather(
+                        todaysWeather.rain.toString(),
+                        todaysWeather.clouds.toString(),
+                        todaysWeather.humidity.toString(),
+                        todaysWeather.pressure.toString(),
+                        todaysWeather.temp.toString(),
+                        todaysWeather.weatherDescription,
+                        todaysWeather.windDirection.toString(),
+                        todaysWeather.windSpeed.toString(),
+                        todaysWeather.location
+                    )
                     weatherPresent.value = "True"
                     Log.d("Volley", "Got Data ${todaysWeather.weatherDescription}")
                 } catch (jse: JsonSyntaxException) {
@@ -293,6 +305,15 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         val difference = System.currentTimeMillis() - weatherCache
         if (difference < timeToWait) {
             Log.d("WeatherCached", "Weather has been cached for $difference")
+            catchRecord.rain = todaysWeather.rain.toString()
+            catchRecord.temp = todaysWeather.temp.toString()
+            catchRecord.humidity = todaysWeather.humidity.toString()
+            catchRecord.pressure = todaysWeather.pressure.toString()
+            catchRecord.clouds = todaysWeather.clouds.toString()
+            catchRecord.comments = todaysWeather.weatherDescription
+            catchRecord.windDirection = todaysWeather.windDirection.toString()
+            catchRecord.windSpeed = todaysWeather.windSpeed.toString()
+            catchRecord.location = todaysWeather.location
             return
         } else {
             Log.d("WeatherCached", "Weather has been retrieved")

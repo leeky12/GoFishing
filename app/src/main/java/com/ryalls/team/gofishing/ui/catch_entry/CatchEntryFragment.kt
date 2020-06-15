@@ -130,12 +130,12 @@ class CatchEntryFragment : Fragment() {
 
     private fun insertRecord() {
         val catchRecord = getCatchRecord()
-        viewModel.insert(catchRecord)
+        viewModel.insertRecord(catchRecord)
     }
 
     private fun updateRecord() {
         val catchRecord = getCatchRecord()
-        viewModel.update(catchRecord)
+        viewModel.updateRecord(catchRecord)
     }
 
     private fun getCatchRecord(): CatchRecord {

@@ -75,8 +75,6 @@ class CatchMap : Fragment(), OnMapReadyCallback {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
-
-
         return root
     }
 
@@ -92,34 +90,41 @@ class CatchMap : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         if (viewModel.lastLocation == null) {
-            // have an pbserver on this to tell me when an address is present
+            // have an observer on this to tell me when an address is present
             viewModel.getAddress(requireActivity(), fusedLocationClient, false)
         }
-        viewModel.catchLocationsReady.observe(viewLifecycleOwner, Observer { locations ->
-            updateMap(viewModel.catchLocations)
-        })
-        viewModel.homeLocationReady.observe(viewLifecycleOwner, Observer { location ->
+        viewModel.homeLocationReady.observe(viewLifecycleOwner, Observer {
             val lat = viewModel.lastLocation!!.latitude
             val long = viewModel.lastLocation!!.longitude
-
             val latLng = LatLng(lat, long)
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f))
         })
         // I have an observer on this to tell me when all the catch locations are present to be displayed
         viewModels.getCatchLocations()
+        viewModel.catchLocationsReady.observe(viewLifecycleOwner, Observer {
+            updateMap(viewModel.catchLocations)
+        })
     }
 
     private fun updateMap(fishedList: List<MapData>?) {
         if (fishedList != null) {
             for (fish in fishedList) {
                 if (fish.latitude != null) {
+                    var lat: Double = 0.0
+                    var long: Double = 0.0
+                    try {
+                        lat = java.lang.Double.valueOf(fish.latitude)
+                        long = java.lang.Double.valueOf(fish.longitude)
+                    } catch (nfe: NumberFormatException) {
+                        continue
+                    }
                     //                   val dateString: String = ConvertDate.getConvertedDateTime(fish.getDate())
                     mMap.addMarker(
                         MarkerOptions()
                             .position(
                                 LatLng(
-                                    java.lang.Double.valueOf(fish.latitude),
-                                    java.lang.Double.valueOf(fish.longitude)
+                                    lat,
+                                    long
                                 )
                             )
                             .snippet(fish.species)
