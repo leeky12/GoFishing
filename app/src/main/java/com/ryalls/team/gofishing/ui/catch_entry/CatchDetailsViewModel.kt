@@ -5,7 +5,6 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.graphics.Bitmap
-import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.util.Base64
@@ -27,7 +26,6 @@ import com.ryalls.team.gofishing.data.weather.GSONWeather
 import com.ryalls.team.gofishing.persistance.CatchRecord
 import com.ryalls.team.gofishing.persistance.CatchRepository
 import com.ryalls.team.gofishing.persistance.CatchRoomDatabase
-import com.ryalls.team.gofishing.persistance.MapData
 import com.ryalls.team.gofishing.utils.Thumbnail
 import com.ryalls.team.gofishing.utils.WeatherConvertor
 import kotlinx.coroutines.Dispatchers
@@ -47,25 +45,25 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
 
     private var repository: CatchRepository
     private var weatherCache: Long = 0L
-
-    lateinit var catchLocations: List<MapData>
+    var todaysLocation = ""
 
     /**
      * Represents a geographical location.
      */
-    var lastLocation: Location? = null
+    private var lastLocation: Location? = null
 
-    private var isNewRecord: Boolean = true
+    private var isNewRecord = true
 
-    // Using LiveData and caching what getAlphabetizedWords returns has several benefits:
-    // - We can put an observer on the data (instead of polling for changes) and only update the
-    //   the UI when the data actually changes.
-    // - Repository is completely separated from the UI through the ViewModel.
     var allWords: LiveData<List<CatchRecord>>
 
     var todaysWeather: WeatherData = WeatherData
 
     val weatherPresent: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+
+    // Mutable String used to indicate the catch locations list has been completely filled  with the data
+    private val homeLocationReady: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
 
@@ -76,15 +74,6 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         MutableLiveData<String>()
     }
 
-    // Mutable String used to indicate the catch locations list has been completely filled  with the data
-    val catchLocationsReady: MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
-    }
-
-    // Mutable String used to indicate the catch locations list has been completely filled  with the data
-    val homeLocationReady: MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
-    }
 
     init {
         val catchDao =
@@ -97,7 +86,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         isNewRecord = value
     }
 
-    fun getNewRecord(): Boolean {
+    fun isNewRecord(): Boolean {
         return isNewRecord
     }
 
@@ -116,7 +105,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         job.join()
     }
 
-    fun getRecord(recordID: Int) {
+    fun getCatchRecord(recordID: Int) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 Log.d("TestCoroutine", "Started $recordID")
@@ -129,22 +118,6 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
             }
         }
     }
-
-    fun getCatchLocations() {
-        val d = Log.d("TestCoroutine", "Started")
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                d
-                catchLocations = repository.getCatchLocations()
-                Log.d("TestCoroutine", "Finished")
-            }
-            withContext(Dispatchers.Main) {
-                Log.d("TestCoroutine", "" + catchRecord.weight)
-                catchLocationsReady.value = "True"
-            }
-        }
-    }
-
 
     fun resetCatchDetails() {
         catchRecord.catchID = 0
@@ -235,21 +208,21 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         repository.insert(catchRecord)
     }
 
-    fun updateWeather(
-        rain: String, clouds: String, humidity: String, pressure: String, temp: String,
-        weatherDescription: String, windDirection: String, windSpeed: String, location: String
-    ) {
-        catchRecord.rain = rain
-        catchRecord.clouds = clouds
-        catchRecord.humidity = humidity
-        catchRecord.pressure = pressure
-        catchRecord.temp = temp
-        catchRecord.weatherDescription = weatherDescription
-        catchRecord.windDirection = windDirection
-        catchRecord.windSpeed = windSpeed
-        catchRecord.location = location
+    fun updateWeather(todaysWeather: WeatherData) {
+        catchRecord.rain = todaysWeather.rain.toString()
+        catchRecord.clouds = todaysWeather.clouds.toString()
+        catchRecord.humidity = todaysWeather.humidity.toString()
+        catchRecord.pressure = todaysWeather.pressure.toString()
+        catchRecord.temp = todaysWeather.temp.toString()
+        catchRecord.weatherDescription = todaysWeather.weatherDescription.toString()
+        catchRecord.windDirection = todaysWeather.windDirection.toString()
+        catchRecord.windSpeed = todaysWeather.windSpeed.toString()
+        //       catchRecord.location = todaysWeather.location.toString()
     }
 
+    fun updateLocation(location: String) {
+        catchRecord.location = location
+    }
 
     private fun getWeather(context: Context, location: Location) {
         // Instantiate the RequestQueue.
@@ -267,17 +240,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
                     val wd = gson.fromJson(response, GSONWeather::class.java)
                     val weatherConv = WeatherConvertor()
                     todaysWeather = weatherConv.createWeatherData(wd)
-                    updateWeather(
-                        todaysWeather.rain.toString(),
-                        todaysWeather.clouds.toString(),
-                        todaysWeather.humidity.toString(),
-                        todaysWeather.pressure.toString(),
-                        todaysWeather.temp.toString(),
-                        todaysWeather.weatherDescription,
-                        todaysWeather.windDirection.toString(),
-                        todaysWeather.windSpeed.toString(),
-                        todaysWeather.location
-                    )
+                    updateWeather(todaysWeather)
                     weatherPresent.value = "True"
                     Log.d("Volley", "Got Data ${todaysWeather.weatherDescription}")
                 } catch (jse: JsonSyntaxException) {
@@ -305,15 +268,10 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         val difference = System.currentTimeMillis() - weatherCache
         if (difference < timeToWait) {
             Log.d("WeatherCached", "Weather has been cached for $difference")
-            catchRecord.rain = todaysWeather.rain.toString()
-            catchRecord.temp = todaysWeather.temp.toString()
-            catchRecord.humidity = todaysWeather.humidity.toString()
-            catchRecord.pressure = todaysWeather.pressure.toString()
-            catchRecord.clouds = todaysWeather.clouds.toString()
-            catchRecord.comments = todaysWeather.weatherDescription
-            catchRecord.windDirection = todaysWeather.windDirection.toString()
-            catchRecord.windSpeed = todaysWeather.windSpeed.toString()
-            catchRecord.location = todaysWeather.location
+            updateWeather(todaysWeather)
+            if (isNewRecord()) {
+                updateLocation(todaysLocation)
+            }
             return
         } else {
             Log.d("WeatherCached", "Weather has been retrieved")
@@ -329,29 +287,21 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
                             Log.w("ViewModel", "onSuccess:null")
                             return@OnSuccessListener
                         }
-
                         lastLocation = location
                         val gc = Geocoder(act, Locale.getDefault())
-                        val address: Address
                         try {
-
                             val addresses =
                                 gc.getFromLocation(location.latitude, location.longitude, 1)
                             updateLocation(
                                 location.latitude.toString(),
                                 location.longitude.toString()
                             )
-                            val sb = StringBuilder()
                             if (addresses.size > 0) {
-                                address = addresses[0]
-//                    town = address.locality
+                                val address = addresses[0]
+                                todaysLocation = address.getAddressLine(0)
                             }
                         } catch (ioe: IOException) {
                             // if no location then city should be "Unknown"
-                        }
-
-                        if (town != null) {
-//                viewModel.catchRecord.location = town
                         }
                         Log.i("Volley", "Location is = $town")
                         if (weather) {

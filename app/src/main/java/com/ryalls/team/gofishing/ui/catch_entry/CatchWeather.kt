@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.ryalls.team.gofishing.R
+import com.ryalls.team.gofishing.data.WeatherData
 import kotlinx.android.synthetic.main.catch_weather.*
 
 /**
@@ -29,7 +30,7 @@ class CatchWeather : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         viewModel.weatherPresent.observe(viewLifecycleOwner, Observer { weather ->
-            if (viewModel.getNewRecord()) {
+            if (viewModel.isNewRecord()) {
                 rainField.setText(viewModel.todaysWeather.rain.toString())
                 tempField.setText(viewModel.todaysWeather.temp.toString())
                 humidityField.setText(viewModel.todaysWeather.humidity.toString())
@@ -38,11 +39,11 @@ class CatchWeather : Fragment() {
                 descriptionField.setText(viewModel.todaysWeather.weatherDescription)
                 windDirectionField.setText(viewModel.todaysWeather.windDirection.toString())
                 windSpeedField.setText(viewModel.todaysWeather.windSpeed.toString())
-                locationField.setText(viewModel.todaysWeather.location)
+                locationField.setText(viewModel.todaysLocation)
                 Log.d("Volley", "Weather Present Observer called")
             }
         })
-        if (!viewModel.getNewRecord()) {
+        if (!viewModel.isNewRecord()) {
             rainField.setText(viewModel.catchRecord.rain)
             tempField.setText(viewModel.catchRecord.temp)
             humidityField.setText(viewModel.catchRecord.humidity)
@@ -59,17 +60,18 @@ class CatchWeather : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        viewModel.updateWeather(
-            rainField.text.toString(),
-            cloudsField.text.toString(),
-            humidityField.text.toString(),
-            pressureField.text.toString(),
-            tempField.text.toString(),
-            descriptionField.text.toString(),
-            windDirectionField.text.toString(),
-            windSpeedField.text.toString(),
-            locationField.text.toString()
-        )
+        val weatherData = WeatherData
+        weatherData.clouds = cloudsField.text.toString().toFloat()
+        weatherData.humidity = humidityField.text.toString().toFloat()
+//        viewModel.todaysLocation = locationField.text.toString()
+        weatherData.pressure = pressureField.text.toString().toFloat()
+        weatherData.rain = rainField.text.toString().toFloat()
+        weatherData.weatherDescription = descriptionField.text.toString()
+        weatherData.windDirection = windDirectionField.text.toString().toFloat()
+        weatherData.windSpeed = windSpeedField.text.toString().toFloat()
+        weatherData.temp = tempField.text.toString().toFloat()
+        viewModel.updateWeather(weatherData)
+        viewModel.updateLocation(locationField.text.toString())
     }
 
     companion object {

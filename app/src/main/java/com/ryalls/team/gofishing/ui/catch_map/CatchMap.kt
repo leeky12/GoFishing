@@ -34,7 +34,7 @@ class CatchMap : Fragment(), OnMapReadyCallback {
     private var param2: String? = null
     private lateinit var mMap: GoogleMap
 
-    private val viewModel: CatchDetailsViewModel by activityViewModels()
+    private val viewModel: MapViewModel by activityViewModels()
     private var fusedLocationClient: FusedLocationProviderClient? = null
 
 
@@ -53,7 +53,7 @@ class CatchMap : Fragment(), OnMapReadyCallback {
             param2 = it.getString(ARG_PARAM2)
         }
 
-     }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -91,7 +91,7 @@ class CatchMap : Fragment(), OnMapReadyCallback {
         mMap = googleMap
         if (viewModel.lastLocation == null) {
             // have an observer on this to tell me when an address is present
-            viewModel.getAddress(requireActivity(), fusedLocationClient, false)
+            viewModel.getMapAddress(requireActivity(), fusedLocationClient)
         }
         viewModel.homeLocationReady.observe(viewLifecycleOwner, Observer {
             val lat = viewModel.lastLocation!!.latitude
@@ -100,7 +100,7 @@ class CatchMap : Fragment(), OnMapReadyCallback {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f))
         })
         // I have an observer on this to tell me when all the catch locations are present to be displayed
-        viewModels.getCatchLocations()
+        viewModel.getCatchLocations()
         viewModel.catchLocationsReady.observe(viewLifecycleOwner, Observer {
             updateMap(viewModel.catchLocations)
         })
@@ -118,7 +118,6 @@ class CatchMap : Fragment(), OnMapReadyCallback {
                     } catch (nfe: NumberFormatException) {
                         continue
                     }
-                    //                   val dateString: String = ConvertDate.getConvertedDateTime(fish.getDate())
                     mMap.addMarker(
                         MarkerOptions()
                             .position(

@@ -73,7 +73,7 @@ class CatchEntryFragment : Fragment() {
 
         dbID = arguments?.getString("dbID")
         if (dbID != null) {
-            viewModel.getRecord(dbID!!.toInt())
+            viewModel.getCatchRecord(dbID!!.toInt())
             viewModel.setNewRecord(false)
         } else {
             viewModel.setNewRecord(true)

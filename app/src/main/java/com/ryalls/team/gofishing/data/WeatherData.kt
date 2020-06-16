@@ -9,5 +9,5 @@ object WeatherData {
     var windSpeed : Float = 0.0f
     var pressure : Float = 0.0f
     var weatherDescription : String = ""
-    var location: String = "Unknown"
+ //   var location: String = "Unknown"
 }
