@@ -8,14 +8,13 @@ class WeatherConvertor {
         val kelvinConvert = 273.15f
         val calcTemp = wd.main.temp.toFloat() - kelvinConvert
         val weatherData = WeatherData
-        weatherData.clouds = wd.clouds.all.toFloat()
-        weatherData.temp = calcTemp
-        weatherData.humidity = wd.main.humidity.toFloat()
-        weatherData.pressure = wd.main.pressure.toFloat()
-        weatherData.windDirection = wd.wind.deg.toFloat()
-        weatherData.windSpeed = wd.wind.speed.toFloat()
+        weatherData.clouds = wd.clouds.all.toString()
+        weatherData.temp = calcTemp.toString()
+        weatherData.humidity = wd.main.humidity.toString()
+        weatherData.pressure = wd.main.pressure.toString()
+        weatherData.windDirection = wd.wind.deg.toString()
+        weatherData.windSpeed = wd.wind.speed.toString()
         weatherData.weatherDescription = wd.weather[0].description
-//        weatherData.location = wd.name
         return weatherData
     }
 }

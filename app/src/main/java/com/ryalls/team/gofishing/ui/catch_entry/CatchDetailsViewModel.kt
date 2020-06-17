@@ -208,16 +208,23 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         repository.insert(catchRecord)
     }
 
+    private fun returnBlankIfZero(value: String): String {
+        return if (value == "0.0") {
+            ""
+        } else {
+            value
+        }
+    }
+
     fun updateWeather(todaysWeather: WeatherData) {
-        catchRecord.rain = todaysWeather.rain.toString()
-        catchRecord.clouds = todaysWeather.clouds.toString()
-        catchRecord.humidity = todaysWeather.humidity.toString()
-        catchRecord.pressure = todaysWeather.pressure.toString()
-        catchRecord.temp = todaysWeather.temp.toString()
+        catchRecord.rain = returnBlankIfZero(todaysWeather.rain.toString())
+        catchRecord.clouds = returnBlankIfZero(todaysWeather.clouds.toString())
+        catchRecord.humidity = returnBlankIfZero(todaysWeather.humidity.toString())
+        catchRecord.pressure = returnBlankIfZero(todaysWeather.pressure.toString())
+        catchRecord.temp = returnBlankIfZero(todaysWeather.temp.toString())
         catchRecord.weatherDescription = todaysWeather.weatherDescription.toString()
-        catchRecord.windDirection = todaysWeather.windDirection.toString()
-        catchRecord.windSpeed = todaysWeather.windSpeed.toString()
-        //       catchRecord.location = todaysWeather.location.toString()
+        catchRecord.windDirection = returnBlankIfZero(todaysWeather.windDirection.toString())
+        catchRecord.windSpeed = returnBlankIfZero(todaysWeather.windSpeed.toString())
     }
 
     fun updateLocation(location: String) {

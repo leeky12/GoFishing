@@ -61,15 +61,15 @@ class CatchWeather : Fragment() {
     override fun onPause() {
         super.onPause()
         val weatherData = WeatherData
-        weatherData.clouds = cloudsField.text.toString().toFloat()
-        weatherData.humidity = humidityField.text.toString().toFloat()
-//        viewModel.todaysLocation = locationField.text.toString()
-        weatherData.pressure = pressureField.text.toString().toFloat()
-        weatherData.rain = rainField.text.toString().toFloat()
+        // need to put in null checks for this
+        weatherData.clouds = cloudsField.text.toString()
+        weatherData.humidity = humidityField.text.toString()
+        weatherData.pressure = pressureField.text.toString()
+        weatherData.rain = rainField.text.toString()
         weatherData.weatherDescription = descriptionField.text.toString()
-        weatherData.windDirection = windDirectionField.text.toString().toFloat()
-        weatherData.windSpeed = windSpeedField.text.toString().toFloat()
-        weatherData.temp = tempField.text.toString().toFloat()
+        weatherData.windDirection = windDirectionField.text.toString()
+        weatherData.windSpeed = windSpeedField.text.toString()
+        weatherData.temp = tempField.text.toString()
         viewModel.updateWeather(weatherData)
         viewModel.updateLocation(locationField.text.toString())
     }
