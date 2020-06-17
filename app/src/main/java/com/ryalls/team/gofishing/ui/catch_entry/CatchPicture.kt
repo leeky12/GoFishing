@@ -166,7 +166,7 @@ class CatchPicture : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == AppCompatActivity.RESULT_OK) {
-            viewModel.setThumbnail(requireContext(), currentPhotoPath)
+            viewModel.setThumbnail(currentPhotoPath)
             mediaPath = GalleryAdd.galleryAddPic(
                 requireActivity(),
                 currentPhotoPath,

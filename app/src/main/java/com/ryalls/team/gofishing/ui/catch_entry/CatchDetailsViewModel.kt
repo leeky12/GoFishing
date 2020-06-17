@@ -45,11 +45,8 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
 
     private var repository: CatchRepository
     private var weatherCache: Long = 0L
-    var todaysLocation = ""
+    private var todaysLocation = ""
 
-    /**
-     * Represents a geographical location.
-     */
     private var lastLocation: Location? = null
 
     private var isNewRecord = true
@@ -91,7 +88,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     }
 
     @SuppressLint("CheckResult")
-    fun setThumbnail(cont: Context, currentPhotoPath: String) = runBlocking {
+    fun setThumbnail(currentPhotoPath: String) = runBlocking {
         // create a thumbnail in the background so it doesnt hold up anything
         val job = viewModelScope.launch {
             val bytearrayoutputstream = ByteArrayOutputStream()
@@ -217,14 +214,18 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     }
 
     fun updateWeather(todaysWeather: WeatherData) {
-        catchRecord.rain = returnBlankIfZero(todaysWeather.rain.toString())
-        catchRecord.clouds = returnBlankIfZero(todaysWeather.clouds.toString())
-        catchRecord.humidity = returnBlankIfZero(todaysWeather.humidity.toString())
-        catchRecord.pressure = returnBlankIfZero(todaysWeather.pressure.toString())
-        catchRecord.temp = returnBlankIfZero(todaysWeather.temp.toString())
-        catchRecord.weatherDescription = todaysWeather.weatherDescription.toString()
-        catchRecord.windDirection = returnBlankIfZero(todaysWeather.windDirection.toString())
-        catchRecord.windSpeed = returnBlankIfZero(todaysWeather.windSpeed.toString())
+        catchRecord.rain = returnBlankIfZero(todaysWeather.rain)
+        catchRecord.clouds = returnBlankIfZero(todaysWeather.clouds)
+        catchRecord.humidity = returnBlankIfZero(todaysWeather.humidity)
+        catchRecord.pressure = returnBlankIfZero(todaysWeather.pressure)
+        catchRecord.temp = returnBlankIfZero(todaysWeather.temp)
+        catchRecord.weatherDescription = todaysWeather.weatherDescription
+        catchRecord.windDirection = returnBlankIfZero(todaysWeather.windDirection)
+        catchRecord.windSpeed = returnBlankIfZero(todaysWeather.windSpeed)
+    }
+
+    fun getTodaysLocation(): String {
+        return todaysLocation
     }
 
     fun updateLocation(location: String) {

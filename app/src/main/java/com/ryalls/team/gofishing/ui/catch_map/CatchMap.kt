@@ -14,7 +14,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.ryalls.team.gofishing.R
 import com.ryalls.team.gofishing.persistance.MapData
-import com.ryalls.team.gofishing.ui.catch_entry.CatchDetailsViewModel
 import kotlinx.android.synthetic.main.app_bar_start_activity.*
 
 
@@ -42,9 +41,6 @@ class CatchMap : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
         activity?.fab?.hide()
     }
-
-    private val viewModels: CatchDetailsViewModel by activityViewModels()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

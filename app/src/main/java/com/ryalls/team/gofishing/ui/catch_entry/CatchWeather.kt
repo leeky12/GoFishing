@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.ryalls.team.gofishing.R
 import com.ryalls.team.gofishing.data.WeatherData
 import kotlinx.android.synthetic.main.catch_weather.*
@@ -18,6 +20,7 @@ import kotlinx.android.synthetic.main.catch_weather.*
 class CatchWeather : Fragment() {
 
     private val viewModel: CatchDetailsViewModel by activityViewModels()
+    private var fusedLocationClient: FusedLocationProviderClient? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,18 +31,19 @@ class CatchWeather : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        viewModel.getAddress(requireActivity(), fusedLocationClient, true)
         viewModel.weatherPresent.observe(viewLifecycleOwner, Observer { weather ->
             if (viewModel.isNewRecord()) {
-                rainField.setText(viewModel.todaysWeather.rain.toString())
-                tempField.setText(viewModel.todaysWeather.temp.toString())
-                humidityField.setText(viewModel.todaysWeather.humidity.toString())
-                pressureField.setText(viewModel.todaysWeather.pressure.toString())
-                cloudsField.setText(viewModel.todaysWeather.clouds.toString())
+                rainField.setText(viewModel.todaysWeather.rain)
+                tempField.setText(viewModel.todaysWeather.temp)
+                humidityField.setText(viewModel.todaysWeather.humidity)
+                pressureField.setText(viewModel.todaysWeather.pressure)
+                cloudsField.setText(viewModel.todaysWeather.clouds)
                 descriptionField.setText(viewModel.todaysWeather.weatherDescription)
-                windDirectionField.setText(viewModel.todaysWeather.windDirection.toString())
-                windSpeedField.setText(viewModel.todaysWeather.windSpeed.toString())
-                locationField.setText(viewModel.todaysLocation)
+                windDirectionField.setText(viewModel.todaysWeather.windDirection)
+                windSpeedField.setText(viewModel.todaysWeather.windSpeed)
+                locationField.setText(viewModel.getTodaysLocation())
                 Log.d("Volley", "Weather Present Observer called")
             }
         })
@@ -56,7 +60,6 @@ class CatchWeather : Fragment() {
         }
 
     }
-
 
     override fun onPause() {
         super.onPause()

@@ -9,7 +9,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.tasks.OnSuccessListener
 import com.ryalls.team.gofishing.persistance.CatchRepository
 import com.ryalls.team.gofishing.persistance.CatchRoomDatabase
 import com.ryalls.team.gofishing.persistance.MapData
@@ -67,11 +66,11 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 fusedLocationClient?.lastLocation?.addOnSuccessListener(
-                    act,
-                    OnSuccessListener { location ->
-                        lastLocation = location
-                        homeLocationReady.value = "True"
-                    })?.addOnFailureListener(act) { e ->
+                    act
+                ) { location ->
+                    lastLocation = location
+                    homeLocationReady.value = "True"
+                }?.addOnFailureListener(act) { e ->
                     Log.w(
                         "Volley",
                         "getLastLocation:onFailure",

@@ -1,14 +1,12 @@
 package com.ryalls.team.gofishing.ui.catch_entry
 
 import android.content.Context
-import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.ryalls.team.gofishing.R
@@ -25,15 +23,10 @@ class CatchEntryFragment : Fragment() {
 
     private val TAG = CatchEntryFragment::class.java.simpleName
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var requestPerm: RequestPerm
 
     private lateinit var fishingPermissions: FishingPermissions
 
-    /**
-     * Represents a geographical location.
-     */
-    private var lastLocation: Location? = null
 
     /**
      * Provides access to the Fused Location Provider API.
@@ -83,18 +76,15 @@ class CatchEntryFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         if (fishingPermissions.checkFishingPermissions()) {
-            viewModel.getAddress(requireActivity(), fusedLocationClient, true)
         } else {
             requestPerm.requestPerm()
         }
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.add_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

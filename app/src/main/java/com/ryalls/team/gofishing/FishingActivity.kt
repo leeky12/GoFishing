@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -16,8 +15,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.ryalls.team.gofishing.interfaces.FishingPermissions
@@ -39,12 +36,6 @@ class FishingActivity : AppCompatActivity(), FishingPermissions, RequestPerm {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
-
-    /**
-     * Provides access to the Fused Location Provider API.
-     */
-    private var fusedLocationClient: FusedLocationProviderClient? = null
-    private val viewModel: CatchDetailsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,8 +63,7 @@ class FishingActivity : AppCompatActivity(), FishingPermissions, RequestPerm {
             catchDetailsViewModel.resetCatchDetails()
             navController.navigate(R.id.nav_details)
         }
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-    }
+   }
 
     override fun requestPerm() {
         ActivityCompat.requestPermissions(this, permissions, REQUEST_PERMISSIONS_CODE)
@@ -131,7 +121,7 @@ class FishingActivity : AppCompatActivity(), FishingPermissions, RequestPerm {
         )
         if (checkPermission(permissions, REQUEST_PERMISSIONS_CODE)) {
             // start the request for weather and location
-            viewModel.getAddress(this, fusedLocationClient, true)
+//            viewModel.getAddress(this, fusedLocationClient, true)
         }
         if (ActivityCompat.shouldShowRequestPermissionRationale(
                 this, Manifest.permission.CAMERA
