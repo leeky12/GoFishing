@@ -12,6 +12,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.ryalls.team.gofishing.persistance.CatchRepository
 import com.ryalls.team.gofishing.persistance.CatchRoomDatabase
 import com.ryalls.team.gofishing.persistance.MapData
+import com.ryalls.team.gofishing.utils.MapStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -19,6 +20,9 @@ import kotlinx.coroutines.withContext
 class MapViewModel(application: Application) : AndroidViewModel(application) {
     private var repository: CatchRepository
     lateinit var catchLocations: List<MapData>
+    val mapStatus: MutableLiveData<MapStatus> by lazy {
+        MutableLiveData<MapStatus>()
+    }
 
     // Mutable String used to indicate the catch locations list has been completely filled  with the data
     val catchLocationsReady: MutableLiveData<String> by lazy {
@@ -68,8 +72,12 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
                 fusedLocationClient?.lastLocation?.addOnSuccessListener(
                     act
                 ) { location ->
-                    lastLocation = location
-                    homeLocationReady.value = "True"
+                    if (location != null) {
+                        lastLocation = location
+                        homeLocationReady.value = "True"
+                    } else {
+                        mapStatus.value = MapStatus.No_MAP
+                    }
                 }?.addOnFailureListener(act) { e ->
                     Log.w(
                         "Volley",

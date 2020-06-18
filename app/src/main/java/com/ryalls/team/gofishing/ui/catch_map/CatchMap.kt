@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -14,6 +15,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.ryalls.team.gofishing.R
 import com.ryalls.team.gofishing.persistance.MapData
+import com.ryalls.team.gofishing.utils.MapStatus
 import kotlinx.android.synthetic.main.app_bar_start_activity.*
 
 
@@ -89,12 +91,24 @@ class CatchMap : Fragment(), OnMapReadyCallback {
             // have an observer on this to tell me when an address is present
             viewModel.getMapAddress(requireActivity(), fusedLocationClient)
         }
+
+        viewModel.mapStatus.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                MapStatus.No_MAP -> Toast.makeText(
+                    activity,
+                    "No current location information available",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+
         viewModel.homeLocationReady.observe(viewLifecycleOwner, Observer {
             val lat = viewModel.lastLocation!!.latitude
             val long = viewModel.lastLocation!!.longitude
             val latLng = LatLng(lat, long)
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f))
         })
+
         // I have an observer on this to tell me when all the catch locations are present to be displayed
         viewModel.getCatchLocations()
         viewModel.catchLocationsReady.observe(viewLifecycleOwner, Observer {
