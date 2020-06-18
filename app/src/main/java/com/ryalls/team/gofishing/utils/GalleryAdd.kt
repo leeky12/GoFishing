@@ -111,17 +111,15 @@ object GalleryAdd {
             )
             val size: Int = cursor!!.count
             /*******  If size is 0, there are no images on the SD Card.  */
-            if (size == 0) {
-            } else {
-                val thumbID = 0
+            if (size != 0) {
                 if (cursor != null) {
                     while (cursor.moveToNext()) {
-                        val file_ColumnIndex: Int =
+                        val fileColumnIndex: Int =
                             cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
                         /**************** Captured image details  */
                         /*****  Used to show image on view in LoadImagesFromSDCard class  */
                         val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
-                        val path: String = cursor.getString(file_ColumnIndex)
+                        val path: String = cursor.getString(fileColumnIndex)
                         val fileName =
                             path.substring(path.lastIndexOf("/") + 1, path.length)
                         if (fileName == name) {

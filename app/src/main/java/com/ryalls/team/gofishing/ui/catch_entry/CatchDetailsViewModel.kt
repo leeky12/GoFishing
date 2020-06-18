@@ -116,35 +116,36 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     }
 
     fun resetCatchDetails() {
-        catchRecord.catchID = 0
-        catchRecord.lure = ""
-        catchRecord.structure = ""
-        catchRecord.conditions = ""
-        catchRecord.depth = ""
-        catchRecord.hook = ""
-        catchRecord.groundBait = ""
-        catchRecord.boatspeed = ""
-        catchRecord.tides = ""
-        catchRecord.species = ""
-        catchRecord.comments = ""
-        catchRecord.weight = ""
-        catchRecord.length = ""
-        catchRecord.line = ""
-        catchRecord.rod = ""
-        catchRecord.reel = ""
-        catchRecord.rain = ""
-        catchRecord.clouds = ""
-        catchRecord.humidity = ""
-        catchRecord.pressure = ""
-        catchRecord.temp = ""
-        catchRecord.weatherDescription = ""
-        catchRecord.windDirection = ""
-        catchRecord.windSpeed = ""
-        catchRecord.location = ""
-        catchRecord.imageID = ""
-        catchRecord.latitude = ""
-        catchRecord.longitude = ""
-        catchRecord.thumbnail = ""
+        catchRecord = CatchRecord("")
+//        catchRecord.catchID = 0
+//        catchRecord.lure = ""
+//        catchRecord.structure = ""
+//        catchRecord.conditions = ""
+//        catchRecord.depth = ""
+//        catchRecord.hook = ""
+//        catchRecord.groundBait = ""
+//        catchRecord.boatspeed = ""
+//        catchRecord.tides = ""
+//        catchRecord.species = ""
+//        catchRecord.comments = ""
+//        catchRecord.weight = ""
+//        catchRecord.length = ""
+//        catchRecord.line = ""
+//        catchRecord.rod = ""
+//        catchRecord.reel = ""
+//        catchRecord.rain = ""
+//        catchRecord.clouds = ""
+//        catchRecord.humidity = ""
+//        catchRecord.pressure = ""
+//        catchRecord.temp = ""
+//        catchRecord.weatherDescription = ""
+//        catchRecord.windDirection = ""
+//        catchRecord.windSpeed = ""
+//        catchRecord.location = ""
+//        catchRecord.imageID = ""
+//        catchRecord.latitude = ""
+//        catchRecord.longitude = ""
+//        catchRecord.thumbnail = ""
     }
 
     fun updatesTackle(rod: String, reel: String, line: String) {
@@ -180,7 +181,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     }
 
     fun updateRecord(updateRecord: CatchRecord) = viewModelScope.launch(Dispatchers.IO) {
-        updateRecord.catchID = catchRecord.catchID
+//        updateRecord.catchID = catchRecord.catchID
         Log.d("CatchRecord", "${updateRecord.catchID}")
         repository.update(updateRecord)
     }
@@ -196,11 +197,6 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
         val date = Date()
         catchRecord.date = formatter.format(date)
-
-        Log.d(
-            "CatchRecord",
-            catchRecord.species + " " + catchRecord.date + " " + catchRecord.location
-        )
         repository.insert(catchRecord)
     }
 
@@ -232,6 +228,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     }
 
     private fun getWeather(context: Context, location: Location) {
+
         // Instantiate the RequestQueue.
         val queue = Volley.newRequestQueue(context)
 
@@ -284,6 +281,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
             Log.d("WeatherCached", "Weather has been retrieved")
             weatherCache = System.currentTimeMillis()
         }
+
         fusedLocationClient?.lastLocation?.addOnSuccessListener(
             act,
             OnSuccessListener { location ->
