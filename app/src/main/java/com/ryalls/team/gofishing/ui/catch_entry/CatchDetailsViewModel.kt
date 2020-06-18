@@ -71,7 +71,6 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         MutableLiveData<String>()
     }
 
-
     init {
         val catchDao =
             CatchRoomDatabase.getDatabase(context = application, scope = viewModelScope).catchDao()
@@ -285,48 +284,43 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
             Log.d("WeatherCached", "Weather has been retrieved")
             weatherCache = System.currentTimeMillis()
         }
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                fusedLocationClient?.lastLocation?.addOnSuccessListener(
-                    act,
-                    OnSuccessListener { location ->
-                        val town: String? = "Unknown"
-                        if (location == null) {
-                            Log.w("ViewModel", "onSuccess:null")
-                            return@OnSuccessListener
-                        }
-                        lastLocation = location
-                        val gc = Geocoder(act, Locale.getDefault())
-                        try {
-                            val addresses =
-                                gc.getFromLocation(location.latitude, location.longitude, 1)
-                            updateLocation(
-                                location.latitude.toString(),
-                                location.longitude.toString()
-                            )
-                            if (addresses.size > 0) {
-                                val address = addresses[0]
-                                todaysLocation = address.getAddressLine(0)
-                            }
-                        } catch (ioe: IOException) {
-                            // if no location then city should be "Unknown"
-                        }
-                        Log.i("Volley", "Location is = $town")
-                        if (weather) {
-                            getWeather(act as Context, location)
-                        }
-                        homeLocationReady.value = "True"
-                    })?.addOnFailureListener(act) { e ->
-                    Log.w(
-                        "Volley",
-                        "getLastLocation:onFailure",
-                        e
-                    )
+        fusedLocationClient?.lastLocation?.addOnSuccessListener(
+            act,
+            OnSuccessListener { location ->
+                val town: String? = "Unknown"
+                if (location == null) {
+                    Log.w("ViewModel", "onSuccess:null")
+                    return@OnSuccessListener
                 }
-            }
+                lastLocation = location
+                val gc = Geocoder(act, Locale.getDefault())
+                try {
+                    val addresses =
+                        gc.getFromLocation(location.latitude, location.longitude, 1)
+                    updateLocation(
+                        location.latitude.toString(),
+                        location.longitude.toString()
+                    )
+                    if (addresses.size > 0) {
+                        val address = addresses[0]
+                        todaysLocation = address.getAddressLine(0)
+                    }
+                } catch (ioe: IOException) {
+                    // if no location then city should be "Unknown"
+                }
+                Log.i("Volley", "Location is = $town")
+                if (weather) {
+                    getWeather(act as Context, location)
+                }
+                homeLocationReady.value = "True"
+            })?.addOnFailureListener(act) { e ->
+            Log.w(
+                "Volley",
+                "getLastLocation:onFailure",
+                e
+            )
         }
     }
-
 
 }
 
