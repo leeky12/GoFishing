@@ -217,6 +217,11 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
                     val weatherConv = WeatherConvertor()
                     todaysWeather = weatherConv.createWeatherData(wd)
                     updateWeather(todaysWeather)
+                    // if I was unable to goecode the location from google then get the location from
+                    // the weather API, which is sometimes nicer
+                    if (todaysLocation.isEmpty()) {
+                        todaysLocation = wd.name
+                    }
                     weatherPresent.value = "True"
                     Log.d("Volley", "Got Data ${todaysWeather.weatherDescription}")
                 } catch (jse: JsonSyntaxException) {
@@ -242,7 +247,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         weather: Boolean
     ) {
         val difference = System.currentTimeMillis() - weatherCache
-        if (difference < timeToWait) {
+        if (difference < timeToWait && homeLocationReady.value == "True") {
             Log.d("WeatherCached", "Weather has been cached for $difference")
             updateWeather(todaysWeather)
             if (isNewRecord()) {

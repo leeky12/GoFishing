@@ -21,6 +21,7 @@ import java.util.*
 
 object GalleryAdd {
 
+    // This will always write to the gallery even if the photo is changed multiple times
     fun galleryAddPic(
         activity: Activity,
         currentPhotoPath: String,
