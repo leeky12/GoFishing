@@ -1,5 +1,6 @@
 package com.ryalls.team.gofishing.ui.catch_entry
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.ryalls.team.gofishing.R
 import com.ryalls.team.gofishing.data.WeatherData
+import com.ryalls.team.gofishing.interfaces.FishingPermissions
 import kotlinx.android.synthetic.main.catch_weather.*
 
 /**
@@ -21,6 +23,7 @@ class CatchWeather : Fragment() {
 
     private val viewModel: CatchDetailsViewModel by activityViewModels()
     private var fusedLocationClient: FusedLocationProviderClient? = null
+    private lateinit var fishingPermissions: FishingPermissions
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,8 +34,10 @@ class CatchWeather : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-        viewModel.getAddress(requireActivity(), fusedLocationClient, true)
+        if (fishingPermissions.checkFishingPermissions()) {
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+            viewModel.getAddress(requireActivity(), fusedLocationClient, true)
+        }
         viewModel.weatherPresent.observe(viewLifecycleOwner, Observer { weather ->
             if (viewModel.isNewRecord()) {
                 rainField.setText(viewModel.todaysWeather.rain)
@@ -58,7 +63,6 @@ class CatchWeather : Fragment() {
             windSpeedField.setText(viewModel.catchRecord.windSpeed)
             locationField.setText(viewModel.catchRecord.location)
         }
-
     }
 
     override fun onPause() {
@@ -75,6 +79,15 @@ class CatchWeather : Fragment() {
         weatherData.temp = tempField.text.toString()
         viewModel.updateWeather(weatherData)
         viewModel.updateLocation(locationField.text.toString())
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            fishingPermissions = context as FishingPermissions
+        } catch (castException: ClassCastException) {
+            Log.d("WordPuzzleSolver", "Interface Not Defined")
+        }
     }
 
     companion object {

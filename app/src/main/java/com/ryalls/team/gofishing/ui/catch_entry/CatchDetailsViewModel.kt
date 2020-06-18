@@ -117,35 +117,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
 
     fun resetCatchDetails() {
         catchRecord = CatchRecord("")
-//        catchRecord.catchID = 0
-//        catchRecord.lure = ""
-//        catchRecord.structure = ""
-//        catchRecord.conditions = ""
-//        catchRecord.depth = ""
-//        catchRecord.hook = ""
-//        catchRecord.groundBait = ""
-//        catchRecord.boatspeed = ""
-//        catchRecord.tides = ""
-//        catchRecord.species = ""
-//        catchRecord.comments = ""
-//        catchRecord.weight = ""
-//        catchRecord.length = ""
-//        catchRecord.line = ""
-//        catchRecord.rod = ""
-//        catchRecord.reel = ""
-//        catchRecord.rain = ""
-//        catchRecord.clouds = ""
-//        catchRecord.humidity = ""
-//        catchRecord.pressure = ""
-//        catchRecord.temp = ""
-//        catchRecord.weatherDescription = ""
-//        catchRecord.windDirection = ""
-//        catchRecord.windSpeed = ""
-//        catchRecord.location = ""
-//        catchRecord.imageID = ""
-//        catchRecord.latitude = ""
-//        catchRecord.longitude = ""
-//        catchRecord.thumbnail = ""
+
     }
 
     fun updatesTackle(rod: String, reel: String, line: String) {

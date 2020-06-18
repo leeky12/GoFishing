@@ -106,8 +106,8 @@ class CatchMap : Fragment(), OnMapReadyCallback {
         if (fishedList != null) {
             for (fish in fishedList) {
                 if (fish.latitude != null) {
-                    var lat: Double = 0.0
-                    var long: Double = 0.0
+                    var lat = 0.0
+                    var long = 0.0
                     try {
                         lat = java.lang.Double.valueOf(fish.latitude)
                         long = java.lang.Double.valueOf(fish.longitude)

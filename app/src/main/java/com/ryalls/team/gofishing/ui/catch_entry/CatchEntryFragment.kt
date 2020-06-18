@@ -20,22 +20,16 @@ import kotlinx.android.synthetic.main.edit_tabbed_fragment.*
 
 class CatchEntryFragment : Fragment() {
 
-
     private val TAG = CatchEntryFragment::class.java.simpleName
 
     private lateinit var requestPerm: RequestPerm
 
     private lateinit var fishingPermissions: FishingPermissions
 
-
-    /**
-     * Provides access to the Fused Location Provider API.
-     */
     private var fusedLocationClient: FusedLocationProviderClient? = null
 
     private val viewModel: CatchDetailsViewModel by activityViewModels()
     private var dbID: String? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,10 +69,7 @@ class CatchEntryFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        if (fishingPermissions.checkFishingPermissions()) {
-        } else {
-            requestPerm.requestPerm()
-        }
+        requestPerm.requestPerm()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -132,7 +123,6 @@ class CatchEntryFragment : Fragment() {
         return viewModel.catchRecord
     }
 
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         try {
@@ -142,6 +132,5 @@ class CatchEntryFragment : Fragment() {
             Log.d("WordPuzzleSolver", "Interface Not Defined")
         }
     }
-
 
 }

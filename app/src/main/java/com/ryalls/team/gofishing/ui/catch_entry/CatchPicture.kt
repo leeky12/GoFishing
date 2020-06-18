@@ -59,7 +59,6 @@ class CatchPicture : Fragment() {
             val granted = permissionCheck.checkFishingPermissions()
             if (granted) {
                 dispatchTakePictureIntent()
-            } else {
             }
         }
         if (viewModel.catchRecord.imageID.isNotEmpty()) {

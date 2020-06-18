@@ -115,6 +115,6 @@ class CatchViewAdapter(
     override fun getItemCount() = catchList.size
 
     companion object {
-        private const val TAG = "CustomAdapter"
+        private var TAG = CatchViewAdapter::class.java.simpleName
     }
 }
