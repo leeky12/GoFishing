@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -14,6 +15,7 @@ import com.google.android.gms.location.LocationServices
 import com.ryalls.team.gofishing.R
 import com.ryalls.team.gofishing.data.WeatherData
 import com.ryalls.team.gofishing.interfaces.FishingPermissions
+import com.ryalls.team.gofishing.utils.WeatherStatus
 import kotlinx.android.synthetic.main.catch_weather.*
 
 /**
@@ -38,6 +40,7 @@ class CatchWeather : Fragment() {
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
             viewModel.getAddress(requireActivity(), fusedLocationClient, true)
         }
+
         viewModel.weatherPresent.observe(viewLifecycleOwner, Observer { weather ->
             if (viewModel.isNewRecord()) {
                 rainField.setText(viewModel.todaysWeather.rain)
@@ -52,6 +55,17 @@ class CatchWeather : Fragment() {
                 Log.d("Volley", "Weather Present Observer called")
             }
         })
+
+        viewModel.weatherStatus.observe(viewLifecycleOwner, Observer { status ->
+            when (status) {
+                WeatherStatus.No_WEATHER -> Toast.makeText(
+                    activity,
+                    "No weather information available",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+
         if (!viewModel.isNewRecord()) {
             rainField.setText(viewModel.catchRecord.rain)
             tempField.setText(viewModel.catchRecord.temp)
