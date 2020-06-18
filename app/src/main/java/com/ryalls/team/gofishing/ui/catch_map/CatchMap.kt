@@ -103,8 +103,9 @@ class CatchMap : Fragment(), OnMapReadyCallback {
         })
 
         viewModel.homeLocationReady.observe(viewLifecycleOwner, Observer {
-            val lat = viewModel.lastLocation!!.latitude
-            val long = viewModel.lastLocation!!.longitude
+            // using elvis to use a defualt value if the data in the view model is null
+            val lat = viewModel.lastLocation?.latitude ?: 51.2
+            val long = viewModel.lastLocation?.longitude ?: -1.14
             val latLng = LatLng(lat, long)
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f))
         })
