@@ -36,10 +36,14 @@ class CatchWeather : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if (fishingPermissions.checkFishingPermissions()) {
+        if (fishingPermissions.checkFishingPermissions() && viewModel.isNewRecord()) {
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
             viewModel.getAddress(requireActivity(), fusedLocationClient, true)
         }
+
+        viewModel.homeLocationReady.observe(viewLifecycleOwner, Observer { location ->
+            locationField.setText(viewModel.getTodaysLocation())
+        })
 
         viewModel.weatherPresent.observe(viewLifecycleOwner, Observer { weather ->
             if (viewModel.isNewRecord()) {
@@ -58,9 +62,14 @@ class CatchWeather : Fragment() {
 
         viewModel.weatherStatus.observe(viewLifecycleOwner, Observer { status ->
             when (status) {
-                WeatherStatus.No_WEATHER -> Toast.makeText(
+                WeatherStatus.NoWEATHER -> Toast.makeText(
                     activity,
                     "No weather information available",
+                    Toast.LENGTH_SHORT
+                ).show()
+                WeatherStatus.NoLOCATION -> Toast.makeText(
+                    activity,
+                    "No location information available",
                     Toast.LENGTH_SHORT
                 ).show()
             }

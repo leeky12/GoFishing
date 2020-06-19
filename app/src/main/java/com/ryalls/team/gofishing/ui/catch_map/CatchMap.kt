@@ -1,6 +1,7 @@
 package com.ryalls.team.gofishing.ui.catch_map
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.ryalls.team.gofishing.R
 import com.ryalls.team.gofishing.persistance.MapData
@@ -29,7 +31,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [CatchMap.newInstance] factory method to
  * create an instance of this fragment.
  */
-class CatchMap : Fragment(), OnMapReadyCallback {
+class CatchMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -103,7 +105,7 @@ class CatchMap : Fragment(), OnMapReadyCallback {
         })
 
         viewModel.homeLocationReady.observe(viewLifecycleOwner, Observer {
-            // using elvis to use a defualt value if the data in the view model is null
+            // using elvis to use a default value if the data in the view model is null
             val lat = viewModel.lastLocation?.latitude ?: 51.2
             val long = viewModel.lastLocation?.longitude ?: -1.14
             val latLng = LatLng(lat, long)
@@ -115,6 +117,7 @@ class CatchMap : Fragment(), OnMapReadyCallback {
         viewModel.catchLocationsReady.observe(viewLifecycleOwner, Observer {
             updateMap(viewModel.catchLocations)
         })
+        mMap.setOnMarkerClickListener(this)
     }
 
     private fun updateMap(fishedList: List<MapData>?) {
@@ -129,7 +132,7 @@ class CatchMap : Fragment(), OnMapReadyCallback {
                     } catch (nfe: NumberFormatException) {
                         continue
                     }
-                    mMap.addMarker(
+                    val marker = mMap.addMarker(
                         MarkerOptions()
                             .position(
                                 LatLng(
@@ -140,6 +143,7 @@ class CatchMap : Fragment(), OnMapReadyCallback {
                             .snippet(fish.species)
                             .title(fish.date)
                     )
+                    marker.tag = fish.catchID
                 }
             }
         }
@@ -164,5 +168,10 @@ class CatchMap : Fragment(), OnMapReadyCallback {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun onMarkerClick(marker: Marker?): Boolean {
+        Log.d("CatchMap", "" + marker?.tag)
+        return false
     }
 }

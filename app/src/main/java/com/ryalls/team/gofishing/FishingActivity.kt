@@ -60,6 +60,7 @@ class FishingActivity : AppCompatActivity(), FishingPermissions, RequestPerm {
         fab.setOnClickListener {
             val catchDetailsViewModel =
                 ViewModelProvider(this).get(CatchDetailsViewModel::class.java)
+            catchDetailsViewModel.setNewRecord(true)
             catchDetailsViewModel.resetCatchDetails()
             navController.navigate(R.id.nav_details)
         }

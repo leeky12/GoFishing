@@ -53,7 +53,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
 
     private var lastLocation: Location? = null
 
-    private var isNewRecord = true
+    private var isNewRecord = false
 
     var allWords: LiveData<List<CatchRecord>>
 
@@ -63,8 +63,8 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         MutableLiveData<String>()
     }
 
-    // Mutable String used to indicate the catch locations list has been completely filled  with the data
-    private val homeLocationReady: MutableLiveData<String> by lazy {
+    // Mutable String used to indicate the home location has been found
+    val homeLocationReady: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
 
@@ -229,7 +229,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
                     weatherPresent.value = "True"
                     Log.d("Volley", "Got Data ${todaysWeather.weatherDescription}")
                 } catch (jse: JsonSyntaxException) {
-                    weatherStatus.value = WeatherStatus.No_WEATHER
+                    weatherStatus.value = WeatherStatus.NoWEATHER
                     Log.d(
                         "Volley",
                         "com.ryalls.team.gofishing.data.weather.Weather not found $jse"
@@ -237,7 +237,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
                 }
             },
             Response.ErrorListener { response ->
-                weatherStatus.value = WeatherStatus.No_WEATHER
+                weatherStatus.value = WeatherStatus.NoWEATHER
                 Log.d("Volley", "Didn't work $response")
             })
         queue.add(stringReq)
@@ -264,14 +264,13 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
             Log.d("WeatherCached", "Weather has been retrieved")
             weatherCache = System.currentTimeMillis()
         }
-
         fusedLocationClient?.lastLocation?.addOnSuccessListener(
             act,
             OnSuccessListener { location ->
                 val town: String? = "Unknown"
                 if (location == null) {
                     Log.w("ViewModel", "onSuccess:null")
-                    weatherStatus.value = WeatherStatus.No_WEATHER
+                    weatherStatus.value = WeatherStatus.NoLOCATION
                     return@OnSuccessListener
                 }
                 lastLocation = location
@@ -288,7 +287,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
                         todaysLocation = address.getAddressLine(0)
                     }
                 } catch (ioe: IOException) {
-                    weatherStatus.value = WeatherStatus.No_WEATHER
+                    weatherStatus.value = WeatherStatus.NoLOCATION
                     // if no location then city should be "Unknown"
                 }
                 Log.i("Volley", "Location is = $town")
@@ -297,7 +296,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
                 }
                 homeLocationReady.value = "True"
             })?.addOnFailureListener(act) { e ->
-            weatherStatus.value = WeatherStatus.No_WEATHER
+            weatherStatus.value = WeatherStatus.NoLOCATION
             Log.w(
                 "Volley",
                 "getLastLocation:onFailure",

@@ -54,7 +54,7 @@ interface CatchDao {
     @Query("SELECT * FROM catch_table where catchId = :catchID")
     fun getRecord(catchID: Int): CatchRecord
 
-    @Query("SELECT date, latitude, longitude, species  FROM catch_table")
+    @Query("SELECT catchID, date, latitude, longitude, species  FROM catch_table")
     fun getCatchLocations(): List<MapData>
 
 }

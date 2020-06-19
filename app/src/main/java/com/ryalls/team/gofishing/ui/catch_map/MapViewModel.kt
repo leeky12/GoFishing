@@ -46,11 +46,11 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getCatchLocations() {
-        val d = Log.d("TestCoroutine", "Started")
+        val d = Log.d("MapView Coroutine", "Started")
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 catchLocations = repository.getCatchLocations()
-                Log.d("MapViewe", "Finished")
+                Log.d("MapView", "Finished")
             }
             withContext(Dispatchers.Main) {
                 Log.d("MapView", "Catch List retrieved")
