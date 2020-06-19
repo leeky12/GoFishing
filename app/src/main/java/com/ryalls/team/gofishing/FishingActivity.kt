@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -15,6 +16,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.ryalls.team.gofishing.interfaces.FishingPermissions
@@ -24,7 +26,9 @@ import com.ryalls.team.gofishing.ui.catch_entry.CatchDetailsViewModel
 
 class FishingActivity : AppCompatActivity(), FishingPermissions, RequestPerm {
 
-    // next task move permissions to the activity so it can be shared amongst the fragments
+    private var fusedLocationClient: FusedLocationProviderClient? = null
+
+    private val viewModel: CatchDetailsViewModel by viewModels()
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private val REQUEST_PERMISSIONS_CODE = 34
@@ -64,7 +68,7 @@ class FishingActivity : AppCompatActivity(), FishingPermissions, RequestPerm {
             catchDetailsViewModel.resetCatchDetails()
             navController.navigate(R.id.nav_details)
         }
-   }
+    }
 
     override fun requestPerm() {
         ActivityCompat.requestPermissions(this, permissions, REQUEST_PERMISSIONS_CODE)

@@ -50,6 +50,7 @@ class CatchEntryFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // start the request for weather and location
 
         // set up the pager fragments here
         view_pager.adapter =
@@ -63,6 +64,9 @@ class CatchEntryFragment : Fragment() {
             viewModel.getCatchRecord(dbID!!.toInt())
             viewModel.setNewRecord(false)
         } else {
+            if (fishingPermissions.checkFishingPermissions()) {
+                viewModel.getAddress(requireActivity(), fusedLocationClient, true)
+            }
             viewModel.setNewRecord(true)
         }
     }
