@@ -37,6 +37,7 @@ class CatchMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener
     private var param2: String? = null
     private lateinit var mMap: GoogleMap
 
+
     private val viewModel: MapViewModel by activityViewModels()
     private var fusedLocationClient: FusedLocationProviderClient? = null
 

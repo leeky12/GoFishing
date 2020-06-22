@@ -25,8 +25,8 @@
         tools:layout="@layout/catch_map" />
 
     <fragment
-        android:id="@+id/nav_settings"
-        android:name="com.ryalls.team.gofishing.ui.settings.Settings"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/catch_settings" />
+        android:id="@+id/nav_identify"
+        android:name="com.ryalls.team.gofishing.ui.identify_fish.Identify"
+        android:label="@string/menu_identify"
+        tools:layout="@layout/catch_identify" />
 </navigation>

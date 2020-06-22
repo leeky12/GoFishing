@@ -285,6 +285,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
                     if (addresses.size > 0) {
                         val address = addresses[0]
                         todaysLocation = address.getAddressLine(0)
+                        updateLocation(todaysLocation)
                     }
                 } catch (ioe: IOException) {
                     weatherStatus.value = WeatherStatus.NoLOCATION

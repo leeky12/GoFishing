@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -84,6 +85,15 @@ class CatchEntryFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.add_catch -> {
+
+                if (viewModel.homeLocationReady.value.isNullOrEmpty()) {
+                    Toast.makeText(
+                        activity,
+                        "No location/weather information available",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
                 // check to see if the catch has been filled in, at least trout
                 Log.d("Current Page", "Current Page " + view_pager.currentItem)
 

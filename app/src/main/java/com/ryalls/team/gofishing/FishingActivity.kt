@@ -55,7 +55,7 @@ class FishingActivity : AppCompatActivity(), FishingPermissions, RequestPerm {
         // R.id.nav_details,
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_view, R.id.nav_settings, R.id.nav_map
+                R.id.nav_view, R.id.nav_identify, R.id.nav_map
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -71,7 +71,9 @@ class FishingActivity : AppCompatActivity(), FishingPermissions, RequestPerm {
     }
 
     override fun requestPerm() {
-        ActivityCompat.requestPermissions(this, permissions, REQUEST_PERMISSIONS_CODE)
+        if (Build.VERSION.SDK_INT >= 23) {
+            ActivityCompat.requestPermissions(this, permissions, REQUEST_PERMISSIONS_CODE)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
