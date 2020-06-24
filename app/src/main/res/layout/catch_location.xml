@@ -11,6 +11,7 @@
         android:id="@+id/location_info"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/mapinfo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -49,22 +50,21 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/mapinfo"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/location_info">
 
         <com.google.android.gms.maps.MapView
-            android:id="@+id/map"
+            android:id="@+id/locationmap"
             android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintToptoBottomOf="parent"
             tools:context=".ui.catch_map.CatchMap" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
