@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/nav_identify"
-        android:name="com.ryalls.team.gofishing.ui.identify_fish.Identify"
+        android:name="com.ryalls.team.gofishing.ui.catch_location.CatchLocation"
         android:label="@string/menu_identify"
-        tools:layout="@layout/catch_identify" />
+        tools:layout="@layout/catch_location" />
 </navigation>
