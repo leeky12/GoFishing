@@ -13,10 +13,10 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 
 data class Main (
 
-	val temp : Double,
-	val feels_like : Double,
-	val temp_min : Double,
-	val temp_max : Double,
-	val pressure : Int,
-	val humidity : Int
+	val temp: Double?,
+	val feels_like: Double?,
+	val temp_min: Double?,
+	val temp_max: Double?,
+	val pressure: Int?,
+	val humidity: Int?
 )

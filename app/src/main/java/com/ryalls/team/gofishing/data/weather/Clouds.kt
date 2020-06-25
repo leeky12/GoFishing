@@ -13,5 +13,5 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 
 data class Clouds (
 
-	val all : Int
+	val all: Int?
 )

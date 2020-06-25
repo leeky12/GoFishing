@@ -16,7 +16,9 @@
     <string name="nav_header_title">Go Fishing</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="identify_fish">Identify Fish</string>
+    <string name="current_location">Current Location</string>
+    <string name="current_latitude">Current Latitude</string>
+    <string name="current_longtitude">Current Longtitude</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>

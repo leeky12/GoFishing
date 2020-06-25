@@ -13,6 +13,6 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 
 data class Coord (
 
-	val lon : Float,
-	val lat : Float
+	val lon: Float?,
+	val lat: Float?
 )

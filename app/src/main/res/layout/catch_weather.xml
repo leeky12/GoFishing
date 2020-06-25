@@ -40,7 +40,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Rain"
-            android:inputType="textNoSuggestions">
+            android:inputType="textNoSuggestions"
+            app:suffixText=" mm">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/rainField"
@@ -57,7 +58,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Temperature"
-            android:inputType="textNoSuggestions">
+            android:inputType="textNoSuggestions"
+            app:suffixText=" Degrees">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tempField"
@@ -74,7 +76,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Humidity"
-            android:inputType="textNoSuggestions">
+            android:inputType="textNoSuggestions"
+            app:suffixText=" %">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/humidityField"
@@ -91,7 +94,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Pressure"
-            android:inputType="textNoSuggestions">
+            android:inputType="textNoSuggestions"
+            app:suffixText=" hPa">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/pressureField"
@@ -108,7 +112,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Clouds"
-            android:inputType="textNoSuggestions">
+            android:inputType="textNoSuggestions"
+            app:suffixText=" %">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/cloudsField"
@@ -125,7 +130,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Wind Direction"
-            android:inputType="textNoSuggestions">
+            android:inputType="textNoSuggestions"
+            app:suffixText=" Degrees">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/windDirectionField"
@@ -142,7 +148,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Wind Speed"
-            android:inputType="textNoSuggestions">
+            android:inputType="textNoSuggestions"
+            app:suffixText=" m/s">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/windSpeedField"

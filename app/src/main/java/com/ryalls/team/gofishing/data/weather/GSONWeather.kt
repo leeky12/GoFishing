@@ -12,18 +12,19 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 For support, please feel free to contact me at https://www.linkedin.com/in/syedabsar */
 
 
-data class GSONWeather (
+data class GSONWeather(
 
-    val coord : Coord,
-    val weather : List<Weather>,
-    val base : String,
-    val main : Main,
-    val wind : Wind,
-    val clouds : Clouds,
-    val dt : Int,
-    val sys : Sys,
-    val timezone : Int,
-    val id : Int,
-    val name : String,
-    val cod : Int
+    val coord: Coord?,
+    val weather: List<Weather>?,
+    val base: String?,
+    val main: Main?,
+    val wind: Wind?,
+    val clouds: Clouds?,
+    val dt: Int,
+    val sys: Sys?,
+    val timezone: Int,
+    val id: Int,
+    val name: String,
+    val cod: Int,
+    val rain: Rain?
 )

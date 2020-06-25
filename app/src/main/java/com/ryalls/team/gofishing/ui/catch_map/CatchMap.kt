@@ -38,8 +38,8 @@ class CatchMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener
     private lateinit var mMap: GoogleMap
 
 
-    private val viewModel: MapViewModel by activityViewModels()
     private var fusedLocationClient: FusedLocationProviderClient? = null
+    private val viewModel: MapViewModel by activityViewModels()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

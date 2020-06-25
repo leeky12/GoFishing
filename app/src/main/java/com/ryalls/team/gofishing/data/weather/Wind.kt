@@ -13,6 +13,6 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 
 data class Wind (
 
-	val speed : Double,
-	val deg : Double
+	val speed: Double?,
+	val deg: Double?
 )
