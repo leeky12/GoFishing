@@ -25,7 +25,6 @@ import kotlinx.android.synthetic.main.catch_location.*
  */
 class CatchLocation : Fragment(), OnMapReadyCallback {
 
-    private var param2: String? = null
     private lateinit var mMap: GoogleMap
     private val viewModel: CatchLocationViewModel by activityViewModels()
     private var fusedLocationClient: FusedLocationProviderClient? = null

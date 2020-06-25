@@ -21,8 +21,6 @@ import kotlinx.android.synthetic.main.edit_tabbed_fragment.*
 
 class CatchEntryFragment : Fragment() {
 
-    private val TAG = CatchEntryFragment::class.java.simpleName
-
     private lateinit var requestPerm: RequestPerm
 
     private lateinit var fishingPermissions: FishingPermissions

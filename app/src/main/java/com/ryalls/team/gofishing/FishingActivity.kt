@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -16,7 +15,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.ryalls.team.gofishing.interfaces.FishingPermissions
@@ -26,12 +24,8 @@ import com.ryalls.team.gofishing.ui.catch_entry.CatchDetailsViewModel
 
 class FishingActivity : AppCompatActivity(), FishingPermissions, RequestPerm {
 
-    private var fusedLocationClient: FusedLocationProviderClient? = null
-
-    private val viewModel: CatchDetailsViewModel by viewModels()
-
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private val REQUEST_PERMISSIONS_CODE = 34
+    private val REQUESTPERMISSIONSCODE = 34
     private val permissions =
         arrayOf(
             Manifest.permission.CAMERA,
@@ -72,7 +66,7 @@ class FishingActivity : AppCompatActivity(), FishingPermissions, RequestPerm {
 
     override fun requestPerm() {
         if (Build.VERSION.SDK_INT >= 23) {
-            ActivityCompat.requestPermissions(this, permissions, REQUEST_PERMISSIONS_CODE)
+            ActivityCompat.requestPermissions(this, permissions, REQUESTPERMISSIONSCODE)
         }
     }
 
@@ -126,7 +120,7 @@ class FishingActivity : AppCompatActivity(), FishingPermissions, RequestPerm {
             permissions,
             grantResults
         )
-        if (checkPermission(permissions, REQUEST_PERMISSIONS_CODE)) {
+        if (checkPermission(permissions, REQUESTPERMISSIONSCODE)) {
             // start the request for weather and location
 //            viewModel.getAddress(this, fusedLocationClient, true)
         }
@@ -143,7 +137,7 @@ class FishingActivity : AppCompatActivity(), FishingPermissions, RequestPerm {
     }
 
     override fun checkFishingPermissions(): Boolean {
-        return checkPermission(permissions, REQUEST_PERMISSIONS_CODE)
+        return checkPermission(permissions, REQUESTPERMISSIONSCODE)
     }
 
 

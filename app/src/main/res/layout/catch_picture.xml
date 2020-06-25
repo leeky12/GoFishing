@@ -28,6 +28,7 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="false"
         android:src="@drawable/ic_fisher"
+        android:contentDescription="TODO"
         app:srcCompat="@drawable/ic_fisher" />
 
 </FrameLayout>

@@ -40,23 +40,23 @@ object ImageProcessing {
         options.inJustDecodeBounds = true
         BitmapFactory.decodeFile(pathName, options)
         Log.d("BitmapMetrics", "Original Bitmap " + options.outHeight + " " + options.outWidth)
-        val wRatio_inv = options.outWidth.toFloat() / maxWidth
-        val hRatio_inv =
+        val wRatioinv = options.outWidth.toFloat() / maxWidth
+        val hRatioinv =
             options.outHeight.toFloat() / maxHeight // Working with inverse ratios is more comfortable
         val finalW: Int
         val finalH: Int
-        val minRatio_inv /* = max{Ratio_inv} */: Int
-        if (wRatio_inv > hRatio_inv) {
-            minRatio_inv = wRatio_inv.toInt()
+        val minRatioinv /* = max{Ratio_inv} */: Int
+        if (wRatioinv > hRatioinv) {
+            minRatioinv = wRatioinv.toInt()
             finalW = maxWidth
-            finalH = Math.round(options.outHeight / wRatio_inv)
+            finalH = Math.round(options.outHeight / wRatioinv)
         } else {
-            minRatio_inv = hRatio_inv.toInt()
+            minRatioinv = hRatioinv.toInt()
             finalH = maxHeight
-            finalW = Math.round(options.outWidth / hRatio_inv)
+            finalW = Math.round(options.outWidth / hRatioinv)
         }
         options.inSampleSize =
-            pow2Ceil(minRatio_inv) // pow2Ceil: A utility function that comes later
+            pow2Ceil(minRatioinv) // pow2Ceil: A utility function that comes later
         //  Raw height and width of image
         options.inJustDecodeBounds = false // Decode bitmap with inSampleSize set
         return Bitmap.createScaledBitmap(

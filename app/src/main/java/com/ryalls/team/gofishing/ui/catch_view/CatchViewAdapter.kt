@@ -114,7 +114,5 @@ class CatchViewAdapter(
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = catchList.size
 
-    companion object {
-        private var TAG = CatchViewAdapter::class.java.simpleName
-    }
+    companion object
 }
