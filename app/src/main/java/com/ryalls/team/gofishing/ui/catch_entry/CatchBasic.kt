@@ -54,7 +54,11 @@ class CatchBasic : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
          val adapter: ArrayAdapter<String> =
-            ArrayAdapter<String>(context as Context, android.R.layout.select_dialog_item, FishList.fish_list)
+            ArrayAdapter(
+                context as Context,
+                android.R.layout.select_dialog_item,
+                FishList.fish_list
+            )
 
         speciesField.threshold = 1
         speciesField.setAdapter(adapter)

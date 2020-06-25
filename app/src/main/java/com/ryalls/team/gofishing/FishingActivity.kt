@@ -55,7 +55,7 @@ class FishingActivity : AppCompatActivity(), FishingPermissions, RequestPerm {
         // R.id.nav_details,
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_view, R.id.nav_identify, R.id.nav_map
+                R.id.nav_view, R.id.nav_current_location, R.id.nav_map
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

@@ -76,7 +76,7 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
                         lastLocation = location
                         homeLocationReady.value = "True"
                     } else {
-                        mapStatus.value = MapStatus.No_MAP
+                        mapStatus.value = MapStatus.NoMAP
                     }
                 }?.addOnFailureListener(act) { e ->
                     Log.w(

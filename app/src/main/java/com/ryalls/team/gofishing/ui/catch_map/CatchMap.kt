@@ -97,7 +97,7 @@ class CatchMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener
 
         viewModel.mapStatus.observe(viewLifecycleOwner, Observer {
             when (it) {
-                MapStatus.No_MAP -> Toast.makeText(
+                MapStatus.NoMAP -> Toast.makeText(
                     activity,
                     "No current location information available",
                     Toast.LENGTH_SHORT

@@ -9,8 +9,7 @@
         android:id="@+id/nav_view"
         android:name="com.ryalls.team.gofishing.ui.catch_view.CatchView"
         android:label="@string/catch_view"
-        tools:layout="@layout/catch_fish_list" >
-    </fragment>
+        tools:layout="@layout/catch_fish_list"></fragment>
 
     <fragment
         android:id="@+id/nav_details"
@@ -19,14 +18,15 @@
         tools:layout="@layout/edit_tabbed_fragment" />
 
     <fragment
+        android:id="@+id/nav_current_location"
+        android:name="com.ryalls.team.gofishing.ui.catch_location.CatchLocation"
+        android:label="@string/menu_identify"
+        tools:layout="@layout/catch_location" />
+    <fragment
         android:id="@+id/nav_map"
         android:name="com.ryalls.team.gofishing.ui.catch_map.CatchMap"
         android:label="@string/catch_map"
         tools:layout="@layout/catch_map" />
 
-    <fragment
-        android:id="@+id/nav_identify"
-        android:name="com.ryalls.team.gofishing.ui.catch_location.CatchLocation"
-        android:label="@string/menu_identify"
-        tools:layout="@layout/catch_location" />
+
 </navigation>

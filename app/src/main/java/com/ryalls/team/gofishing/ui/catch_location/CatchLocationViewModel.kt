@@ -66,7 +66,7 @@ class CatchLocationViewModel(application: Application) : AndroidViewModel(applic
                 lastLocation = location
                 homeLocationReady.value = "True"
             } else {
-                mapStatus.value = MapStatus.No_MAP
+                mapStatus.value = MapStatus.NoMAP
                 currentLocation = "Unknown"
                 homeLocationReady.value = "True"
             }
@@ -76,7 +76,7 @@ class CatchLocationViewModel(application: Application) : AndroidViewModel(applic
                 "getLastLocation:onFailure",
                 e
             )
-            mapStatus.value = MapStatus.No_MAP
+            mapStatus.value = MapStatus.NoMAP
             currentLocation = "Unknown"
             homeLocationReady.value = "True"
         }
