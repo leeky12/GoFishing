@@ -117,6 +117,8 @@ class CatchView : Fragment(), ILaunchAdapterInterface {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.info_catch -> {
+                // todo add the observer here to know when the fish count has finished
+                // so we can start the dialog box to display it.
                 viewModel.calculateCatch()
                 true
             }
