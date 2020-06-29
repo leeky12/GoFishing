@@ -37,6 +37,7 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
 
 class CatchDetailsViewModel(application: Application) : AndroidViewModel(application) {
@@ -67,6 +68,12 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     val homeLocationReady: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
+
+    // Mutable String used to indicate the fishcount has been calculated
+    val fishCountReady: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+
 
     var catchRecord: CatchRecord = CatchRecord("")
 
@@ -181,6 +188,26 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
             ""
         } else {
             value
+        }
+    }
+
+    fun calculateCatch() {
+        var fishList: List<String>
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                fishList = repository.getSpeciesList()
+                var hashMap: HashMap<String, Int> = HashMap<String, Int>(30)
+                for (item in fishList) {
+                    var value = hashMap[item]
+                    if (value == null) {
+                        hashMap[item] = 1
+                    } else {
+                        value++
+                        hashMap[item] = value
+                    }
+                }
+                fishCountReady.value = true
+            }
         }
     }
 

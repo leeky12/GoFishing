@@ -18,9 +18,7 @@ package com.ryalls.team.gofishing.ui.catch_view
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -41,6 +39,10 @@ import kotlinx.android.synthetic.main.app_bar_start_activity.*
  * Demonstrates the use of [RecyclerView] with a [LinearLayoutManager]
  */
 class CatchView : Fragment(), ILaunchAdapterInterface {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var layoutManager: RecyclerView.LayoutManager
@@ -107,9 +109,23 @@ class CatchView : Fragment(), ILaunchAdapterInterface {
         return rootView
     }
 
-    companion object {
-        private const val TAG = "RecyclerViewFragment"
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.info_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.info_catch -> {
+                viewModel.calculateCatch()
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
+    }
+
 
     override fun launchDetailView(dbID: Int) {
         val navController = findNavController()
@@ -130,4 +146,9 @@ class CatchView : Fragment(), ILaunchAdapterInterface {
         }
         builder.show()
     }
+
+    companion object {
+        private const val TAG = "RecyclerViewFragment"
+    }
+
 }
