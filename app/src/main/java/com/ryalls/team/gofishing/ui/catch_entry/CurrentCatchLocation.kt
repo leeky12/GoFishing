@@ -20,7 +20,7 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [CatchMap.newInstance] factory method to
+ * Use the [CurrentCatchLocation.newInstance] factory method to
  * create an instance of this fragment.
  */
 class CurrentCatchLocation : Fragment(), OnMapReadyCallback {
@@ -85,7 +85,7 @@ class CurrentCatchLocation : Fragment(), OnMapReadyCallback {
             lat = 0.0
             long = 0.0
         }
-        val marker = mMap.addMarker(
+        mMap.addMarker(
             MarkerOptions()
                 .position(
                     LatLng(

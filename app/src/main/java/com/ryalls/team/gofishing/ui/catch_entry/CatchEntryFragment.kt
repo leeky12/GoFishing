@@ -87,7 +87,7 @@ class CatchEntryFragment : Fragment() {
                 if (viewModel.homeLocationReady.value.isNullOrEmpty()) {
                     Toast.makeText(
                         activity,
-                        "No location/weather information available",
+                        "No current location/weather information",
                         Toast.LENGTH_SHORT
                     ).show()
                 }

@@ -61,17 +61,19 @@ class CatchWeather : Fragment() {
         })
 
         viewModel.weatherStatus.observe(viewLifecycleOwner, Observer { status ->
-            when (status) {
-                WeatherStatus.NoWEATHER -> Toast.makeText(
-                    activity,
-                    "No weather information available",
-                    Toast.LENGTH_SHORT
-                ).show()
-                WeatherStatus.NoLOCATION -> Toast.makeText(
-                    activity,
-                    "No location information available",
-                    Toast.LENGTH_SHORT
-                ).show()
+            if (viewModel.isNewRecord()) {
+                when (status) {
+                    WeatherStatus.NoWEATHER -> Toast.makeText(
+                        requireActivity(),
+                        "No current weather information",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    WeatherStatus.NoLOCATION -> Toast.makeText(
+                        requireActivity(),
+                        "No current location information",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         })
 

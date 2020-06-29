@@ -41,7 +41,7 @@ class CatchPicture : Fragment() {
     private lateinit var currentPhotoPath:
             String
     private lateinit var fileName: String
-    private val REQUESTTAKEPHOTO = 1
+    private val requestTakePhoto = 1
     private lateinit var photoURI: Uri
 
     override fun onCreateView(
@@ -155,7 +155,7 @@ class CatchPicture : Fragment() {
                             photoFile
                         )
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                        startActivityForResult(takePictureIntent, `REQUESTTAKEPHOTO`)
+                        startActivityForResult(takePictureIntent, requestTakePhoto)
                     }
                 }
             }
@@ -164,7 +164,7 @@ class CatchPicture : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == `REQUESTTAKEPHOTO` && resultCode == AppCompatActivity.RESULT_OK) {
+        if (requestCode == requestTakePhoto && resultCode == AppCompatActivity.RESULT_OK) {
             viewModel.setThumbnail(currentPhotoPath)
             mediaPath = GalleryAdd.galleryAddPic(
                 requireActivity(),

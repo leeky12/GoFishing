@@ -25,7 +25,7 @@ import com.ryalls.team.gofishing.ui.catch_entry.CatchDetailsViewModel
 class FishingActivity : AppCompatActivity(), FishingPermissions, RequestPerm {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private val REQUESTPERMISSIONSCODE = 34
+    private val requestPermissionsCode = 34
     private val permissions =
         arrayOf(
             Manifest.permission.CAMERA,
@@ -66,7 +66,7 @@ class FishingActivity : AppCompatActivity(), FishingPermissions, RequestPerm {
 
     override fun requestPerm() {
         if (Build.VERSION.SDK_INT >= 23) {
-            ActivityCompat.requestPermissions(this, permissions, REQUESTPERMISSIONSCODE)
+            ActivityCompat.requestPermissions(this, permissions, requestPermissionsCode)
         }
     }
 
@@ -120,7 +120,7 @@ class FishingActivity : AppCompatActivity(), FishingPermissions, RequestPerm {
             permissions,
             grantResults
         )
-        if (checkPermission(permissions, REQUESTPERMISSIONSCODE)) {
+        if (checkPermission(permissions, requestPermissionsCode)) {
             // start the request for weather and location
 //            viewModel.getAddress(this, fusedLocationClient, true)
         }
@@ -137,7 +137,7 @@ class FishingActivity : AppCompatActivity(), FishingPermissions, RequestPerm {
     }
 
     override fun checkFishingPermissions(): Boolean {
-        return checkPermission(permissions, REQUESTPERMISSIONSCODE)
+        return checkPermission(permissions, requestPermissionsCode)
     }
 
 

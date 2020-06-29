@@ -20,7 +20,7 @@ class CatchEntryPagerAdapter(
 
     private var permFragment: FishingPermissions = parentFragment
 
-    private val TABTITLES = arrayOf(
+    private val tabTitles = arrayOf(
         R.string.catch_picture,
         R.string.catch_basic,
         R.string.catch_details,
@@ -30,7 +30,7 @@ class CatchEntryPagerAdapter(
     )
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return context.resources.getString(TABTITLES[position])
+        return context.resources.getString(tabTitles[position])
     }
 
     override fun getItem(position: Int): Fragment {
