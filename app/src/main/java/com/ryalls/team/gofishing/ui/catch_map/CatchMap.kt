@@ -150,6 +150,10 @@ class CatchMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener
         }
     }
 
+    override fun onMarkerClick(marker: Marker?): Boolean {
+        Log.d("CatchMap", "" + marker?.tag)
+        return false
+    }
 
     companion object {
         /**
@@ -169,10 +173,5 @@ class CatchMap : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener
                     putString(ARG_PARAM2, param2)
                 }
             }
-    }
-
-    override fun onMarkerClick(marker: Marker?): Boolean {
-        Log.d("CatchMap", "" + marker?.tag)
-        return false
     }
 }
