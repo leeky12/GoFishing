@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/nav_current_location"
-        android:name="com.ryalls.team.gofishing.ui.catch_location.CatchLocation"
+        android:name="com.ryalls.team.gofishing.ui.current_location.CurrentLocation"
         android:label="@string/menu_identify"
         tools:layout="@layout/catch_location" />
     <fragment

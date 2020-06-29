@@ -9,7 +9,7 @@
     <string name="catch_tackle">Tackle</string>
     <string name="catch_map">Catch Map</string>
     <string name="tab_text_4">Weather</string>
-    <string name="tab_text_5">Extra</string>
+    <string name="catch_location">Location</string>
     <string name="title_activity_start_activity">start_activity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -23,7 +23,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_identify">Identify</string>
+    <string name="menu_identify">Current Location</string>
 
     <string name="home_second">Home Second</string>
     <string name="species">Species</string>

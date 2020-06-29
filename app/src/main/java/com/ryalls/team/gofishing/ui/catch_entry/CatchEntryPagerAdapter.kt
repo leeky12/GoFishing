@@ -25,7 +25,8 @@ class CatchEntryPagerAdapter(
         R.string.catch_basic,
         R.string.catch_details,
         R.string.catch_tackle,
-        R.string.tab_text_4
+        R.string.tab_text_4,
+        R.string.catch_location
     )
 
     override fun getPageTitle(position: Int): CharSequence? {
@@ -42,13 +43,16 @@ class CatchEntryPagerAdapter(
                 CatchDetails.newInstance(2)
             3 ->
                 CatchTackle.newInstance(3)
-            else ->
+            4 ->
                 CatchWeather.newInstance(4)
+            else ->
+                CurrentCatchLocation.newInstance()
+
 
         }
     }
 
     override fun getCount(): Int {
-        return 5
+        return 6
     }
 }

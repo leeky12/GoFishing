@@ -1,4 +1,4 @@
-package com.ryalls.team.gofishing.ui.catch_location
+package com.ryalls.team.gofishing.ui.current_location
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -15,7 +15,7 @@ import com.ryalls.team.gofishing.persistance.CatchRoomDatabase
 import com.ryalls.team.gofishing.utils.MapStatus
 import java.util.*
 
-class CatchLocationViewModel(application: Application) : AndroidViewModel(application) {
+class CurrentLocationViewModel(application: Application) : AndroidViewModel(application) {
     private var repository: CatchRepository
 
     val mapStatus: MutableLiveData<MapStatus> by lazy {

@@ -1,4 +1,4 @@
-package com.ryalls.team.gofishing.ui.catch_location
+package com.ryalls.team.gofishing.ui.current_location
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,13 +20,13 @@ import kotlinx.android.synthetic.main.catch_location.*
 
 /**
  * A simple [Fragment] subclass.
- * Use the [CatchLocation.newInstance] factory method to
+ * Use the [CurrentLocation.newInstance] factory method to
  * create an instance of this fragment.
  */
-class CatchLocation : Fragment(), OnMapReadyCallback {
+class CurrentLocation : Fragment(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
-    private val viewModel: CatchLocationViewModel by activityViewModels()
+    private val viewModel: CurrentLocationViewModel by activityViewModels()
     private var fusedLocationClient: FusedLocationProviderClient? = null
 
 
@@ -69,7 +69,7 @@ class CatchLocation : Fragment(), OnMapReadyCallback {
             currentLatitude.setText("" + lat)
             currentLongtitude.setText("" + long)
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f))
-            mMap.addMarker(
+            val marker = mMap.addMarker(
                 MarkerOptions()
                     .position(
                         LatLng(
@@ -80,6 +80,9 @@ class CatchLocation : Fragment(), OnMapReadyCallback {
                     .snippet(viewModel.currentLocation)
                     .title("Current Location")
             )
+            if (lat != 0.0 && long != 0.0) {
+                marker.showInfoWindow()
+            }
         })
         viewModel.mapStatus.observe(viewLifecycleOwner, Observer {
             when (it) {
@@ -104,6 +107,6 @@ class CatchLocation : Fragment(), OnMapReadyCallback {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            CatchLocation()
+            CurrentLocation()
     }
 }

@@ -5,7 +5,7 @@
     android:id="@+id/location_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.catch_location.CatchLocation">
+    tools:context=".ui.current_location.CurrentLocation">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/location_info"

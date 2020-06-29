@@ -11,53 +11,56 @@
     card_view:cardCornerRadius="10dp"
     card_view:cardElevation="5dp">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/mainView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:layout_height="match_parent">
+
 
         <ImageView
             android:id="@+id/fishThumbnail"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
+            android:layout_margin="8dp"
             android:contentDescription="@string/catch_image"
-            android:src="@drawable/ic_fisher" />
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_fisher"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/location"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ellipsize="marquee"
-            android:fadingEdge="horizontal"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:layout_alignParentTop="true"
-            android:scrollHorizontally="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_margin="8dp"
             android:singleLine="true"
-            android:layout_toEndOf="@+id/fishThumbnail"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toEndOf="@+id/fishThumbnail"
+            card_view:layout_constraintTop_toTopOf="parent"
             tools:text="Basingstoke" />
 
         <TextView
             android:id="@+id/date"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/location"
-            android:layout_alignStart="@+id/location"
+            android:layout_margin="8dp"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toEndOf="@+id/fishThumbnail"
+            card_view:layout_constraintTop_toBottomOf="@+id/location"
             tools:text="06/02/1967" />
 
         <TextView
             android:id="@+id/species"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/date"
-            android:layout_alignStart="@+id/date"
+            android:layout_margin="8dp"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toEndOf="@+id/fishThumbnail"
+            card_view:layout_constraintTop_toBottomOf="@+id/date"
             tools:text="Pike" />
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
