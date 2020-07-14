@@ -21,6 +21,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import com.ryalls.team.gofishing.data.SpeciesCount
 import com.ryalls.team.gofishing.data.WeatherData
 import com.ryalls.team.gofishing.data.weather.GSONWeather
 import com.ryalls.team.gofishing.persistance.CatchRecord
@@ -59,6 +60,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     var allWords: LiveData<List<CatchRecord>>
 
     var todaysWeather: WeatherData = WeatherData
+    lateinit var hashMap: HashMap<String, Int>
 
     val weatherPresent: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
@@ -73,6 +75,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     val fishCountReady: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
+    var speciesCount = ArrayList<SpeciesCount>()
 
 
     var catchRecord: CatchRecord = CatchRecord("")
@@ -196,7 +199,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 fishList = repository.getSpeciesList()
-                var hashMap: HashMap<String, Int> = HashMap<String, Int>(30)
+                hashMap = HashMap<String, Int>(30)
                 for (item in fishList) {
                     var value = hashMap[item]
                     if (value == null) {
@@ -206,7 +209,19 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
                         hashMap[item] = value
                     }
                 }
-                fishCountReady.value = true
+                withContext(Dispatchers.Main) {
+                    hashMap.forEach { (key, value) ->
+                        var entry = SpeciesCount()
+                        entry.species = key
+                        entry.count = value
+                        speciesCount.add(entry)
+                        Log.d("Info", entry.species)
+                    }
+                    for (species in speciesCount) {
+                        Log.d("InInfoModel", species.species + " " + species.count)
+                    }
+                    fishCountReady.value = true
+                }
             }
         }
     }

@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import com.ryalls.team.gofishing.R
 import com.ryalls.team.gofishing.interfaces.ILaunchAdapterInterface
 import com.ryalls.team.gofishing.ui.catch_entry.CatchDetailsViewModel
+import com.ryalls.team.gofishing.ui.catch_list_info.InfoList
 import com.ryalls.team.gofishing.utils.KeyboardUtils
 import kotlinx.android.synthetic.main.app_bar_start_activity.*
 
@@ -85,10 +86,10 @@ class CatchView : Fragment(), ILaunchAdapterInterface {
                     activity?.fab?.hide()
                 }
             }
+
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (newState == SCROLL_STATE_IDLE)
-                {
+                if (newState == SCROLL_STATE_IDLE) {
                     activity?.fab?.show()
                 }
             }
@@ -119,7 +120,12 @@ class CatchView : Fragment(), ILaunchAdapterInterface {
             R.id.info_catch -> {
                 // todo add the observer here to know when the fish count has finished
                 // so we can start the dialog box to display it.
+
+                val infoDialog = InfoList()
+                infoDialog.show(childFragmentManager, "InfoList")
+
                 viewModel.calculateCatch()
+
                 true
             }
             else -> {

@@ -50,5 +50,6 @@
     <string name="line">Line</string>
     <string name="enter_species">Please enter a species</string>
     <string name="catch_image">Catch Image</string>
+    <string name="fish_count">Fish Count</string>
 
 </resources>
