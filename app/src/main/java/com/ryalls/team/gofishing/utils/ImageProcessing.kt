@@ -28,7 +28,7 @@ object ImageProcessing {
                     else -> 0.0f
                 }
             } catch (e: IOException) {
-                Log.d("EXIF", e.message)
+                Log.d("EXIF", e.message.toString())
             }
         }
         return 0.0f

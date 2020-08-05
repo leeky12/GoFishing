@@ -35,9 +35,9 @@ import com.ryalls.team.gofishing.data.SpeciesCount
  * @param catchView ILaunchAdapterInterface to launch the various adapters required
  */
 class InfoListAdapter :
+
     RecyclerView.Adapter<InfoListAdapter.ViewHolder>() {
     private var catchList = emptyList<SpeciesCount>() // Cached copy of words
-
 
     internal fun setList(catchRecords: List<SpeciesCount>) {
         this.catchList = catchRecords
@@ -51,14 +51,8 @@ class InfoListAdapter :
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val species_name: TextView
-        val species_count: TextView
-
-        init {
-            species_name = v.findViewById(R.id.species_name)
-            species_count = v.findViewById(R.id.species_count)
-        }
-
+        val speciesname: TextView = v.findViewById(R.id.species_name)
+        val speciescount: TextView = v.findViewById(R.id.species_count)
     }
 
     // Create new views (invoked by the layout manager)
@@ -74,12 +68,11 @@ class InfoListAdapter :
     override fun onBindViewHolder(viewHolder: ViewHolder, positionInList: Int) {
         // Get element from your dataset at this position and replace the contents of the view
         // with that element
-        viewHolder.species_name.text = catchList[positionInList].species
-        viewHolder.species_count.text = catchList[positionInList].count.toString()
+        viewHolder.speciesname.text = catchList[positionInList].species
+        viewHolder.speciescount.text = catchList[positionInList].count.toString()
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = catchList.size
 
-    companion object
 }

@@ -60,7 +60,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     var allWords: LiveData<List<CatchRecord>>
 
     var todaysWeather: WeatherData = WeatherData
-    lateinit var hashMap: HashMap<String, Int>
+    private lateinit var hashMap: HashMap<String, Int>
 
     val weatherPresent: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
@@ -211,7 +211,7 @@ class CatchDetailsViewModel(application: Application) : AndroidViewModel(applica
                 }
                 withContext(Dispatchers.Main) {
                     hashMap.forEach { (key, value) ->
-                        var entry = SpeciesCount()
+                        val entry = SpeciesCount()
                         entry.species = key
                         entry.count = value
                         speciesCount.add(entry)

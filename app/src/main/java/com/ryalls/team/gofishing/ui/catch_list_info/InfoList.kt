@@ -71,6 +71,11 @@ class InfoList : DialogFragment() {
         return rootView
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.speciesCount.clear()
+    }
+
     companion object {
         private const val TAG = "RecyclerViewFragment"
     }

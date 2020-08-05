@@ -124,11 +124,11 @@ object GalleryAdd {
                         val fileName =
                             path.substring(path.lastIndexOf("/") + 1, path.length)
                         if (fileName == name) {
-                            val idColumn = cursor.getLong(idColumn)
+                            val newIdColumn = cursor.getLong(idColumn)
                             cursor.close()
                             return ContentUris.withAppendedId(
                                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                                idColumn
+                                newIdColumn
                             )
                         }
                     }
